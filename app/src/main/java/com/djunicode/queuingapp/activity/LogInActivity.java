@@ -1,19 +1,29 @@
-package com.djunicode.queuingapp;
+package com.djunicode.queuingapp.activity;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import com.djunicode.queuingapp.R;
+import com.djunicode.queuingapp.fragment.LogInStudentFragment;
 
 public class LogInActivity extends AppCompatActivity {
 
+  private final static String TAG = LogInActivity.class.getSimpleName();
+
   private EditText usernameEditText, sapIDEditText, passwordEditText;
   private Spinner departmentSpinner, yearSpinner;
+  private TextView logInStudentTextView, logInTeacherTextView, signUpTeacherTextView;
+  private CardView signUpStudentButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +35,10 @@ public class LogInActivity extends AppCompatActivity {
     passwordEditText = (EditText) findViewById(R.id.passwordEditText);
     departmentSpinner = (Spinner) findViewById(R.id.departmentSpinner);
     yearSpinner = (Spinner) findViewById(R.id.yearSpinner);
+    logInStudentTextView = (TextView) findViewById(R.id.logInStudentTextView);
+    logInTeacherTextView = (TextView) findViewById(R.id.logInTeacherTextView);
+    signUpTeacherTextView = (TextView) findViewById(R.id.signUpTeacherTextView);
+    signUpStudentButton = (CardView) findViewById(R.id.signUpStudentButton);
 
     String username = usernameEditText.getText().toString();
     String sapID = sapIDEditText.getText().toString();
@@ -53,6 +67,19 @@ public class LogInActivity extends AppCompatActivity {
       @Override
       public void onNothingSelected(AdapterView<?> parent) {
 
+      }
+    });
+
+    logInStudentTextView.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        LogInStudentFragment fragment = new LogInStudentFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+            R.anim.enter_from_left, R.anim.exit_to_right);
+        transaction.replace(R.id.containerFrame, fragment);
+        transaction.addToBackStack(TAG);
+        transaction.commit();
       }
     });
   }
