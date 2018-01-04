@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.fragment.LogInStudentFragment;
+import com.djunicode.queuingapp.fragment.LogInTeacherFragment;
+import com.djunicode.queuingapp.fragment.SignUpTeacherFragment;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -75,8 +77,34 @@ public class LogInActivity extends AppCompatActivity {
       public void onClick(View v) {
         LogInStudentFragment fragment = new LogInStudentFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-            R.anim.enter_from_left, R.anim.exit_to_right);
+        transaction.setCustomAnimations(R.anim.appear, R.anim.disappear,
+            R.anim.appear, R.anim.disappear);
+        transaction.replace(R.id.containerFrame, fragment);
+        transaction.addToBackStack(TAG);
+        transaction.commit();
+      }
+    });
+
+    signUpTeacherTextView.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        SignUpTeacherFragment fragment = new SignUpTeacherFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.appear, R.anim.disappear,
+            R.anim.appear, R.anim.disappear);
+        transaction.replace(R.id.containerFrame, fragment);
+        transaction.addToBackStack(TAG);
+        transaction.commit();
+      }
+    });
+
+    logInTeacherTextView.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        LogInTeacherFragment fragment = new LogInTeacherFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.appear, R.anim.disappear,
+            R.anim.appear, R.anim.disappear);
         transaction.replace(R.id.containerFrame, fragment);
         transaction.addToBackStack(TAG);
         transaction.commit();

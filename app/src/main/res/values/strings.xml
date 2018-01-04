@@ -5,8 +5,14 @@
   <string name="sap_id">SAP ID</string>
   <string name="password">PASSWORD</string>
   <string name="log_in_as_student">LOG IN AS STUDENT</string>
-  <string name="login_as_teacher">Login as Teacher</string>
-  <string name="or"> OR </string>
+  <string name="or">OR</string>
+  <string name="sign_up_as_student">SIGN UP AS STUDENT</string>
+  <string name="already_a_member">Already a member?</string>
+  <string name="log_in">Log In</string>
+  <string name="i_am_a_teacher">I am a Teacher.</string>
+  <string name="sign_up">Sign Up</string>
+  <string name="sign_up_as_teacher">SIGN UP AS TEACHER</string>
+  <string name="log_in_as_teacher">LOG IN AS TEACHER</string>
 
   <string-array name="dept_array">
     <item>SELECT DEPARTMENT</item>
@@ -27,11 +33,5 @@
     <item>TE</item>
     <item>BE</item>
   </string-array>
-
-  <string name="sign_in_as_student">SIGN IN AS STUDENT</string>
-  <string name="already_a_member">Already a member?</string>
-  <string name="log_in">Log In</string>
-  <string name="i_am_a_teacher">I am a Teacher.</string>
-  <string name="sign_up">Sign Up</string>
 
 </resources>

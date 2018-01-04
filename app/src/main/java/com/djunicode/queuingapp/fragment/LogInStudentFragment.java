@@ -31,8 +31,8 @@ public class LogInStudentFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_log_in_student, container, false);
 
-    usernameLogInEditText = (EditText) view.findViewById(R.id.usernameEditText);
-    passwordLogInEditText = (EditText) view.findViewById(R.id.passwordEditText);
+    usernameLogInEditText = (EditText) view.findViewById(R.id.usernameLogInEditText);
+    passwordLogInEditText = (EditText) view.findViewById(R.id.passwordLogInEditText);
     logInStudentButton = (CardView) view.findViewById(R.id.logInStudentButton);
 
     String username = usernameLogInEditText.getText().toString();
