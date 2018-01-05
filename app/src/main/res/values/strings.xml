@@ -13,6 +13,10 @@
   <string name="sign_up">Sign Up</string>
   <string name="sign_up_as_teacher">SIGN UP AS TEACHER</string>
   <string name="log_in_as_teacher">LOG IN AS TEACHER</string>
+  <string name="submission">Submission</string>
+  <string name="subscriptions">Subscriptions</string>
+  <string name="find_a_teacher">Find a Teacher</string>
+  <string name="which_submission_do_you_have">Which submission do you have?</string>
 
   <string-array name="dept_array">
     <item>SELECT DEPARTMENT</item>
@@ -33,5 +37,8 @@
     <item>TE</item>
     <item>BE</item>
   </string-array>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

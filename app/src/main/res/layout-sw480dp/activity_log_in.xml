@@ -7,6 +7,7 @@
   android:layout_height="match_parent"
   android:id="@+id/containerFrame"
   android:background="@drawable/login_bg"
+  android:padding="10dp"
   tools:context="com.djunicode.queuingapp.activity.LogInActivity">
 
     <ScrollView
@@ -22,31 +23,30 @@
           android:textStyle="bold"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="50dp"
+          android:layout_marginTop="30dp"
           android:layout_gravity="center"
           android:fontFamily="monospace"
           android:text="@string/welcome"
           android:textColor="#fff"
-          android:textSize="25sp"/>
+          android:textSize="@dimen/welcome"/>
 
         <LinearLayout
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="20dp"
           android:layout_gravity="center"
           android:orientation="vertical">
 
           <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textColorHint="#bab5b5">
+            android:textColorHint="#bab5b5"
+            android:layout_gravity="center_horizontal">
 
             <EditText
               android:id="@+id/usernameEditText"
-              android:layout_width="350dp"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_gravity="center_horizontal"
               android:drawablePadding="10dp"
               android:drawableStart="@drawable/ic_person"
               android:ems="10"
@@ -60,7 +60,7 @@
             android:id="@+id/departmentSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:entries="@array/dept_array"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"/>
 
@@ -68,21 +68,21 @@
             android:id="@+id/yearSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:entries="@array/year_array"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"/>
 
           <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColorHint="#bab5b5">
+            android:textColorHint="#bab5b5"
+            android:layout_gravity="center_horizontal">
 
             <EditText
               android:id="@+id/sapIDEditText"
-              android:layout_width="350dp"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_gravity="center_horizontal"
               android:drawablePadding="10dp"
               android:drawableStart="@drawable/ic_sap"
               android:ems="10"
@@ -93,16 +93,16 @@
           </android.support.design.widget.TextInputLayout>
 
           <android.support.design.widget.TextInputLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColorHint="#bab5b5">
+            android:textColorHint="#bab5b5"
+            android:layout_gravity="center_horizontal">
 
             <EditText
               android:id="@+id/passwordEditText"
-              android:layout_width="350dp"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_gravity="center_horizontal"
               android:drawablePadding="10dp"
               android:drawableStart="@drawable/ic_lock"
               android:ems="10"
@@ -116,9 +116,9 @@
 
         <android.support.v7.widget.CardView
           android:id="@+id/signUpStudentButton"
-          android:layout_width="350dp"
-          android:layout_height="50dp"
-          android:layout_marginTop="60dp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="30dp"
           android:layout_gravity="center_horizontal"
           android:clickable="true"
           android:focusable="true"
@@ -148,7 +148,6 @@
           <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:padding="10dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
@@ -176,12 +175,12 @@
           <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <View
-              android:layout_width="150dp"
+              android:layout_width="@dimen/horizontal_line"
               android:layout_height="1dp"
               android:layout_gravity="center_vertical"
               android:background="#bab5b5"/>
@@ -207,7 +206,6 @@
           <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:padding="10dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">

@@ -5,10 +5,11 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:background="@drawable/login_bg"
   android:orientation="vertical"
-  tools:context="com.djunicode.queuingapp.fragment.LogInTeacherFragment">
+  android:padding="10dp"
+  tools:context="com.djunicode.queuingapp.fragment.SignUpTeacherFragment">
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical">
@@ -17,7 +18,7 @@
       android:textStyle="bold"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="50dp"
+      android:layout_marginTop="30dp"
       android:layout_gravity="center"
       android:fontFamily="monospace"
       android:text="@string/welcome"
@@ -25,15 +26,15 @@
       android:textSize="25sp"/>
 
     <android.support.design.widget.TextInputLayout
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="100dp"
       android:layout_gravity="center_horizontal"
       android:textColorHint="#bab5b5">
 
       <EditText
-        android:id="@+id/usernameLogInTeacherEditText"
-        android:layout_width="350dp"
+        android:id="@+id/usernameTeacherEditText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/ic_person"
@@ -44,16 +45,44 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <Spinner
+      android:id="@+id/departmentTeacherSpinner"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:entries="@array/dept_array"
+      android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"/>
+
     <android.support.design.widget.TextInputLayout
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="20dp"
       android:layout_gravity="center_horizontal"
       android:textColorHint="#bab5b5">
 
       <EditText
-        android:id="@+id/passwordLogInTeacherEditText"
-        android:layout_width="350dp"
+        android:id="@+id/sapIDTeacherEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_sap"
+        android:ems="10"
+        android:hint="@string/sap_id"
+        android:inputType="text"
+        android:textColor="#fff"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:layout_gravity="center_horizontal"
+      android:textColorHint="#bab5b5">
+
+      <EditText
+        android:id="@+id/passwordTeacherEditText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/ic_lock"
@@ -67,9 +96,9 @@
   </LinearLayout>
 
   <android.support.v7.widget.CardView
-    android:id="@+id/logInTeacherButton"
-    android:layout_width="350dp"
-    android:layout_height="50dp"
+    android:id="@+id/signUpTeacherButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="100dp"
     android:layout_gravity="center_horizontal"
     android:clickable="true"
@@ -85,7 +114,7 @@
       android:padding="10dp"
       android:drawableEnd="@drawable/ic_send"
       android:gravity="center"
-      android:text="@string/log_in_as_teacher"
+      android:text="@string/sign_up_as_teacher"
       android:textColor="#fff"
       android:textSize="20sp"/>
 

@@ -1,5 +1,6 @@
 package com.djunicode.queuingapp.activity;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -108,6 +109,14 @@ public class LogInActivity extends AppCompatActivity {
         transaction.replace(R.id.containerFrame, fragment);
         transaction.addToBackStack(TAG);
         transaction.commit();
+      }
+    });
+
+    signUpStudentButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), StudentScreenActivity.class);
+        startActivity(intent);
       }
     });
   }
