@@ -1,10 +1,12 @@
 package com.djunicode.queuingapp.activity;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -78,5 +80,19 @@ public class StudentScreenActivity extends AppCompatActivity {
     transaction.replace(R.id.containerLayout, fragment);
     transaction.addToBackStack(TAG);
     transaction.commit();
+  }
+
+  @Override
+  public void onBackPressed() {
+    new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Exit the app.")
+        .setMessage("Are you sure you want to exit?")
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            finish();
+          }
+        }).setNegativeButton("No", null).show();
   }
 }
