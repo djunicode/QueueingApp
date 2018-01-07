@@ -17,6 +17,16 @@
   <string name="subscriptions">Subscriptions</string>
   <string name="find_a_teacher">Find a Teacher</string>
   <string name="which_submission_do_you_have">Which submission do you have?</string>
+  <string name="err_msg_username">Enter a username</string>
+  <string name="err_msg_username_inappropriate_length">Username should be at least 5 characters</string>
+  <string name="err_msg_SAPId">Enter valid SAPId</string>
+  <string name="err_msg_SAPId_inappropriate_length">SAPID has 11 digits</string>
+  <string name="err_msg_password">Enter the password</string>
+  <string name="err_msg_password_inappropriate_length">Password should be at least 5 characters</string>
+  <string name="err_msg_username_password_dont_match">Username and password does not match</string>
+  <string name="err_msg_department">Enter your department</string>
+  <string name="err_msg_year">Enter your year</string>
+
 
   <string-array name="dept_array">
     <item>SELECT DEPARTMENT</item>
