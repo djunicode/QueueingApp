@@ -33,11 +33,12 @@ public class LogInActivity extends AppCompatActivity {
   private final static String TAG = LogInActivity.class.getSimpleName();
 
   private EditText usernameEditText, sapIDEditText, passwordEditText;
-  private Spinner departmentSpinner, yearSpinner;
+  private Spinner departmentSpinner, yearSpinner, batchSpinner;
   private TextView logInStudentTextView, logInTeacherTextView, signUpTeacherTextView;
   private CardView signUpStudentButton;
   private TextInputLayout studentSignUpinputLayoutUsername, studentSignUpinputLayoutSAPId,
-      studentSignUpinputLayoutPassword, studentSignUpinputLayoutDepartment, studentSignUpinputLayoutYear;
+      studentSignUpinputLayoutPassword, studentSignUpinputLayoutDepartment,
+      studentSignUpinputLayoutYear, batchSpinnerLayout;
   private SharedPreferences sp_student, sp_teacher;
   // Session Manager Class
   SessionManager session;
@@ -52,11 +53,13 @@ public class LogInActivity extends AppCompatActivity {
     studentSignUpinputLayoutPassword = (TextInputLayout) findViewById(R.id.signUp_student_password);
     studentSignUpinputLayoutDepartment = (TextInputLayout) findViewById(R.id.signUp_student_department);
     studentSignUpinputLayoutYear = (TextInputLayout) findViewById(R.id.signUp_student_year);
+    batchSpinnerLayout = (TextInputLayout) findViewById(R.id.batchTextInputLayout);
     usernameEditText = (EditText) findViewById(R.id.usernameEditText);
     sapIDEditText = (EditText) findViewById(R.id.sapIDEditText);
     passwordEditText = (EditText) findViewById(R.id.passwordEditText);
     departmentSpinner = (Spinner) findViewById(R.id.departmentSpinner);
     yearSpinner = (Spinner) findViewById(R.id.yearSpinner);
+    batchSpinner = (Spinner) findViewById(R.id.batchSpinner);
     logInStudentTextView = (TextView) findViewById(R.id.logInStudentTextView);
     logInTeacherTextView = (TextView) findViewById(R.id.logInTeacherTextView);
     signUpTeacherTextView = (TextView) findViewById(R.id.signUpTeacherTextView);
@@ -120,6 +123,19 @@ public class LogInActivity extends AppCompatActivity {
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String year = parent.getItemAtPosition(position).toString();
         Log.i("Year", year);
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
+
+    batchSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String batch = parent.getItemAtPosition(position).toString();
+        Log.i("Batch", batch);
       }
 
       @Override

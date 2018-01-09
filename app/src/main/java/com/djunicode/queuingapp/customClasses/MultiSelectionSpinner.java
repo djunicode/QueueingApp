@@ -1,4 +1,4 @@
-package com.djunicode.queuingapp.lib;
+package com.djunicode.queuingapp.customClasses;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -30,7 +30,7 @@
         android:textSize="30sp"/>
 
       <android.support.design.widget.TextInputLayout
-        android:id="@+id/logIn_student_username"
+        android:id="@+id/logInStudentSapId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -38,13 +38,13 @@
         android:textColorHint="#bab5b5">
 
         <EditText
-          android:id="@+id/usernameLogInEditText"
+          android:id="@+id/sapIdLogInEditText"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:drawablePadding="10dp"
           android:drawableStart="@drawable/ic_person"
           android:ems="10"
-          android:hint="@string/username"
+          android:hint="@string/sap_id"
           android:inputType="textPersonName"
           android:textColor="#fff"/>
 

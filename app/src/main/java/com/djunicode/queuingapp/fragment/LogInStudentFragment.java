@@ -29,9 +29,9 @@ import com.djunicode.queuingapp.activity.StudentScreenActivity;
  */
 public class LogInStudentFragment extends Fragment {
 
-  private EditText usernameLogInEditText, passwordLogInEditText;
+  private EditText sapIdLogInEditText, passwordLogInEditText;
   private CardView logInStudentButton;
-  private TextInputLayout studentLogIninputLayoutUsername, studentLogIninputLayoutPassword;
+  private TextInputLayout studentLogIninputLayoutSapId, studentLogIninputLayoutPassword;
   // Session Manager Class
   SessionManager session;
   SharedPreferences spDemo;
@@ -47,15 +47,14 @@ public class LogInStudentFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_log_in_student, container, false);
 
-    studentLogIninputLayoutUsername = (TextInputLayout) view.findViewById(R.id.logIn_student_username);
+    studentLogIninputLayoutSapId = (TextInputLayout) view.findViewById(R.id.logInStudentSapId);
     studentLogIninputLayoutPassword = (TextInputLayout) view.findViewById(R.id.logIn_student_password);
-    usernameLogInEditText = (EditText) view.findViewById(R.id.usernameLogInEditText);
+    sapIdLogInEditText = (EditText) view.findViewById(R.id.sapIdLogInEditText);
     passwordLogInEditText = (EditText) view.findViewById(R.id.passwordLogInEditText);
     logInStudentButton = (CardView) view.findViewById(R.id.logInStudentButton);
 
-    String username = usernameLogInEditText.getText().toString();
+    String username = sapIdLogInEditText.getText().toString();
     String password = passwordLogInEditText.getText().toString();
-
 
     // Session Manager
     session = new SessionManager(getContext(), "Student");
@@ -64,11 +63,11 @@ public class LogInStudentFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if (validLogIn()) {
-          session.createLoginSession(usernameLogInEditText.getText().toString(),
+          session.createLoginSession(sapIdLogInEditText.getText().toString(),
               passwordLogInEditText.getText().toString());
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
           startActivity(intent);
-          Toast.makeText(getContext(), usernameLogInEditText.getText().toString(),
+          Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
@@ -95,16 +94,16 @@ public class LogInStudentFragment extends Fragment {
   }
 
   private boolean validateUsername() {
-    if (usernameLogInEditText.getText().toString().trim().isEmpty()) {
-      studentLogIninputLayoutUsername.setError(getString(R.string.err_msg_username));
-      requestFocus(usernameLogInEditText);
+    if (sapIdLogInEditText.getText().toString().trim().isEmpty()) {
+      studentLogIninputLayoutSapId.setError(getString(R.string.err_msg_username));
+      requestFocus(sapIdLogInEditText);
       return false;
-    } else if ((usernameLogInEditText.getText().toString().length() < 5)) {
-      studentLogIninputLayoutUsername.setError(getString(R.string.err_msg_username_inappropriate_length));
-      requestFocus(usernameLogInEditText);
+    } else if ((sapIdLogInEditText.getText().toString().length() < 5)) {
+      studentLogIninputLayoutSapId.setError(getString(R.string.err_msg_username_inappropriate_length));
+      requestFocus(sapIdLogInEditText);
       return false;
     }else {
-      studentLogIninputLayoutUsername.setErrorEnabled(false);
+      studentLogIninputLayoutSapId.setErrorEnabled(false);
     }
 
     return true;
@@ -127,7 +126,7 @@ public class LogInStudentFragment extends Fragment {
   }
 
   private boolean validMatch() {
-    if(usernameLogInEditText.getText().toString().equals("dhruv") &&
+    if(sapIdLogInEditText.getText().toString().equals("dhruv") &&
         passwordLogInEditText.getText().toString().equals("demopass")) {
 
       return true;

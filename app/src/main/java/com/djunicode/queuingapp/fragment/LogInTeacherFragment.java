@@ -23,9 +23,9 @@ import com.djunicode.queuingapp.activity.StudentScreenActivity;
  */
 public class LogInTeacherFragment extends Fragment {
 
-  private EditText usernameLogInTeacherEditText, passwordLogInTeacherEditText;
+  private EditText sapIdLogInTeacherEditText, passwordLogInTeacherEditText;
   private CardView logInTeacherButton;
-  private TextInputLayout teacherLogIninputLayoutUsername, teacherLogIninputLayoutPassword;
+  private TextInputLayout teacherLogIninputLayoutSapID, teacherLogIninputLayoutPassword;
   // Session Manager Class
   SessionManager session;
   SharedPreferences spDemo;
@@ -39,13 +39,13 @@ public class LogInTeacherFragment extends Fragment {
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_log_in_teacher, container, false);
 
-    teacherLogIninputLayoutUsername = (TextInputLayout) view.findViewById(R.id.logIn_teacher_username);
+    teacherLogIninputLayoutSapID = (TextInputLayout) view.findViewById(R.id.logInTeacherSapID);
     teacherLogIninputLayoutPassword = (TextInputLayout) view.findViewById(R.id.logIn_teacher_password);
-    usernameLogInTeacherEditText = (EditText) view.findViewById(R.id.usernameLogInTeacherEditText);
+    sapIdLogInTeacherEditText = (EditText) view.findViewById(R.id.sapIdLogInTeacherEditText);
     passwordLogInTeacherEditText = (EditText) view.findViewById(R.id.passwordLogInTeacherEditText);
     logInTeacherButton = (CardView) view.findViewById(R.id.logInTeacherButton);
 
-    String username = usernameLogInTeacherEditText.getText().toString();
+    String username = sapIdLogInTeacherEditText.getText().toString();
     String password = passwordLogInTeacherEditText.getText().toString();
 
     // Session Manager
@@ -55,12 +55,12 @@ public class LogInTeacherFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if(validTeacherLogIn()) {
-          session.createLoginSession(usernameLogInTeacherEditText.getText().toString(),
+          session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
               passwordLogInTeacherEditText.getText().toString());
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
           // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);
-          Toast.makeText(getContext(), usernameLogInTeacherEditText.getText().toString(),
+          Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
@@ -87,16 +87,16 @@ public class LogInTeacherFragment extends Fragment {
   }
 
   private boolean validateUsername() {
-    if (usernameLogInTeacherEditText.getText().toString().trim().isEmpty()) {
-      teacherLogIninputLayoutUsername.setError(getString(R.string.err_msg_username));
-      requestFocus(usernameLogInTeacherEditText);
+    if (sapIdLogInTeacherEditText.getText().toString().trim().isEmpty()) {
+      teacherLogIninputLayoutSapID.setError(getString(R.string.err_msg_username));
+      requestFocus(sapIdLogInTeacherEditText);
       return false;
-    } else if ((usernameLogInTeacherEditText.getText().toString().length() < 5)) {
-      teacherLogIninputLayoutUsername.setError(getString(R.string.err_msg_username_inappropriate_length));
-      requestFocus(usernameLogInTeacherEditText);
+    } else if ((sapIdLogInTeacherEditText.getText().toString().length() < 5)) {
+      teacherLogIninputLayoutSapID.setError(getString(R.string.err_msg_username_inappropriate_length));
+      requestFocus(sapIdLogInTeacherEditText);
       return false;
     }else {
-      teacherLogIninputLayoutUsername.setErrorEnabled(false);
+      teacherLogIninputLayoutSapID.setErrorEnabled(false);
     }
 
     return true;
@@ -119,7 +119,7 @@ public class LogInTeacherFragment extends Fragment {
   }
 
   private boolean validMatch() {
-    if(usernameLogInTeacherEditText.getText().toString().equals("dhruv") &&
+    if(sapIdLogInTeacherEditText.getText().toString().equals("dhruv") &&
         passwordLogInTeacherEditText.getText().toString().equals("demopass")) {
 
       return true;

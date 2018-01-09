@@ -1,17 +1,21 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 
 /**
@@ -62,6 +66,22 @@ public class FindTeacherFragment extends Fragment {
       @Override
       public void onNothingSelected(AdapterView<?> parent) {
 
+      }
+    });
+
+    findTeacherButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if(teacherSpinner.getSelectedItemPosition() != 0){
+          String location = "Prof. " + teacherSpinner.getSelectedItem().toString() +
+              " is in the staff lounge.";
+          AlertDialog.Builder builder = new Builder(getActivity());
+          builder.setMessage(location)
+              .setPositiveButton("OK", null)
+              .show();
+        }
+        else
+          Toast.makeText(getContext(), "Please Select a teacher!", Toast.LENGTH_SHORT).show();
       }
     });
 
