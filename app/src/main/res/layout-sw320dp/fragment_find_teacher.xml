@@ -10,8 +10,7 @@
     android:id="@+id/ll1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="20dp">
+    android:orientation="vertical">
 
     <TextView
       android:layout_width="wrap_content"
@@ -126,28 +125,28 @@
     android:id="@+id/sightedTeacherButton"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:layout_below="@id/separatorLine"
     android:layout_marginTop="25dp"
     android:layout_marginBottom="20dp"
+    android:layout_below="@id/separatorLine"
     android:layout_centerHorizontal="true"
-    app:cardBackgroundColor="@color/colorAccentDark"
-    app:cardCornerRadius="25dp"
-    app:cardElevation="10dp"
     android:clickable="true"
+    android:clipToPadding="false"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:clipToPadding="false">
+    app:cardBackgroundColor="@color/colorAccentDark"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="10dp">
 
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
+      android:layout_gravity="center"
       android:padding="10dp"
+      android:drawableEnd="@drawable/ic_location"
       android:drawablePadding="20dp"
       android:text="@string/sighted_a_teacher"
-      android:layout_gravity="center"
-      android:textSize="20sp"
-      android:drawableEnd="@drawable/ic_location"
-      android:textColor="@android:color/white"/>
+      android:textColor="@android:color/white"
+      android:textSize="20sp"/>
 
   </android.support.v7.widget.CardView>
 

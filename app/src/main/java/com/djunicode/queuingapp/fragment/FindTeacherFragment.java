@@ -3,6 +3,7 @@ package com.djunicode.queuingapp.fragment;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
+import com.djunicode.queuingapp.activity.SightedTeacherActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,7 +87,14 @@ public class FindTeacherFragment extends Fragment {
       }
     });
 
+    sightedTeacherButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), SightedTeacherActivity.class);
+        getContext().startActivity(intent);
+      }
+    });
+
     return view;
   }
-
 }

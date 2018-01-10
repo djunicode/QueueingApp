@@ -74,5 +74,8 @@
   <string name="join">JOIN</string>
   <string name="your_position_in_the_queue_is">YOUR POSITION IN THE QUEUE IS</string>
   <string name="i_am_done">I AM DONE</string>
+  <string name="department">Department</string>
+  <string name="room">Room</string>
+  <string name="update_teacher_location">Update Teacher Location</string>
 
 </resources>
