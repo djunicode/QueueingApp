@@ -45,7 +45,7 @@
           android:drawableStart="@drawable/ic_person"
           android:ems="10"
           android:hint="@string/sap_id"
-          android:inputType="textPersonName"
+          android:inputType="numberDecimal"
           android:textColor="#fff"/>
 
       </android.support.design.widget.TextInputLayout>

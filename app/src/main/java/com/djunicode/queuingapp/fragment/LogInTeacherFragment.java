@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
+import com.djunicode.queuingapp.activity.TeacherScreenActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +58,7 @@ public class LogInTeacherFragment extends Fragment {
         if(validTeacherLogIn()) {
           session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
               passwordLogInTeacherEditText.getText().toString());
-          Intent intent = new Intent(getContext(), StudentScreenActivity.class);
+          Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
           // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),

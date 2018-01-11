@@ -77,5 +77,11 @@
   <string name="department">Department</string>
   <string name="room">Room</string>
   <string name="update_teacher_location">Update Teacher Location</string>
+  <string name="my_profile">My Profile</string>
+  <string name="my_location">My Location</string>
+  <string name="restriction">Restriction</string>
+  <string name="time">Time</string>
+  <string name="students">Students</string>
+  <string name="floor">Floor</string>
 
 </resources>

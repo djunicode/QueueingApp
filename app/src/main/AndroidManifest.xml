@@ -35,6 +35,8 @@
     </activity>
     <activity android:name=".activity.SightedTeacherActivity">
     </activity>
+    <activity android:name=".activity.TeacherScreenActivity">
+    </activity>
   </application>
 
 </manifest>
