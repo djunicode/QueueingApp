@@ -97,7 +97,7 @@ public class LogInActivity extends AppCompatActivity {
 
       if(sp_teacher.contains("teacher_username") && sp_teacher.contains("teacher_password")){
         Toast.makeText(getApplicationContext(), "I got it!", Toast.LENGTH_SHORT).show();
-        Intent in = new Intent(this, StudentScreenActivity.class);
+        Intent in = new Intent(this, TeacherScreenActivity.class);
         // StudentScreenActivity just for demo till the time teacher fragments are not ready
         startActivity(in);
 

@@ -83,5 +83,8 @@
   <string name="time">Time</string>
   <string name="students">Students</string>
   <string name="floor">Floor</string>
+  <string name="cancel">Cancel</string>
+  <string name="start">Start</string>
+  <string name="students_in_the_queue">STUDENTS IN THE QUEUE</string>
 
 </resources>

@@ -4,7 +4,9 @@ package com.djunicode.queuingapp.fragment;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -17,17 +19,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
+import com.djunicode.queuingapp.activity.StudentListActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,9 +43,14 @@ public class TeacherSubmissionFragment extends Fragment {
 
   private Spinner subjectSpinner, batchSpinner;
   private CardView fromTimePickerButton;
-  private Button studentsButton, timerButton;
-  private FloatingActionButton createFab;
+  private ImageButton studentsButton, timerButton;
+  private FloatingActionButton createFab, startFab, cancelFab;
   private ScrollView scrollView;
+  private LinearLayout fabLL1, fabLL2;
+  private CoordinatorLayout coordinatorLayout;
+  private Animation fabOpen, fabClose, rotateForward, rotateBackward;
+  private Boolean isFabOpen = false;
+  private Boolean isCreated = false;
 
   public TeacherSubmissionFragment() {
     // Required empty public constructor
@@ -57,10 +69,19 @@ public class TeacherSubmissionFragment extends Fragment {
     subjectSpinner = (Spinner) view.findViewById(R.id.subjectSpinner);
     batchSpinner = (Spinner) view.findViewById(R.id.batchSpinner);
     fromTimePickerButton = (CardView) view.findViewById(R.id.fromTimePickerButton);
-    studentsButton = (Button) view.findViewById(R.id.studentsButton);
-    timerButton = (Button) view.findViewById(R.id.timerButton);
+    studentsButton = (ImageButton) view.findViewById(R.id.studentsButton);
+    timerButton = (ImageButton) view.findViewById(R.id.timerButton);
     createFab = (FloatingActionButton) view.findViewById(R.id.createFab);
-    scrollView = (ScrollView) view.findViewById(R.id.teacherScrollView);
+    startFab = (FloatingActionButton) view.findViewById(R.id.startFab);
+    cancelFab = (FloatingActionButton) view.findViewById(R.id.cancelFab);
+//    scrollView = (ScrollView) view.findViewById(R.id.teacherScrollView);
+    coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.teacherCoordinatorLayout);
+    fabLL1 = (LinearLayout) view.findViewById(R.id.fabLL1);
+    fabLL2 = (LinearLayout) view.findViewById(R.id.fabLL2);
+    fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+    fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+    rotateForward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
+    rotateBackward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
@@ -95,15 +116,15 @@ public class TeacherSubmissionFragment extends Fragment {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
               if(hourOfDay <= 11 && minute <=59)
-                Snackbar.make(scrollView, "Submission is from " + hourOfDay + ":" + minute + "am",
+                Snackbar.make(coordinatorLayout, "Submission is from " + hourOfDay + ":" + minute + "am",
                     Snackbar.LENGTH_LONG).show();
               else {
                 if(hourOfDay == 12 && minute == 0)
-                  Snackbar.make(scrollView, "Submission is from " + hourOfDay + ":" + minute + "pm",
+                  Snackbar.make(coordinatorLayout, "Submission is from " + hourOfDay + ":" + minute + "pm",
                       Snackbar.LENGTH_LONG).show();
                 else {
                   hourOfDay -= 12;
-                  Snackbar.make(scrollView, "Submission is from " + hourOfDay + ":" + minute + "pm",
+                  Snackbar.make(coordinatorLayout, "Submission is from " + hourOfDay + ":" + minute + "pm",
                       Snackbar.LENGTH_LONG).show();
                 }
               }
@@ -124,15 +145,15 @@ public class TeacherSubmissionFragment extends Fragment {
           @Override
           public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             if(hourOfDay <= 11 && minute <=59)
-              Snackbar.make(scrollView, "Submission is till " + hourOfDay + ":" + minute + "am",
+              Snackbar.make(coordinatorLayout, "Submission is till " + hourOfDay + ":" + minute + "am",
                   Snackbar.LENGTH_LONG).show();
             else {
               if(hourOfDay == 12 && minute == 0)
-                Snackbar.make(scrollView, "Submission is till " + hourOfDay + ":" + minute + "pm",
+                Snackbar.make(coordinatorLayout, "Submission is till " + hourOfDay + ":" + minute + "pm",
                     Snackbar.LENGTH_LONG).show();
               else {
                 hourOfDay -= 12;
-                Snackbar.make(scrollView, "Submission is till " + hourOfDay + ":" + minute + "pm",
+                Snackbar.make(coordinatorLayout, "Submission is till " + hourOfDay + ":" + minute + "pm",
                     Snackbar.LENGTH_LONG).show();
               }
             }
@@ -166,7 +187,58 @@ public class TeacherSubmissionFragment extends Fragment {
         builder.show();
       }
     });
+
+    createFab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if(!isCreated){
+          createFab.setImageResource(R.drawable.ic_add);
+          isCreated = true;
+        }
+        else {
+          animateFab();
+        }
+      }
+    });
+
+    cancelFab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        animateFab();
+        createFab.setImageResource(R.drawable.book_open_page);
+        isCreated = false;
+      }
+    });
+
+    startFab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        animateFab();
+        createFab.setImageResource(R.drawable.book_open_page);
+        Intent intent = new Intent(getContext(), StudentListActivity.class);
+        startActivity(intent);
+        isCreated = false;
+      }
+    });
     return view;
+  }
+
+  private void animateFab(){
+    if(isFabOpen){
+      fabLL1.setVisibility(View.INVISIBLE);
+      fabLL2.setVisibility(View.INVISIBLE);
+      isFabOpen=false;
+      createFab.setAnimation(rotateBackward);
+      fabLL1.animate().translationY(0).alpha(0.0f);
+      fabLL2.animate().translationY(0).alpha(0.0f);
+    } else {
+      fabLL1.setVisibility(View.VISIBLE);
+      fabLL2.setVisibility(View.VISIBLE);
+      isFabOpen=true;
+      createFab.setAnimation(rotateForward);
+      fabLL1.animate().translationY(-getResources().getDimension(R.dimen.standard_55)).alpha(1.0f);
+      fabLL2.animate().translationY(-getResources().getDimension(R.dimen.standard_105)).alpha(1.0f);
+    }
   }
 
 }
