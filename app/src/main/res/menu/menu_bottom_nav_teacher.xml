@@ -8,7 +8,7 @@
     android:title="@string/my_location"
     android:icon="@drawable/ic_location_teacher"/>
 
-  <item android:id="@+id/action_profile"
-    android:title="@string/my_profile"
-    android:icon="@drawable/ic_profile"/>
+  <item android:id="@+id/action_recents"
+    android:title="@string/recent"
+    android:icon="@drawable/ic_time"/>
 </menu>

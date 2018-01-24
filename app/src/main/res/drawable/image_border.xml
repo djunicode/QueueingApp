@@ -3,7 +3,12 @@
   android:shape="oval">
 
   <stroke
-    android:color="#FF4081"
+    android:color="#fff"
     android:width="5dp"/>
 
+  <padding
+    android:bottom="2dp"
+    android:left="2dp"
+    android:right="2dp"
+    android:top="2dp"/>
 </shape>

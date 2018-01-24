@@ -86,5 +86,11 @@
   <string name="cancel">Cancel</string>
   <string name="start">Start</string>
   <string name="students_in_the_queue">STUDENTS IN THE QUEUE</string>
+  <string name="recent">Recent</string>
+  <string name="submissions">Submissions</string>
+  <string name="subscribers">Subscribers</string>
+  <string name="time_table">Time-Table</string>
+  <string name="create_new">Create new</string>
+  <string name="delete">Delete</string>
 
 </resources>

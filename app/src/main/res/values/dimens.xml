@@ -3,6 +3,7 @@
 
   <dimen name="welcome">20sp</dimen>
   <dimen name="horizontal_line">150dp</dimen>
-  <dimen name="standard_55">65dp</dimen>
-  <dimen name="standard_105">115dp</dimen>
+  <dimen name="standard_65">65dp</dimen>
+  <dimen name="standard_115">115dp</dimen>
+  <dimen name="standard_165">165dp</dimen>
 </resources>

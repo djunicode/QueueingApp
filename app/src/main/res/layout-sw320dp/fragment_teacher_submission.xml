@@ -8,8 +8,9 @@
   tools:context="com.djunicode.queuingapp.fragment.TeacherSubmissionFragment">
 
   <RelativeLayout
+    android:id="@+id/submissionRelativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <LinearLayout
       android:id="@+id/ll1"
@@ -180,8 +181,7 @@
     <android.support.v7.widget.CardView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:cardElevation="4dp"
-      >
+      app:cardElevation="4dp">
 
       <TextView
         android:layout_width="wrap_content"
@@ -239,10 +239,51 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="10dp"
-      android:backgroundTint="@android:color/holo_blue_dark"
+      android:backgroundTint="@android:color/holo_green_light"
       android:clickable="true"
       android:focusable="true"
       android:src="@drawable/ic_done"
+      app:fabSize="mini"
+      app:pressedTranslationZ="8dp"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/fabLL3"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="6dp"
+    android:layout_gravity="bottom|end"
+    android:padding="10dp"
+
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:visibility="invisible">
+
+    <android.support.v7.widget.CardView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:cardElevation="4dp">
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/create_new"
+        android:textColor="@android:color/background_dark"
+        android:typeface="normal"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/createNewFab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="10dp"
+      android:backgroundTint="@android:color/holo_blue_dark"
+      android:clickable="true"
+      android:focusable="true"
+      android:src="@drawable/book_open_page"
       app:fabSize="mini"
       app:pressedTranslationZ="8dp"/>
 
@@ -254,7 +295,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
     android:layout_gravity="bottom|end"
-    android:src="@drawable/book_open_page"
+    android:src="@drawable/ic_add"
     app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>
