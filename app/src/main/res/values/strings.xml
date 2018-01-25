@@ -24,6 +24,7 @@
   <string name="err_msg_password">Enter the password</string>
   <string name="err_msg_password_inappropriate_length">Password should be at least 5 characters</string>
   <string name="err_msg_username_password_dont_match">Username and password does not match</string>
+  <string name="err_msg_batch">Enter your batch</string>
   <string name="err_msg_department">Enter your department</string>
   <string name="err_msg_year">Enter your year</string>
 

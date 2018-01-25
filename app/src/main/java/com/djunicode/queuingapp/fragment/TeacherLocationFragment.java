@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +17,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
+import com.djunicode.queuingapp.customClasses.TeacherTimerTask;
+import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import java.util.Timer;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +37,7 @@ public class TeacherLocationFragment extends Fragment {
   private FloatingActionButton locationUpdateFab;
   public static boolean locationUpdated = false;
   public static String locationString;
+  ApiInterface apiInterface;
 
   public TeacherLocationFragment() {
     // Required empty public constructor
@@ -38,6 +49,11 @@ public class TeacherLocationFragment extends Fragment {
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_teacher_location, container, false);
+    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+    TeacherTimerTask timerTask = new TeacherTimerTask();
+    Timer t = new Timer();
+    t.schedule(timerTask, 6000,360000);
 
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
@@ -125,6 +141,28 @@ public class TeacherLocationFragment extends Fragment {
               locationString));
           Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(getContext(), "Clicked!", Toast.LENGTH_LONG).show();
+        Call<LocationTeacher> call = apiInterface.sendTeacherLocation(6, "Comps", "60");
+        call.enqueue(new Callback<LocationTeacher>() {
+          @Override
+          public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
+            Log.i("Id", response.body().getId().toString());
+            Log.i("Floor", response.body().getFloor().toString());
+            Log.i("Department", response.body().getDepartment().toString());
+            Log.i("Room", response.body().getRoom().toString());
+            Log.i("Updated At", response.body().getUpdated_at().toString());
+          }
+
+          @Override
+          public void onFailure(Call<LocationTeacher> call, Throwable t) {
+            if(t != null) {
+              int i = Log.i("info: ", t.getMessage());
+            }
+            else {
+              Log.i("info: ", "failed");
+            }
+          }
+        });
       }
     });
 

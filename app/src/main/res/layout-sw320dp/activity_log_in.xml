@@ -101,7 +101,6 @@
             android:layout_marginTop="30dp"
             android:entries="@array/batch_array"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"/>
-
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout

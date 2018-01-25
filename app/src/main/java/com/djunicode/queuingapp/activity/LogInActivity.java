@@ -23,10 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
+import com.djunicode.queuingapp.customClasses.HashingPassword;
 import com.djunicode.queuingapp.fragment.FindTeacherFragment;
 import com.djunicode.queuingapp.fragment.LogInStudentFragment;
 import com.djunicode.queuingapp.fragment.LogInTeacherFragment;
 import com.djunicode.queuingapp.fragment.SignUpTeacherFragment;
+import com.djunicode.queuingapp.model.Student;
+import com.djunicode.queuingapp.model.StudentForId;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -36,12 +44,16 @@ public class LogInActivity extends AppCompatActivity {
   private Spinner departmentSpinner, yearSpinner, batchSpinner;
   private TextView logInStudentTextView, logInTeacherTextView, signUpTeacherTextView;
   private CardView signUpStudentButton;
+  private String username, department, year, batch, SAPId, password; //Student's data to be send to server
   private TextInputLayout studentSignUpinputLayoutUsername, studentSignUpinputLayoutSAPId,
       studentSignUpinputLayoutPassword, studentSignUpinputLayoutDepartment,
       studentSignUpinputLayoutYear, batchSpinnerLayout;
   private SharedPreferences sp_student, sp_teacher;
   // Session Manager Class
   SessionManager session;
+  ApiInterface apiInterface;
+  private String salt, intermediate_password, hashed_password;
+  int idFromServer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +76,14 @@ public class LogInActivity extends AppCompatActivity {
     logInTeacherTextView = (TextView) findViewById(R.id.logInTeacherTextView);
     signUpTeacherTextView = (TextView) findViewById(R.id.signUpTeacherTextView);
     signUpStudentButton = (CardView) findViewById(R.id.signUpStudentButton);
+    apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     //studentSignUpinputLayoutUsername.setError(getString(R.string.err_msg_username));
-
-    String username = usernameEditText.getText().toString();
-    String sapID = sapIDEditText.getText().toString();
-    String password = passwordEditText.getText().toString();
     sp_student = getSharedPreferences("Student",MODE_PRIVATE);
     sp_teacher = getSharedPreferences("Teacher",MODE_PRIVATE);
 
-    // To remove Locally stored variables remove the below comment
 
-    /*Editor editor_student = sp_student.edit();
+    Editor editor_student = sp_student.edit();
     Editor editor_teacher = sp_teacher.edit();
 
     editor_student.remove("student_username");
@@ -84,7 +92,7 @@ public class LogInActivity extends AppCompatActivity {
 
     editor_teacher.remove("teacher_username");
     editor_teacher.remove("teacher_password");
-    editor_teacher.commit();*/
+    editor_teacher.commit();
 
     //if SharedPreferences contains username and password then redirect to Home activity
     if(sp_student.contains("student_username") && sp_student.contains("student_password")){
@@ -97,7 +105,7 @@ public class LogInActivity extends AppCompatActivity {
 
       if(sp_teacher.contains("teacher_username") && sp_teacher.contains("teacher_password")){
         Toast.makeText(getApplicationContext(), "I got it!", Toast.LENGTH_SHORT).show();
-        Intent in = new Intent(this, TeacherScreenActivity.class);
+        Intent in = new Intent(this, StudentScreenActivity.class);
         // StudentScreenActivity just for demo till the time teacher fragments are not ready
         startActivity(in);
 
@@ -198,6 +206,14 @@ public class LogInActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         if (validSignUp()) {
+          username = usernameEditText.getText().toString();
+          department = departmentSpinner.getSelectedItem().toString();
+          year = yearSpinner.getSelectedItem().toString();
+          batch = batchSpinner.getSelectedItem().toString();
+          SAPId = sapIDEditText.getText().toString();
+          password = passwordEditText.getText().toString();
+          hash_password(password); //Hash the password before sending it to the server
+          getIdForStudentFromUser();
           session.createLoginSession(usernameEditText.getText().toString(),
               passwordEditText.getText().toString());
           Intent intent = new Intent(LogInActivity.this, StudentScreenActivity.class);
@@ -222,6 +238,10 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     if (!validateYear()) {
+      return false;
+    }
+
+    if (!validateBatch()) {
       return false;
     }
 
@@ -308,11 +328,63 @@ public class LogInActivity extends AppCompatActivity {
     }
   }
 
+  private boolean validateBatch() {
+    if(batchSpinner.getSelectedItemPosition() == 0) {
+      batchSpinnerLayout.setError(getString(R.string.err_msg_batch));
+      return false;
+    }
+    else {
+      batchSpinnerLayout.setError("");
+      return true;
+    }
+  }
+
   private void requestFocus(View view) {
     if (view.requestFocus()) {
       getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
   }
 
+  private void sendDataToServer(int id) {
+    Log.i("id", Integer.toString(id));
+    Call<Student> call = apiInterface.createStudentAccount(id, username, SAPId, department, year, batch);
+    call.enqueue(new Callback<Student>() {
+      @Override
+      public void onResponse(Call<Student> call, Response<Student> response) {
+//        Log.i("student", response.body().toString());
+      }
+
+      @Override
+      public void onFailure(Call<Student> call, Throwable t) {
+
+      }
+    });
+  }
+
+  private void hash_password (String password) {
+
+    HashingPassword hashingPassword = new HashingPassword();
+    salt = hashingPassword.generate_salt();
+    intermediate_password = password + salt;
+    hashed_password = hashingPassword.hash_the_password(intermediate_password);
+  }
+
+  private void getIdForStudentFromUser () {
+    Call<StudentForId> call = apiInterface.getId(username, hashed_password);
+    call.enqueue(new Callback<StudentForId>() {
+      @Override
+      public void onResponse(Call<StudentForId> call, Response<StudentForId> response) {
+        Log.i("idFromServer", Integer.toString(response.body().getId()));
+        sendDataToServer(response.body().getId());
+
+      }
+
+      @Override
+      public void onFailure(Call<StudentForId> call, Throwable t) {
+
+      }
+    });
+
+  }
 
 }
