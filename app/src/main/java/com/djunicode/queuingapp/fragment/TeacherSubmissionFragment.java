@@ -20,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,11 +52,11 @@ import java.util.List;
  */
 public class TeacherSubmissionFragment extends Fragment {
 
-  private Spinner subjectSpinner, batchSpinner;
+  public static Spinner subjectSpinner, batchSpinner;
   private CardView fromTimePickerButton;
   private ImageButton studentsButton, timerButton;
-  private FloatingActionButton createFab, startFab, cancelFab, createNewFab;
-  private LinearLayout fabLL1, fabLL2, fabLL3;
+  private FloatingActionButton createFab, startFab, cancelFab, createNewFab, editFab;
+  private LinearLayout fabLL1, fabLL2, fabLL3, fabLL4;
   private CoordinatorLayout coordinatorLayout;
   private RelativeLayout relativeLayout;
   private Animation fabOpen, fabClose, rotateForward, rotateBackward;
@@ -63,6 +64,8 @@ public class TeacherSubmissionFragment extends Fragment {
   private String fromTime;
   private String toTime;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
+  public static BottomSheetFragment bottomSheetFragment;
+  private Bundle globalArgs;
 
   public TeacherSubmissionFragment() {
     // Required empty public constructor
@@ -78,6 +81,8 @@ public class TeacherSubmissionFragment extends Fragment {
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
 
+    final Bundle args = getArguments();
+
     isFabOpen = false;
     fromSelected = false;
     toSelected = false;
@@ -91,15 +96,22 @@ public class TeacherSubmissionFragment extends Fragment {
     startFab = (FloatingActionButton) view.findViewById(R.id.startFab);
     cancelFab = (FloatingActionButton) view.findViewById(R.id.cancelFab);
     createNewFab = (FloatingActionButton) view.findViewById(R.id.createNewFab);
+    editFab = (FloatingActionButton) view.findViewById(R.id.editFab);
     coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.teacherCoordinatorLayout);
     relativeLayout = (RelativeLayout) view.findViewById(R.id.submissionRelativeLayout);
     fabLL1 = (LinearLayout) view.findViewById(R.id.fabLL1);
     fabLL2 = (LinearLayout) view.findViewById(R.id.fabLL2);
     fabLL3 = (LinearLayout) view.findViewById(R.id.fabLL3);
+    fabLL4 = (LinearLayout) view.findViewById(R.id.fabLL4);
     fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
     fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
     rotateForward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_forward);
     rotateBackward = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_backward);
+
+    if (args != null) {
+      globalArgs = args;
+      createFab.setImageResource(R.drawable.ic_upload);
+    }
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
@@ -236,7 +248,44 @@ public class TeacherSubmissionFragment extends Fragment {
     createFab.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        animateFab();
+        if (args != null) {
+          Log.i("Position", Integer.toString(args.getInt("Position")));
+//          recentEventsList.remove(extras.getInt("Position"));
+          if (toSelected || studentsSelected) {
+            AlertDialog.Builder builder = new Builder(getContext());
+            builder.setMessage("Do you want to use the last location or set new location?")
+                .setPositiveButton("LAST", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                    if (!TeacherLocationFragment.locationUpdated) {
+                      updateLocation(true);
+                      String message = "No last location set! Please update your location.";
+                      Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                    } else {
+                      recentEventsList
+                          .set(args.getInt("Position"),
+                              new RecentEvents(subjectSpinner.getSelectedItem().toString(),
+                                  batchSpinner.getSelectedItem().toString(), fromTime, toTime,
+                                  TeacherLocationFragment.locationString));
+                      Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+                    }
+                    createFab.setImageResource(R.drawable.ic_add);
+                  }
+                })
+                .setNegativeButton("NEW", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                    updateLocation(true);
+                    createFab.setImageResource(R.drawable.ic_add);
+                  }
+                });
+            builder.show();
+          } else {
+            Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
+          }
+        } else {
+          animateFab();
+        }
       }
     });
 
@@ -260,9 +309,6 @@ public class TeacherSubmissionFragment extends Fragment {
       @Override
       public void onClick(View v) {
         animateFab();
-        /*recentEventsList.add(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
-            batchSpinner.getSelectedItem().toString(), fromTime, toTime,
-            TeacherLocationFragment.locationString));*/
 
         if (toSelected || studentsSelected) {
           AlertDialog.Builder builder = new Builder(getContext());
@@ -271,24 +317,7 @@ public class TeacherSubmissionFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                   if (!TeacherLocationFragment.locationUpdated) {
-                    Bundle extras = new Bundle();
-                    extras.putBoolean("Flag", false);
-                    extras.putString("Subject", subjectSpinner.getSelectedItem().toString());
-                    extras.putString("Batch", batchSpinner.getSelectedItem().toString());
-                    extras.putString("From", fromTime);
-                    extras.putString("To", toTime);
-
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-                        .beginTransaction();
-
-                    TeacherLocationFragment locationFragment = new TeacherLocationFragment();
-                    locationFragment.setArguments(extras);
-
-                    TeacherScreenActivity.bottomNavigationView
-                        .setSelectedItemId(R.id.action_location);
-
-                    transaction.replace(R.id.containerLayoutTeacher, locationFragment);
-                    transaction.commit();
+                    updateLocation(false);
 
                     String message = "No last location set! Please update your location.";
                     Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
@@ -299,41 +328,55 @@ public class TeacherSubmissionFragment extends Fragment {
                             TeacherLocationFragment.locationString));
                     Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
                   }
+                  createFab.setImageResource(R.drawable.ic_add);
                 }
               })
               .setNegativeButton("NEW", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                  Bundle extras = new Bundle();
-                  extras.putBoolean("Flag", true);
-                  extras.putString("Subject", subjectSpinner.getSelectedItem().toString());
-                  extras.putString("Batch", batchSpinner.getSelectedItem().toString());
-                  extras.putString("From", fromTime);
-                  extras.putString("To", toTime);
-
-                  FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-                      .beginTransaction();
-
-                  TeacherLocationFragment locationFragment = new TeacherLocationFragment();
-                  locationFragment.setArguments(extras);
-
-                  TeacherScreenActivity.bottomNavigationView
-                      .setSelectedItemId(R.id.action_location);
-
-                  transaction.replace(R.id.containerLayoutTeacher, locationFragment);
-                  transaction.commit();
-
+                  updateLocation(false);
+                  createFab.setImageResource(R.drawable.ic_add);
                 }
               });
           builder.show();
         } else {
           Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
         }
+      }
+    });
 
+    editFab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        bottomSheetFragment = new BottomSheetFragment();
+        bottomSheetFragment
+            .show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
       }
     });
 
     return view;
+  }
+
+  private void updateLocation(boolean flag) {
+    Bundle extras = new Bundle();
+    extras.putBoolean("Flag", flag);
+    extras.putString("Subject", subjectSpinner.getSelectedItem().toString());
+    extras.putString("Batch", batchSpinner.getSelectedItem().toString());
+    extras.putString("From", fromTime);
+    extras.putString("To", toTime);
+    if(flag) extras.putInt("Position", globalArgs.getInt("Position"));
+
+    FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+        .beginTransaction();
+
+    TeacherLocationFragment locationFragment = new TeacherLocationFragment();
+    locationFragment.setArguments(extras);
+
+    TeacherScreenActivity.bottomNavigationView
+        .setSelectedItemId(R.id.action_location);
+
+    transaction.replace(R.id.containerLayoutTeacher, locationFragment);
+    transaction.commit();
   }
 
   private void animateFab() {
@@ -341,26 +384,32 @@ public class TeacherSubmissionFragment extends Fragment {
       fabLL1.setVisibility(View.INVISIBLE);
       fabLL2.setVisibility(View.INVISIBLE);
       fabLL3.setVisibility(View.INVISIBLE);
+      fabLL4.setVisibility(View.INVISIBLE);
       isFabOpen = false;
       createFab.setAnimation(rotateBackward);
       fabLL1.animate().translationY(0).alpha(0.0f);
       fabLL2.animate().translationY(0).alpha(0.0f);
       fabLL3.animate().translationY(0).alpha(0.0f);
-      if(VERSION.SDK_INT >= 23)
+      fabLL4.animate().translationY(0).alpha(0.0f);
+      if (VERSION.SDK_INT >= 23) {
         relativeLayout.setForeground(new ColorDrawable(getResources().
             getColor(android.R.color.transparent)));
+      }
     } else {
       fabLL1.setVisibility(View.VISIBLE);
       fabLL2.setVisibility(View.VISIBLE);
       fabLL3.setVisibility(View.VISIBLE);
+      fabLL4.setVisibility(View.VISIBLE);
       isFabOpen = true;
       createFab.setAnimation(rotateForward);
       fabLL1.animate().translationY(-getResources().getDimension(R.dimen.standard_65)).alpha(1.0f);
       fabLL2.animate().translationY(-getResources().getDimension(R.dimen.standard_115)).alpha(1.0f);
       fabLL3.animate().translationY(-getResources().getDimension(R.dimen.standard_165)).alpha(1.0f);
-      if(VERSION.SDK_INT >= 23)
+      fabLL4.animate().translationY(-getResources().getDimension(R.dimen.standard_215)).alpha(1.0f);
+      if (VERSION.SDK_INT >= 23) {
         relativeLayout.setForeground(new ColorDrawable(ContextCompat.
             getColor(getContext(), R.color.transparent_white)));
+      }
     }
   }
 
