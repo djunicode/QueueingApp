@@ -3,12 +3,11 @@
   package="com.djunicode.queuingapp">
 
   <supports-screens
-    android:resizeable="true"
-    android:smallScreens="true"
-    android:normalScreens="true"
-    android:largeScreens="true"
     android:anyDensity="true"
-    />
+    android:largeScreens="true"
+    android:normalScreens="true"
+    android:resizeable="true"
+    android:smallScreens="true"/>
 
   <application
     android:allowBackup="false"
@@ -19,7 +18,8 @@
     android:theme="@style/AppTheme">
     <activity android:name=".activity.MainActivity">
     </activity>
-    <activity android:name=".activity.LogInActivity"
+    <activity
+      android:name=".activity.LogInActivity"
       android:theme="@style/MyTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -28,6 +28,22 @@
       </intent-filter>
     </activity>
     <activity android:name=".activity.StudentScreenActivity">
+    </activity>
+    <activity
+      android:name=".activity.StudentQueueActivity"
+      android:theme="@style/MyTheme">
+    </activity>
+    <activity android:name=".activity.SightedTeacherActivity">
+    </activity>
+    <activity android:name=".activity.TeacherScreenActivity">
+    </activity>
+    <activity android:name=".activity.StudentListActivity">
+    </activity>
+    <activity android:name=".activity.TeacherProfileActivity"
+      android:theme="@style/MyTheme">
+    </activity>
+    <activity android:name=".activity.timeTableActivity"
+      android:theme="@style/MyTheme">
     </activity>
   </application>
 

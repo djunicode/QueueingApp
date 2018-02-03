@@ -42,7 +42,7 @@
       android:textSize="20sp"
       android:textStyle="bold"/>
 
-    <com.djunicode.queuingapp.lib.MultiSelectionSpinner
+    <com.djunicode.queuingapp.customClasses.MultiSelectionSpinner
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:id="@+id/subjectSpinner"
@@ -65,7 +65,7 @@
       android:textSize="20sp"
       android:textStyle="bold"/>
 
-    <com.djunicode.queuingapp.lib.MultiSelectionSpinner
+    <com.djunicode.queuingapp.customClasses.MultiSelectionSpinner
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:id="@+id/teacherSpinner"

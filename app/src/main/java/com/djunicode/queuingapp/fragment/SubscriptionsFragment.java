@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
-import com.djunicode.queuingapp.lib.MultiSelectionSpinner;
-import com.djunicode.queuingapp.lib.MultiSelectionSpinner.OnMultipleItemsSelectedListener;
+import com.djunicode.queuingapp.customClasses.MultiSelectionSpinner;
+import com.djunicode.queuingapp.customClasses.MultiSelectionSpinner.OnMultipleItemsSelectedListener;
 import java.util.List;
 
 /**

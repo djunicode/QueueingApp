@@ -48,6 +48,18 @@
     <item>BE</item>
   </string-array>
 
+  <string-array name="batch_array">
+    <item>SELECT BATCH</item>
+    <item>A1</item>
+    <item>A2</item>
+    <item>A3</item>
+    <item>A4</item>
+    <item>B1</item>
+    <item>B2</item>
+    <item>B3</item>
+    <item>B4</item>
+  </string-array>
+
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="semester">Semester</string>
@@ -55,5 +67,31 @@
   <string name="teacher">Teacher</string>
   <string name="find_teacher">FIND TEACHER</string>
   <string name="sighted_a_teacher">SIGHTED A TEACHER</string>
+  <string name="location">Location :</string>
+  <string name="from">From :</string>
+  <string name="to">To :</string>
+  <string name="batch">Batch :</string>
+  <string name="join">JOIN</string>
+  <string name="your_position_in_the_queue_is">YOUR POSITION IN THE QUEUE IS</string>
+  <string name="i_am_done">I AM DONE</string>
+  <string name="department">Department</string>
+  <string name="room">Room</string>
+  <string name="update_teacher_location">Update Teacher Location</string>
+  <string name="my_profile">My Profile</string>
+  <string name="my_location">My Location</string>
+  <string name="restriction">Restriction</string>
+  <string name="time">Time</string>
+  <string name="students">Students</string>
+  <string name="floor">Floor</string>
+  <string name="cancel">Cancel</string>
+  <string name="start">Start</string>
+  <string name="students_in_the_queue">STUDENTS IN THE QUEUE</string>
+  <string name="recent">Recent</string>
+  <string name="submissions">Submissions</string>
+  <string name="subscribers">Subscribers</string>
+  <string name="time_table">Time-Table</string>
+  <string name="create_new">Create new</string>
+  <string name="delete">Delete</string>
+  <string name="edit">Edit</string>
 
 </resources>
