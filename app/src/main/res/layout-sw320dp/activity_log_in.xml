@@ -20,17 +20,6 @@
       android:layout_height="wrap_content"
       android:orientation="vertical">
 
-      <TextView
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
-        android:fontFamily="monospace"
-        android:text="@string/welcome"
-        android:textColor="#fff"
-        android:textSize="@dimen/welcome"/>
-
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
