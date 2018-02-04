@@ -82,7 +82,7 @@ public class TeacherLocationFragment extends Fragment {
     floorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position != 0){
+        if (position != 0) {
           departmentSpinner.setEnabled(true);
           departmentSpinner.setAlpha(1.0f);
         }
@@ -97,7 +97,7 @@ public class TeacherLocationFragment extends Fragment {
     departmentSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position != 0){
+        if (position != 0) {
           roomSpinner.setEnabled(true);
           roomSpinner.setAlpha(1.0f);
         }
@@ -131,15 +131,24 @@ public class TeacherLocationFragment extends Fragment {
 
         boolean flag = false;
 
-        if(extras != null){
+        if (extras != null) {
           flag = extras.getBoolean("Flag");
           String subject = extras.getString("Subject");
           String batch = extras.getString("Batch");
           String from = extras.getString("From");
           String to = extras.getString("To");
-          TeacherSubmissionFragment.recentEventsList.add(new RecentEvents(subject, batch, from, to,
-              locationString));
-          Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
+
+          if (flag) {
+            TeacherSubmissionFragment.recentEventsList
+                .set(extras.getInt("Position"), new RecentEvents(subject, batch, from, to,
+                    locationString));
+            Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+          } else {
+            TeacherSubmissionFragment.recentEventsList
+                .add(new RecentEvents(subject, batch, from, to,
+                    locationString));
+            Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
+          }
         }
         Toast.makeText(getContext(), "Clicked!", Toast.LENGTH_LONG).show();
         Call<LocationTeacher> call = apiInterface.sendTeacherLocation(6, "Comps", "60");
