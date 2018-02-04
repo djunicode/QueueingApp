@@ -120,7 +120,7 @@ public class LogInTeacherFragment extends Fragment {
   }
 
   private boolean validMatch() {
-    if(sapIdLogInTeacherEditText.getText().toString().equals("dhruv") &&
+    if(sapIdLogInTeacherEditText.getText().toString().equals("60004160006") &&
         passwordLogInTeacherEditText.getText().toString().equals("demopass")) {
 
       return true;
