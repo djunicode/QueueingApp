@@ -23,6 +23,7 @@ public class EmailActivity extends AppCompatActivity {
   private EditText signUpEmailEditText, verifyEditText;
   private Button sendCodeButton, verifyEmailButton;
   private ApiInterface apiInterface;
+  private Integer id;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +45,40 @@ public class EmailActivity extends AppCompatActivity {
     sendCodeButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        Call<UserEmailVerify> call = apiInterface
-            .sendEmail(null, signUpEmailEditText.getText().toString(), null);
+        String email = signUpEmailEditText.getText().toString();
+        Call<UserEmailVerify> call = apiInterface.sendEmail("", email, "");
+        if (user.equals("teacher")) {
+          if (email.contains("@djsce.ac.in")) {
+            call.enqueue(new Callback<UserEmailVerify>() {
+              @Override
+              public void onResponse(Call<UserEmailVerify> call,
+                  Response<UserEmailVerify> response) {
+                Integer id = response.body().getId();
+                Log.i("ID:", Integer.toString(id));
+              }
 
-        call.enqueue(new Callback<UserEmailVerify>() {
-          @Override
-          public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
-            Integer id = response.body().getId();
-            Log.i("ID:", Integer.toString(id));
+              @Override
+              public void onFailure(Call<UserEmailVerify> call, Throwable t) {
+                Log.e("Error:", t.getMessage());
+              }
+            });
+          } else {
+            Log.e("Error: ", "Invalid teacher email");
           }
+        } else {
+          call.enqueue(new Callback<UserEmailVerify>() {
+            @Override
+            public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
+              id = response.body().getId();
+              Log.i("ID:", Integer.toString(id));
+            }
 
-          @Override
-          public void onFailure(Call<UserEmailVerify> call, Throwable t) {
-
-          }
-        });
+            @Override
+            public void onFailure(Call<UserEmailVerify> call, Throwable t) {
+              Log.e("Error:", t.getMessage());
+            }
+          });
+        }
       }
     });
 
@@ -67,6 +87,20 @@ public class EmailActivity extends AppCompatActivity {
       public void onClick(View v) {
         Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
 
+       Call<UserEmailVerify> call = apiInterface
+           .verifyEmail(id, verifyEditText.getText().toString());
+       call.enqueue(new Callback<UserEmailVerify>() {
+         @Override
+         public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
+           Boolean valid = response.body().getValid();
+           Log.i("Token: ", valid.toString());
+         }
+
+         @Override
+         public void onFailure(Call<UserEmailVerify> call, Throwable t) {
+
+         }
+       });
         if (user.equals("teacher")) {
           intent.putExtra("user", user);
         } else {

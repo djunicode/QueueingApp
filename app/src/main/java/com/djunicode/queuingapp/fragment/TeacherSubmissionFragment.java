@@ -1,10 +1,15 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -15,6 +20,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
@@ -42,6 +49,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.StudentListActivity;
+import com.djunicode.queuingapp.activity.StudentQueueActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
 import com.djunicode.queuingapp.model.RecentEvents;
 import java.util.ArrayList;
@@ -66,6 +74,9 @@ public class TeacherSubmissionFragment extends Fragment {
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
   public static BottomSheetFragment bottomSheetFragment;
   private Bundle globalArgs;
+  private static final int SUBMISSION_NOTIFICATION_ID = 1000;
+  private NotificationCompat.Builder notificationBuilder;
+  private NotificationManager notificationManager;
 
   public TeacherSubmissionFragment() {
     // Required empty public constructor
@@ -121,6 +132,26 @@ public class TeacherSubmissionFragment extends Fragment {
 
     batchSpinner.setEnabled(false);
     batchSpinner.setAlpha(0.4f);
+
+    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_submission);
+
+    notificationBuilder = new NotificationCompat.Builder(getContext())
+        .setColor(ContextCompat.getColor(getContext(),R.color.colorPrimary))
+        .setSmallIcon(R.drawable.ic_submission)
+        .setLargeIcon(largeIcon)
+        .setContentTitle("Submission started.")
+        .setContentText("The submission for DLDA is started.")
+        .setAutoCancel(true);
+
+    Intent queueActivityIntent = new Intent(getContext(), StudentQueueActivity.class);
+    TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(getContext());
+    taskStackBuilder.addNextIntentWithParentStack(queueActivityIntent);
+    PendingIntent resultPendingIntent = taskStackBuilder
+        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+    notificationBuilder.setContentIntent(resultPendingIntent);
+
+    notificationManager = (NotificationManager)
+        getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
     subjectSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
@@ -300,6 +331,7 @@ public class TeacherSubmissionFragment extends Fragment {
       @Override
       public void onClick(View v) {
         animateFab();
+        notificationManager.notify(SUBMISSION_NOTIFICATION_ID, notificationBuilder.build());
         Intent intent = new Intent(getContext(), StudentListActivity.class);
         startActivity(intent);
       }

@@ -16,12 +16,19 @@ public class UserEmailVerify {
   private String password;
   @SerializedName("id")
   private Integer id;
+  @SerializedName("token")
+  private String token;
+  @SerializedName("valid")
+  private Boolean valid;
 
-  public UserEmailVerify(String name, String email, String password, Integer id){
+  public UserEmailVerify(String name, String email, String password, Integer id, String token,
+      Boolean valid) {
     this.name = name;
     this.email = email;
     this.password = password;
     this.id = id;
+    this.token = token;
+    this.valid = valid;
   }
 
   public void setName(String name) {
@@ -50,5 +57,17 @@ public class UserEmailVerify {
 
   public Integer getId() {
     return id;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setValid(Boolean valid) {
+    this.valid = valid;
+  }
+
+  public Boolean getValid() {
+    return valid;
   }
 }
