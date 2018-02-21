@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.activity;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,18 +43,21 @@ public class EmailActivity extends AppCompatActivity {
     sendCodeButton = (Button) findViewById(R.id.sendCodeButton);
     verifyEmailButton = (Button) findViewById(R.id.verifyEmailButton);
 
+    verifyEmailButton.setEnabled(false);
+
     sendCodeButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         String email = signUpEmailEditText.getText().toString();
-        Call<UserEmailVerify> call = apiInterface.sendEmail("", email, "");
+//        email.split("@")[0]
+        Call<UserEmailVerify> call = apiInterface.sendEmail("raj5", email, "demopass");
         if (user.equals("teacher")) {
           if (email.contains("@djsce.ac.in")) {
             call.enqueue(new Callback<UserEmailVerify>() {
               @Override
-              public void onResponse(Call<UserEmailVerify> call,
-                  Response<UserEmailVerify> response) {
-                Integer id = response.body().getId();
+              public void onResponse(@NonNull Call<UserEmailVerify> call,
+                  @NonNull Response<UserEmailVerify> response) {
+                id = response.body().getId();
                 Log.i("ID:", Integer.toString(id));
               }
 
@@ -70,7 +74,7 @@ public class EmailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
               id = response.body().getId();
-              Log.i("ID:", Integer.toString(id));
+              Log.e("ID:", id.toString());
             }
 
             @Override
@@ -79,34 +83,40 @@ public class EmailActivity extends AppCompatActivity {
             }
           });
         }
+        sendCodeButton.setEnabled(false);
+        verifyEmailButton.setEnabled(true);
       }
     });
 
     verifyEmailButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
+        final Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
 
-       Call<UserEmailVerify> call = apiInterface
-           .verifyEmail(id, verifyEditText.getText().toString());
-       call.enqueue(new Callback<UserEmailVerify>() {
-         @Override
-         public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
-           Boolean valid = response.body().getValid();
-           Log.i("Token: ", valid.toString());
-         }
+        Call<UserEmailVerify> call = apiInterface
+            .verifyEmail(id, verifyEditText.getText().toString());
+        call.enqueue(new Callback<UserEmailVerify>() {
+          @Override
+          public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
+            Boolean valid = response.body().getValid();
+            Log.e("Valid:", valid.toString());
 
-         @Override
-         public void onFailure(Call<UserEmailVerify> call, Throwable t) {
+            if(valid){
+              if (user.equals("teacher")) {
+                intent.putExtra("user", user);
+              } else {
+                intent.putExtra("user", "student");
+              }
+              startActivity(intent);
+            }
+          }
 
-         }
-       });
-        if (user.equals("teacher")) {
-          intent.putExtra("user", user);
-        } else {
-          intent.putExtra("user", "student");
-        }
-        startActivity(intent);
+          @Override
+          public void onFailure(Call<UserEmailVerify> call, Throwable t) {
+            Log.e("Error:", t.getMessage());
+          }
+        });
+
       }
     });
   }

@@ -4,8 +4,10 @@ package com.djunicode.queuingapp.fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import android.widget.AdapterView;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.customClasses.MultiSelectionSpinner;
 import com.djunicode.queuingapp.customClasses.MultiSelectionSpinner.OnMultipleItemsSelectedListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.List;
 
 /**
@@ -97,6 +100,14 @@ public class SubscriptionsFragment extends Fragment {
       @Override
       public void selectedStrings(List<String> strings) {
         Toast.makeText(getContext(), "Teachers:" + strings.toString(), Toast.LENGTH_LONG).show();
+      }
+    });
+
+    subscriptionsFab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.e("RegId", token);
       }
     });
 

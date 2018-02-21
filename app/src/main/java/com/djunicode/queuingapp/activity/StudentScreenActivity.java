@@ -1,25 +1,38 @@
 package com.djunicode.queuingapp.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.fragment.FindTeacherFragment;
 import com.djunicode.queuingapp.fragment.SubmissionFragment;
 import com.djunicode.queuingapp.fragment.SubscriptionsFragment;
+import com.djunicode.queuingapp.service.MyFirebaseInstanceIdService;
+import com.djunicode.queuingapp.service.MyFirebaseMessagingService;
+import com.djunicode.queuingapp.utils.NotificationUtils;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class StudentScreenActivity extends AppCompatActivity {
 
   private final static String TAG = LogInActivity.class.getSimpleName();
 
   private BottomNavigationView bottomNavigationView;
+  private BroadcastReceiver broadcastReceiver;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +41,7 @@ public class StudentScreenActivity extends AppCompatActivity {
 
     bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
 
-    if(savedInstanceState == null){
+    if (savedInstanceState == null) {
       loadSubmissionFragment();
     }
 
@@ -50,6 +63,27 @@ public class StudentScreenActivity extends AppCompatActivity {
             return true;
           }
         });
+
+    broadcastReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals(MyFirebaseInstanceIdService.REGISTRATION_COMPLETE)) {
+//          FirebaseMessaging.getInstance().subscribeToTopic("global");
+
+          displayFirebaseRegId();
+        } else if (intent.getAction().equals(MyFirebaseMessagingService.PUSH_NOTIFICATION)) {
+          String message = intent.getStringExtra("message");
+          Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        }
+      }
+    };
+    displayFirebaseRegId();
+  }
+
+  private void displayFirebaseRegId() {
+    SharedPreferences preferences = getApplicationContext()
+        .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+    Log.e("Firebase RegId", preferences.getString("regId", "empty"));
   }
 
   private void loadSubmissionFragment() {
@@ -80,6 +114,24 @@ public class StudentScreenActivity extends AppCompatActivity {
     transaction.replace(R.id.containerLayout, fragment);
     transaction.addToBackStack(TAG);
     transaction.commit();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+        new IntentFilter(MyFirebaseInstanceIdService.REGISTRATION_COMPLETE));
+
+    LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+        new IntentFilter(MyFirebaseMessagingService.PUSH_NOTIFICATION));
+
+    NotificationUtils.clearNotifications(getApplicationContext());
+  }
+
+  @Override
+  protected void onPause() {
+    LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+    super.onPause();
   }
 
   @Override

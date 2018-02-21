@@ -42,10 +42,10 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @POST("queues/users/")
-  Call<UserEmailVerify> sendEmail(@Field("name") String name, @Field("email") String email,
+  Call<UserEmailVerify> sendEmail(@Field("username") String name, @Field("email") String email,
       @Field("password") String password);
 
   @FormUrlEncoded
-  @PUT("queues/users/{id}")
+  @PUT("queues/users/{id}/")
   Call<UserEmailVerify> verifyEmail(@Path("id") int id, @Field("token") String token);
 }

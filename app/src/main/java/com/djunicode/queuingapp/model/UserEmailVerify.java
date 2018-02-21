@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserEmailVerify {
 
-  @SerializedName("name")
+  @SerializedName("username")
   private String name;
   @SerializedName("email")
   private String email;

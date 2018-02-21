@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
+import com.djunicode.queuingapp.activity.SubjectsActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
 
 /**
@@ -60,7 +61,7 @@ public class SignUpTeacherFragment extends Fragment {
         if(validSubmission()) {
           session.createLoginSession(usernameTeacherEditText.getText().toString(),
               passwordTeacherEditText.getText().toString());
-          Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
+          Intent intent = new Intent(getContext(), SubjectsActivity.class);
           // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);
           Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),

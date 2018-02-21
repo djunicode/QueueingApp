@@ -10,6 +10,7 @@
     android:smallScreens="true"/>
 
   <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
 
   <application
     android:allowBackup="false"
@@ -19,6 +20,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
     <activity
+      android:launchMode="singleTop"
       android:name=".activity.MainActivity"
       android:theme="@style/MyTheme">
       <intent-filter>
@@ -53,6 +55,25 @@
     </activity>
     <activity android:name=".activity.EmailActivity">
     </activity>
+    <activity android:name=".activity.SubjectsActivity">
+    </activity>
+
+    <service
+      android:name=".service.MyFirebaseMessagingService">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+      </intent-filter>
+    </service>
+
+    <service
+      android:name=".service.MyFirebaseInstanceIdService">
+      <intent-filter>
+        <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+      </intent-filter>
+    </service>
+
+    <service android:name=".service.UpdateQueueService"/>
+
   </application>
 
 </manifest>

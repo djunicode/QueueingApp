@@ -8,6 +8,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -51,7 +52,9 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.StudentListActivity;
 import com.djunicode.queuingapp.activity.StudentQueueActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.customClasses.ObjectSerializer;
 import com.djunicode.queuingapp.model.RecentEvents;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +80,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private static final int SUBMISSION_NOTIFICATION_ID = 1000;
   private NotificationCompat.Builder notificationBuilder;
   private NotificationManager notificationManager;
+  private ArrayList<String> subjects;
 
   public TeacherSubmissionFragment() {
     // Required empty public constructor
@@ -91,6 +95,9 @@ public class TeacherSubmissionFragment extends Fragment {
 
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
+
+    SharedPreferences preferences = getActivity()
+        .getSharedPreferences("com.djunicode.queuingapp", Context.MODE_PRIVATE);
 
     final Bundle args = getArguments();
 
@@ -124,19 +131,26 @@ public class TeacherSubmissionFragment extends Fragment {
       createFab.setImageResource(R.drawable.ic_upload);
     }
 
+    try {
+      subjects = (ArrayList<String>) ObjectSerializer.deserialize(
+          preferences.getString("subjects", ObjectSerializer.serialize(new ArrayList<String>())));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
 
-    subjectSpinner.setAdapter(adapter);
-    batchSpinner.setAdapter(adapter);
+    ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(getContext(),
+        android.R.layout.simple_list_item_1, subjects);
 
-    batchSpinner.setEnabled(false);
-    batchSpinner.setAlpha(0.4f);
+    subjectSpinner.setAdapter(subjectsAdapter);
+    batchSpinner.setAdapter(adapter);
 
     Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_submission);
 
     notificationBuilder = new NotificationCompat.Builder(getContext())
-        .setColor(ContextCompat.getColor(getContext(),R.color.colorPrimary))
+        .setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary))
         .setSmallIcon(R.drawable.ic_submission)
         .setLargeIcon(largeIcon)
         .setContentTitle("Submission started.")
@@ -396,7 +410,9 @@ public class TeacherSubmissionFragment extends Fragment {
     extras.putString("Batch", batchSpinner.getSelectedItem().toString());
     extras.putString("From", fromTime);
     extras.putString("To", toTime);
-    if(flag) extras.putInt("Position", globalArgs.getInt("Position"));
+    if (flag) {
+      extras.putInt("Position", globalArgs.getInt("Position"));
+    }
 
     FragmentTransaction transaction = getActivity().getSupportFragmentManager()
         .beginTransaction();
