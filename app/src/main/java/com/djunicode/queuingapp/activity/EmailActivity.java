@@ -43,7 +43,7 @@ public class EmailActivity extends AppCompatActivity {
     sendCodeButton = (Button) findViewById(R.id.sendCodeButton);
     verifyEmailButton = (Button) findViewById(R.id.verifyEmailButton);
 
-    verifyEmailButton.setEnabled(false);
+//    verifyEmailButton.setEnabled(false);
 
     sendCodeButton.setOnClickListener(new OnClickListener() {
       @Override
@@ -93,7 +93,7 @@ public class EmailActivity extends AppCompatActivity {
       public void onClick(View v) {
         final Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
 
-        Call<UserEmailVerify> call = apiInterface
+       /* Call<UserEmailVerify> call = apiInterface
             .verifyEmail(id, verifyEditText.getText().toString());
         call.enqueue(new Callback<UserEmailVerify>() {
           @Override
@@ -115,7 +115,14 @@ public class EmailActivity extends AppCompatActivity {
           public void onFailure(Call<UserEmailVerify> call, Throwable t) {
             Log.e("Error:", t.getMessage());
           }
-        });
+        });*/
+
+        if (user.equals("teacher")) {
+          intent.putExtra("user", user);
+        } else {
+          intent.putExtra("user", "student");
+        }
+        startActivity(intent);
 
       }
     });

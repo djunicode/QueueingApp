@@ -3,7 +3,10 @@ package com.djunicode.queuingapp.rest;
 import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.Student;
 import com.djunicode.queuingapp.model.StudentForId;
+import com.djunicode.queuingapp.model.StudentQueue;
+import com.djunicode.queuingapp.model.StudentSubscriptions;
 import com.djunicode.queuingapp.model.UserEmailVerify;
+import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -48,4 +51,16 @@ public interface ApiInterface {
   @FormUrlEncoded
   @PUT("queues/users/{id}/")
   Call<UserEmailVerify> verifyEmail(@Path("id") int id, @Field("token") String token);
+
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/")
+  Call<StudentQueue> studentJoiningTheQueue (@Path("id") int id, @Field("queueItems") String sapID);
+
+  @GET("queues/queue/{id}/")
+  Call<StudentQueue> getUpdatedQueue(@Path("id") int id);
+
+  @FormUrlEncoded
+  @PUT("queues/student/{id}/")
+  Call<Student> setStudentSubscriptions(@Path("id") int id, @Field("teacherNames")
+      List<String> subscriptions);
 }

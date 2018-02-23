@@ -5,6 +5,7 @@ package com.djunicode.queuingapp.model;
  */
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 
 public class Student {
@@ -21,11 +22,15 @@ public class Student {
   public String batch;
   @SerializedName("sapID")
   public String sapID;
+  @SerializedName("teacherNames")
+  private List<String> teacherNames;
+  @SerializedName("subscription")
+  private List<String> subscription;
 //  @SerializedName("password")
 //  public String password;
 
   public Student(int user, String name, String department, String year, String batch,
-      String sapID, String password)   {
+      String sapID, String password, List<String> teacherNames, List<String> subscription)   {
     this.user = user;
     this.name = name;
     this.department = department;
@@ -33,7 +38,16 @@ public class Student {
     this.batch = batch;
     this.sapID = sapID;
 //    this.password = password;
+    this.teacherNames = teacherNames;
+    this.subscription = subscription;
   }
 
+  public List<String> getTeacherNames() {
+    return teacherNames;
+  }
+
+  public List<String> getSubscription() {
+    return subscription;
+  }
 }
 

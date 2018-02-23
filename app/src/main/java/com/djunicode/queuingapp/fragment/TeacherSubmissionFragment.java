@@ -54,9 +54,15 @@ import com.djunicode.queuingapp.activity.StudentQueueActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
 import com.djunicode.queuingapp.customClasses.ObjectSerializer;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.StudentQueue;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -345,6 +351,20 @@ public class TeacherSubmissionFragment extends Fragment {
       @Override
       public void onClick(View v) {
         animateFab();
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<StudentQueue> call = apiInterface.studentJoiningTheQueue(1, "60004160035");
+        call.enqueue(new Callback<StudentQueue>() {
+          @Override
+          public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
+            List<String> queue = response.body().getItems();
+            Log.e("Items", queue.toString());
+          }
+
+          @Override
+          public void onFailure(Call<StudentQueue> call, Throwable t) {
+
+          }
+        });
         notificationManager.notify(SUBMISSION_NOTIFICATION_ID, notificationBuilder.build());
         Intent intent = new Intent(getContext(), StudentListActivity.class);
         startActivity(intent);
