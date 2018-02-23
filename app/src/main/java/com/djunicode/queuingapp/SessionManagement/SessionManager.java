@@ -32,10 +32,12 @@ public class SessionManager {
 
   public void createLoginSession(String sapid, String password){
 
+
     if (prefName.equals("Teacher")){
 
-      // Storing name in sharedPreferences
+      // Storing sapID in sharedPreferences
       editor.putString("teacher_sapid", sapid);
+
 
       // Storing password in sharedPreferences
       editor.putString("teacher_password", password);
@@ -45,6 +47,7 @@ public class SessionManager {
     else {
 
       editor.putString("student_sapid", sapid);
+
 
       // Storing password in sharedPreferences
       editor.putString("student_password", password);

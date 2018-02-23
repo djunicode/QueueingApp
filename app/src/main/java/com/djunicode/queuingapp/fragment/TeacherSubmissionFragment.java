@@ -1,10 +1,17 @@
 package com.djunicode.queuingapp.fragment;
 
 
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -15,6 +22,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
@@ -46,6 +56,19 @@ import com.djunicode.queuingapp.activity.TeacherScreenActivity;
 import com.djunicode.queuingapp.model.RecentEvents;
 import java.util.ArrayList;
 import java.util.List;
+import com.djunicode.queuingapp.activity.StudentQueueActivity;
+import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.customClasses.ObjectSerializer;
+import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.StudentQueue;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,6 +90,11 @@ public class TeacherSubmissionFragment extends Fragment {
   public static BottomSheetFragment bottomSheetFragment;
   private Bundle globalArgs;
 
+  private static final int SUBMISSION_NOTIFICATION_ID = 1000;
+  private NotificationCompat.Builder notificationBuilder;
+  private NotificationManager notificationManager;
+  private ArrayList<String> subjects;
+
   public TeacherSubmissionFragment() {
     // Required empty public constructor
   }
@@ -80,6 +108,10 @@ public class TeacherSubmissionFragment extends Fragment {
 
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
+
+
+    SharedPreferences preferences = getActivity()
+        .getSharedPreferences("com.djunicode.queuingapp", Context.MODE_PRIVATE);
 
     final Bundle args = getArguments();
 
@@ -113,14 +145,41 @@ public class TeacherSubmissionFragment extends Fragment {
       createFab.setImageResource(R.drawable.ic_upload);
     }
 
+    try {
+      subjects = (ArrayList<String>) ObjectSerializer.deserialize(
+          preferences.getString("subjects", ObjectSerializer.serialize(new ArrayList<String>())));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
 
-    subjectSpinner.setAdapter(adapter);
+    ArrayAdapter<String> subjectsAdapter = new ArrayAdapter<String>(getContext(),
+        android.R.layout.simple_list_item_1, subjects);
+
+    subjectSpinner.setAdapter(subjectsAdapter);
     batchSpinner.setAdapter(adapter);
 
-    batchSpinner.setEnabled(false);
-    batchSpinner.setAlpha(0.4f);
+    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_submission);
+
+    notificationBuilder = new NotificationCompat.Builder(getContext())
+        .setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary))
+        .setSmallIcon(R.drawable.ic_submission)
+        .setLargeIcon(largeIcon)
+        .setContentTitle("Submission started.")
+        .setContentText("The submission for DLDA is started.")
+        .setAutoCancel(true);
+
+    Intent queueActivityIntent = new Intent(getContext(), StudentQueueActivity.class);
+    TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(getContext());
+    taskStackBuilder.addNextIntentWithParentStack(queueActivityIntent);
+    PendingIntent resultPendingIntent = taskStackBuilder
+        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+    notificationBuilder.setContentIntent(resultPendingIntent);
+
+    notificationManager = (NotificationManager)
+        getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
     subjectSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
@@ -300,6 +359,22 @@ public class TeacherSubmissionFragment extends Fragment {
       @Override
       public void onClick(View v) {
         animateFab();
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<StudentQueue> call = apiInterface.studentJoiningTheQueue(1, "60004160035");
+        call.enqueue(new Callback<StudentQueue>() {
+          @Override
+          public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
+            List<String> queue = response.body().getItems();
+            Log.e("Items", queue.toString());
+          }
+
+          @Override
+          public void onFailure(Call<StudentQueue> call, Throwable t) {
+
+          }
+        });
+        notificationManager.notify(SUBMISSION_NOTIFICATION_ID, notificationBuilder.build());
         Intent intent = new Intent(getContext(), StudentListActivity.class);
         startActivity(intent);
       }
@@ -364,7 +439,10 @@ public class TeacherSubmissionFragment extends Fragment {
     extras.putString("Batch", batchSpinner.getSelectedItem().toString());
     extras.putString("From", fromTime);
     extras.putString("To", toTime);
-    if(flag) extras.putInt("Position", globalArgs.getInt("Position"));
+
+    if (flag) {
+      extras.putInt("Position", globalArgs.getInt("Position"));
+    }
 
     FragmentTransaction transaction = getActivity().getSupportFragmentManager()
         .beginTransaction();

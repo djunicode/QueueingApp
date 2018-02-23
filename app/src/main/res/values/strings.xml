@@ -25,6 +25,7 @@
   <string name="err_msg_password_inappropriate_length">Password should be at least 5 characters</string>
   <string name="err_msg_username_password_dont_match">Username and password does not match</string>
   <string name="err_msg_batch">Enter your batch</string>
+
   <string name="err_msg_department">Enter your department</string>
   <string name="err_msg_year">Enter your year</string>
 
@@ -100,4 +101,9 @@
   <string name="verify_email">Verify Email</string>
   <string name="welcome_back_user">WELCOME BACK USER!</string>
 
+  <string name="which_subjects_do_you_teach">Which subjects do you teach?</string>
+  <string name="odd_sem">Odd Sem</string>
+  <string name="even_sem">Even Sem</string>
+
 </resources>
+

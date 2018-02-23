@@ -16,6 +16,7 @@ import com.djunicode.queuingapp.fragment.SubmissionFragment;
 
 import static com.djunicode.queuingapp.customClasses.QueueDialogClass.flag;
 
+
 public class StudentQueueActivity extends AppCompatActivity {
 
   private TextView queuePositionTextView, positionTV;

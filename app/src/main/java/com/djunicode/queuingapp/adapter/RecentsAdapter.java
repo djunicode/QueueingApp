@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.StudentQueue;
 import java.util.List;
 
 /**
@@ -28,7 +29,8 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.MyViewHo
     this.recentEventsList = recentEventsList;
   }
 
-  public class MyViewHolder extends RecyclerView.ViewHolder{
+
+  public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     TextView subjectName, batchName, startTime, endTime, location;
     public RelativeLayout viewBackground, viewForeground;
@@ -42,6 +44,13 @@ public class RecentsAdapter extends RecyclerView.Adapter<RecentsAdapter.MyViewHo
       location = (TextView) itemView.findViewById(R.id.location);
       viewBackground = (RelativeLayout) itemView.findViewById(R.id.backgroundView);
       viewForeground = (RelativeLayout) itemView.findViewById(R.id.foregroundView);
+
+      itemView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
   }
 

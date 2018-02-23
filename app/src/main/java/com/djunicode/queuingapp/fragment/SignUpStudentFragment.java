@@ -90,12 +90,14 @@ public class SignUpStudentFragment extends Fragment {
 
     //if SharedPreferences contains username and password then redirect to Home activity
     if (sp_student.contains("student_sapid") && sp_student.contains("student_password")) {
+
       Intent in = new Intent(getContext(), StudentScreenActivity.class);
       startActivity(in);
 
     } else {
 
       if (sp_teacher.contains("teacher_sapid") && sp_teacher.contains("teacher_password")) {
+
         Toast.makeText(getActivity(), "I got it!", Toast.LENGTH_SHORT).show();
         Intent in = new Intent(getContext(), TeacherScreenActivity.class);
         // StudentScreenActivity just for demo till the time teacher fragments are not ready
@@ -152,6 +154,7 @@ public class SignUpStudentFragment extends Fragment {
       public void onClick(View v) {
         if (validSignUp()) {
           session.createLoginSession(sapIDEditText.getText().toString(),
+
               passwordEditText.getText().toString());
           Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
           startActivity(intent);

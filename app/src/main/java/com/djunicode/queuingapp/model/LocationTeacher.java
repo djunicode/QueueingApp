@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.model;
 
 import com.google.gson.annotations.Expose;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -12,14 +13,18 @@ public class LocationTeacher {
   @SerializedName("id")
   public Integer id;
 
+
   @SerializedName("room")
   public String room;
+
 
   @SerializedName("department")
   public String department;
 
+
   @SerializedName("floor")
   public Integer floor;
+
 
   @SerializedName("updated_at")
   public String updated_at;

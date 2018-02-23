@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.StudentQueueActivity;
-import com.djunicode.queuingapp.model.Queue;
 import com.djunicode.queuingapp.model.StudentQueue;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
@@ -24,6 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * Created by Ruturaj on 09-01-2018.
@@ -91,6 +91,9 @@ public class QueueDialogClass extends Dialog {
         else{
           Toast.makeText(getContext(), "You are already in the queue", Toast.LENGTH_SHORT).show();
         }
+        Intent intent = new Intent(activity, StudentQueueActivity.class);
+        getContext().startActivity(intent);
+        dismiss();
       }
     });
 

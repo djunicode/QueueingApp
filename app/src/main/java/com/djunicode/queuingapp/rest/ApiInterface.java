@@ -1,14 +1,21 @@
 package com.djunicode.queuingapp.rest;
 
 import com.djunicode.queuingapp.model.LocationTeacher;
-import com.djunicode.queuingapp.model.Queue;
+
+
+import com.djunicode.queuingapp.model.TeacherModel;
+
+
+import retrofit2.http.Body;
+
 import com.djunicode.queuingapp.model.Student;
 import com.djunicode.queuingapp.model.StudentForId;
 import com.djunicode.queuingapp.model.StudentQueue;
-import com.djunicode.queuingapp.model.TeacherModel;
-
+import com.djunicode.queuingapp.model.StudentSubscriptions;
+import com.djunicode.queuingapp.model.UserEmailVerify;
+import java.util.List;
 import retrofit2.Call;
-import retrofit2.http.Body;
+
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -34,14 +41,6 @@ public interface ApiInterface {
   @POST("queues/users/")
   Call<StudentForId> getId (@Field("username") String username, @Field("password") String password);
 
-  @FormUrlEncoded
-  @POST("queues/")
-  Call<LocationTeacher> sendTeacherLocation  (@Field("floor") Integer floor,
-      @Field("department") String department, @Field("room") String room);
-
-  @GET("queues/{id}/")
-  Call<LocationTeacher> getTeacherLocation (@Path("id") int id);
-
   @DELETE("queues/{id}/")
   Call<LocationTeacher> deleteTeacherLocation (@Path("id") int id);
 
@@ -58,4 +57,31 @@ public interface ApiInterface {
   Call<TeacherModel> getTeacherId (@Path("name") String name);
 
 
+
+
+  @FormUrlEncoded
+  @POST("queues/")
+  Call<LocationTeacher> sendTeacherLocation(@Field("floor") Integer floor,
+      @Field("department") String department, @Field("room") String room);
+
+  @GET("queues/{id}/")
+  Call<LocationTeacher> getTeacherLocation(@Path("id") int id);
+
+  @FormUrlEncoded
+  @POST("queues/users/")
+  Call<UserEmailVerify> sendEmail(@Field("username") String name, @Field("email") String email,
+      @Field("password") String password);
+
+  @FormUrlEncoded
+  @PUT("queues/users/{id}/")
+  Call<UserEmailVerify> verifyEmail(@Path("id") int id, @Field("token") String token);
+
+
+  @GET("queues/queue/{id}/")
+  Call<StudentQueue> getUpdatedQueue(@Path("id") int id);
+
+  @FormUrlEncoded
+  @PUT("queues/student/{id}/")
+  Call<Student> setStudentSubscriptions(@Path("id") int id, @Field("teacherNames")
+      List<String> subscriptions);
 }

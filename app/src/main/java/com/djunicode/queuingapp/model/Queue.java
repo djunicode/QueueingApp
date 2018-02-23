@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StudentQueue {
+/**
+ * Created by dhruv on 19/2/18.
+ */
+
+public class Queue {
 
   @SerializedName("id")
   public Integer id;
@@ -50,7 +54,7 @@ public class StudentQueue {
   public String queueItems;
 
   @SerializedName("items")
-  public ArrayList<String> items = new ArrayList<>();
+  public List<String> items = new ArrayList<>();
 
     /*public Integer id, size, maxLength;
     public Boolean isEmpty, isFull, lock;
@@ -58,11 +62,10 @@ public class StudentQueue {
     public Date startTime, endTime, avgTime;
     public Timestamp created_at, updated_at;*/
 
-
-  public StudentQueue(Integer id, Boolean isEmpty, Boolean isFull, Integer size,
+  public Queue(Integer id, Boolean isEmpty, Boolean isFull, Integer size,
       Integer maxLength, String startTime, String endTime,
       String avgTime, String subject, Boolean lock, String created_at,
-      String updated_at, String queueItems, ArrayList<String> items){
+      String updated_at, String queueItems, List<String> items){
 
     this.id = id;
     this.isEmpty = isEmpty;
@@ -182,13 +185,5 @@ public class StudentQueue {
 
   public String getUpdated_at() {
     return updated_at;
-  }
-
-  public ArrayList<String> getItems() {
-    return items;
-  }
-
-  public void setItems(ArrayList<String> items) {
-    this.items = items;
   }
 }
