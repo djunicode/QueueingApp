@@ -20,6 +20,7 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.customClasses.TeacherTimerTask;
 import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.TeacherModel;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
 
@@ -37,7 +38,13 @@ public class TeacherLocationFragment extends Fragment {
   private FloatingActionButton locationUpdateFab;
   public static boolean locationUpdated = false;
   public static String locationString;
+  //public static
+  int glo_id=9;
   ApiInterface apiInterface;
+  String room, dept;
+  Integer floor;
+  Integer t_id;
+
 
   public TeacherLocationFragment() {
     // Required empty public constructor
@@ -83,6 +90,7 @@ public class TeacherLocationFragment extends Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position != 0) {
+          floor = position+1;
           departmentSpinner.setEnabled(true);
           departmentSpinner.setAlpha(1.0f);
         }
@@ -98,6 +106,7 @@ public class TeacherLocationFragment extends Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position != 0) {
+          dept = departmentSpinner.getItemAtPosition(position).toString();
           roomSpinner.setEnabled(true);
           roomSpinner.setAlpha(1.0f);
         }
@@ -112,6 +121,7 @@ public class TeacherLocationFragment extends Fragment {
     roomSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        room = roomSpinner.getItemAtPosition(position).toString();
         locationUpdateFab.setEnabled(true);
       }
 
@@ -149,17 +159,36 @@ public class TeacherLocationFragment extends Fragment {
                     locationString));
             Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
           }
-        }
-        Toast.makeText(getContext(), "Clicked!", Toast.LENGTH_LONG).show();
-        Call<LocationTeacher> call = apiInterface.sendTeacherLocation(6, "Comps", "60");
+        }        Toast.makeText(getContext(), "Clicked!", Toast.LENGTH_LONG).show();
+        Call<LocationTeacher> call = apiInterface.sendTeacherLocation(floor, dept, room);
         call.enqueue(new Callback<LocationTeacher>() {
           @Override
           public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
+            glo_id = response.body().getId();
             Log.i("Id", response.body().getId().toString());
             Log.i("Floor", response.body().getFloor().toString());
             Log.i("Department", response.body().getDepartment().toString());
             Log.i("Room", response.body().getRoom().toString());
             Log.i("Updated At", response.body().getUpdated_at().toString());
+            updateLocation();
+          }
+
+          private void updateLocation() {
+            getTeacherId("Aruna Gawde");
+            Log.e("GId", Integer.toString(glo_id));
+            Call<TeacherModel> call1 = apiInterface.updateTeachersLocation(t_id, glo_id, 1);
+            call1.enqueue(new Callback<TeacherModel>() {
+              @Override
+              public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+                Log.e("Dhruv", "Response successfull");
+              }
+
+              @Override
+              public void onFailure(Call<TeacherModel> call, Throwable t) {
+                Log.e("Dhruv", "Response unsuccessfull");
+              }
+            });
+
           }
 
           @Override
@@ -172,10 +201,28 @@ public class TeacherLocationFragment extends Fragment {
             }
           }
         });
+
       }
     });
 
     return view;
+  }
+
+  private void getTeacherId(String name){
+
+    Call<TeacherModel> call = apiInterface.getTeacherId(name);
+    call.enqueue(new Callback<TeacherModel>() {
+      @Override
+      public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+        t_id = response.body().getId();
+        Log.e("T_Id", Integer.toString(t_id));
+      }
+
+      @Override
+      public void onFailure(Call<TeacherModel> call, Throwable t) {
+        t_id = 0;
+      }
+    });
   }
 
 }

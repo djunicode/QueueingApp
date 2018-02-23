@@ -12,14 +12,14 @@ public class LocationTeacher {
   @SerializedName("id")
   public Integer id;
 
-  @SerializedName("floor")
-  public Integer floor;
+  @SerializedName("room")
+  public String room;
 
   @SerializedName("department")
   public String department;
 
-  @SerializedName("room")
-  public String room;
+  @SerializedName("floor")
+  public Integer floor;
 
   @SerializedName("updated_at")
   public String updated_at;

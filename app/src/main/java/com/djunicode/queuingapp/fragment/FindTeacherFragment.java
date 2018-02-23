@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.SightedTeacherActivity;
+import com.djunicode.queuingapp.model.LocationTeacher;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +35,10 @@ public class FindTeacherFragment extends Fragment {
 
   private Spinner subjectSpinner, teacherSpinner;
   private CardView findTeacherButton, sightedTeacherButton;
+  ApiInterface apiInterface;
+  String location2 = "Dhruv";
+  String dept;
+  String teacherLocation, floor, room;
 
   public FindTeacherFragment() {
     // Required empty public constructor
@@ -38,6 +50,8 @@ public class FindTeacherFragment extends Fragment {
       Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_find_teacher, container, false);
+    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
 
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
@@ -75,12 +89,42 @@ public class FindTeacherFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if(teacherSpinner.getSelectedItemPosition() != 0){
-          String location = "Prof. " + teacherSpinner.getSelectedItem().toString() +
-              " is in the staff lounge.";
-          AlertDialog.Builder builder = new Builder(getActivity());
-          builder.setMessage(location)
-              .setPositiveButton("OK", null)
-              .show();
+          Call<LocationTeacher> call = apiInterface.getTeacherLocation(12);
+          call.enqueue(new Callback<LocationTeacher>() {
+            @Override
+            public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
+              Log.e("Dhruv", "inside onResponse");
+              if (response.isSuccessful()) {
+                Log.e("Dhruv", "Successfull");
+                Log.e("Dhruv", response.body().getDepartment() );
+                dept = response.body().getDepartment();
+                floor = response.body().getFloor().toString();
+                room = response.body().getRoom();
+                teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
+                        " is in Department: " + dept + " at Floor: " + floor + " in Room: "
+                        + room;
+                AlertDialog.Builder builder = new Builder(getActivity());
+                builder.setMessage(teacherLocation)
+                        .setPositiveButton("OK", null)
+                        .show();
+
+
+                //+ " Floor: "
+                        //+ response.body().getFloor().toString() + " Room: " + response.body().getRoom();
+              }
+            }
+
+            @Override
+            public void onFailure(Call<LocationTeacher> call, Throwable t) {
+              Log.e("Dhruv", "failure");
+            }
+          });
+           teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
+              " " +  "Department: " + "Waiting for Teacher, please try again";
+//          AlertDialog.Builder builder = new Builder(getActivity());
+//          builder.setMessage(teacherLocation)
+//              .setPositiveButton("OK", null)
+//              .show();
         }
         else
           Toast.makeText(getContext(), "Please Select a teacher!", Toast.LENGTH_SHORT).show();
