@@ -4,6 +4,7 @@ import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.Queue;
 import com.djunicode.queuingapp.model.Student;
 import com.djunicode.queuingapp.model.StudentForId;
+import com.djunicode.queuingapp.model.StudentQueue;
 import com.djunicode.queuingapp.model.TeacherModel;
 
 import retrofit2.Call;
@@ -46,7 +47,7 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @PUT("queues/queue/{id}/")
-  Call<Queue> studentJoiningTheQueue (@Path("id") int id, @Field("queueItems") String sapID);
+  Call<StudentQueue> studentJoiningTheQueue (@Path("id") int id, @Field("queueItems") String sapID);
 
   @FormUrlEncoded
   @PUT("queues/teacher/{id}/" )

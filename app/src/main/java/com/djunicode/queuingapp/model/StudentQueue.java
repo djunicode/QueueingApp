@@ -12,7 +12,7 @@ import java.util.List;
  * Created by dhruv on 19/2/18.
  */
 
-public class Queue {
+public class StudentQueue {
 
     @SerializedName("id")
     public Integer id;
@@ -62,7 +62,7 @@ public class Queue {
     public Date startTime, endTime, avgTime;
     public Timestamp created_at, updated_at;*/
 
-    Queue(Integer id, Boolean isEmpty, Boolean isFull, Integer size,
+    StudentQueue(Integer id, Boolean isEmpty, Boolean isFull, Integer size,
           Integer maxLength, String startTime, String endTime,
           String avgTime, String subject, Boolean lock, String created_at,
           String updated_at, String queueItems, ArrayList<String> items){
