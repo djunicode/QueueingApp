@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.SightedTeacherActivity;
 import com.djunicode.queuingapp.model.LocationTeacher;
+import com.djunicode.queuingapp.model.TeacherModel;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
 
@@ -39,6 +40,7 @@ public class FindTeacherFragment extends Fragment {
   String location2 = "Dhruv";
   String dept;
   String teacherLocation, floor, room;
+  int teacher_location_id;
 
   public FindTeacherFragment() {
     // Required empty public constructor
@@ -89,36 +91,23 @@ public class FindTeacherFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if(teacherSpinner.getSelectedItemPosition() != 0){
-          Call<LocationTeacher> call = apiInterface.getTeacherLocation(12);
-          call.enqueue(new Callback<LocationTeacher>() {
+          Call<TeacherModel> call1 = apiInterface.getIdForTeacherFromName("Aruna Gawde");
+          call1.enqueue(new Callback<TeacherModel>() {
             @Override
-            public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
-              Log.e("Dhruv", "inside onResponse");
-              if (response.isSuccessful()) {
-                Log.e("Dhruv", "Successfull");
-                Log.e("Dhruv", response.body().getDepartment() );
-                dept = response.body().getDepartment();
-                floor = response.body().getFloor().toString();
-                room = response.body().getRoom();
-                teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
-                        " is in Department: " + dept + " at Floor: " + floor + " in Room: "
-                        + room;
-                AlertDialog.Builder builder = new Builder(getActivity());
-                builder.setMessage(teacherLocation)
-                        .setPositiveButton("OK", null)
-                        .show();
-
-
-                //+ " Floor: "
-                        //+ response.body().getFloor().toString() + " Room: " + response.body().getRoom();
+            public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+              if (response.isSuccessful()){
+                teacher_location_id = response.body().getLocation();
+                getTLocation();
+                Log.e("FindTeacherFragment", "success");
               }
             }
 
             @Override
-            public void onFailure(Call<LocationTeacher> call, Throwable t) {
-              Log.e("Dhruv", "failure");
+            public void onFailure(Call<TeacherModel> call, Throwable t) {
+              Log.e("T_l", "failed");
             }
           });
+
            teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
               " " +  "Department: " + "Waiting for Teacher, please try again";
 //          AlertDialog.Builder builder = new Builder(getActivity());
@@ -128,6 +117,7 @@ public class FindTeacherFragment extends Fragment {
         }
         else
           Toast.makeText(getContext(), "Please Select a teacher!", Toast.LENGTH_SHORT).show();
+
       }
     });
 
@@ -142,5 +132,39 @@ public class FindTeacherFragment extends Fragment {
     return view;
   }
 
+  void getTLocation() {
+    Log.e("T_l", Integer.toString(teacher_location_id));
+    Call<LocationTeacher> call = apiInterface.getTeacherLocation(teacher_location_id);
+    call.enqueue(new Callback<LocationTeacher>() {
+      @Override
+      public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
+        Log.e("Dhruv", "inside onResponse");
+        if (response.isSuccessful()) {
+          Log.e("Dhruv", "Successfull");
+          Log.e("Dhruv", response.body().getDepartment());
+          dept = response.body().getDepartment();
+          floor = response.body().getFloor().toString();
+          room = response.body().getRoom();
+          teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
+                  " is in Department: " + dept + " at Floor: " + floor + " in Room: "
+                  + room;
+          AlertDialog.Builder builder = new Builder(getActivity());
+          builder.setMessage(teacherLocation)
+                  .setPositiveButton("OK", null)
+                  .show();
+
+
+          //+ " Floor: "
+          //+ response.body().getFloor().toString() + " Room: " + response.body().getRoom();
+        }
+      }
+
+
+      @Override
+      public void onFailure(Call<LocationTeacher> call, Throwable t) {
+        Log.e("Dhruv", "failure");
+      }
+    });
+  }
 
 }

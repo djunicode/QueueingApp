@@ -67,6 +67,9 @@ public interface ApiInterface {
   @GET("queues/{id}/")
   Call<LocationTeacher> getTeacherLocation(@Path("id") int id);
 
+  @GET("queues/teacher/name/{name}/")
+  Call<TeacherModel> getIdForTeacherFromName(@Path("name") String name);
+
   @FormUrlEncoded
   @POST("queues/users/")
   Call<UserEmailVerify> sendEmail(@Field("username") String name, @Field("email") String email,
