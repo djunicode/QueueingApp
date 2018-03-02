@@ -176,8 +176,8 @@ public class SignUpStudentFragment extends Fragment {
           batch = batchSpinner.getSelectedItem().toString();
           SAPId = sapIDEditText.getText().toString();
           password = passwordEditText.getText().toString();
-          Log.i("id", Integer.toString(id));
-          Call<Student> call = apiInterface.createStudentAccount(id, username, SAPId, department, year, batch);
+//          Log.i("id", Integer.toString(id));
+          Call<Student> call = apiInterface.createStudentAccount(userId, username, SAPId, department, year, batch);
           call.enqueue(new Callback<Student>() {
           @Override
           public void onResponse(Call<Student> call, Response<Student> response) {
