@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    sp_student = getSharedPreferences("Student", MODE_PRIVATE);
+    /*sp_student = getSharedPreferences("Student", MODE_PRIVATE);
     sp_teacher = getSharedPreferences("Teacher", MODE_PRIVATE);
 
     if (sp_student.contains("student_sapid") && sp_student.contains("student_password")) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         // StudentScreenActivity just for demo till the time teacher fragments are not ready
         startActivity(in);
       }
-    }
+    }*/
 
 
       signUpStudentCardView = (CardView) findViewById(R.id.signUpStudentCardView);

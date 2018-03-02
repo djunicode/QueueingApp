@@ -21,9 +21,13 @@ import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.SightedTeacherActivity;
 import com.djunicode.queuingapp.model.LocationTeacher;
+import com.djunicode.queuingapp.model.TeacherListModel;
 import com.djunicode.queuingapp.model.TeacherModel;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +45,9 @@ public class FindTeacherFragment extends Fragment {
   String dept;
   String teacherLocation, floor, room;
   int teacher_location_id;
+  private List<String> list;
+  ArrayAdapter<String> teacher_adapter;
+  String teacher_selected;
 
   public FindTeacherFragment() {
     // Required empty public constructor
@@ -64,6 +71,8 @@ public class FindTeacherFragment extends Fragment {
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
 
+    list = new ArrayList<>();
+
     subjectSpinner = (Spinner) view.findViewById(R.id.subjectSpinner);
     teacherSpinner = (Spinner) view.findViewById(R.id.teacherSpinner);
     semSpinner = (Spinner) view.findViewById(R.id.semSpinner);
@@ -82,6 +91,8 @@ public class FindTeacherFragment extends Fragment {
 
     final ArrayAdapter<String> adapter_s4 = new ArrayAdapter<String>(getContext(),
             android.R.layout.simple_spinner_dropdown_item, sem4_Sub);
+
+
 
     semSpinner.setAdapter(sem_adapter);
     subjectSpinner.setAdapter(adapter);
@@ -120,6 +131,22 @@ public class FindTeacherFragment extends Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position != 0){
+          Call<TeacherListModel> call = apiInterface.getTeachers(subjectSpinner.getSelectedItem()
+                  .toString());
+          call.enqueue(new Callback<TeacherListModel>() {
+            @Override
+            public void onResponse(Call<TeacherListModel> call, Response<TeacherListModel> response) {
+              list = response.body().getTeachers();
+              teacher_adapter = new ArrayAdapter<String>(getContext(),
+                      android.R.layout.simple_spinner_dropdown_item, list);
+              teacherSpinner.setAdapter(teacher_adapter);
+            }
+
+            @Override
+            public void onFailure(Call<TeacherListModel> call, Throwable t) {
+
+            }
+          });
           teacherSpinner.setEnabled(true);
           teacherSpinner.setAlpha(1.0f);
           Toast.makeText(getContext(), parent.getItemAtPosition(position).toString(),
@@ -133,11 +160,14 @@ public class FindTeacherFragment extends Fragment {
       }
     });
 
+
+
     findTeacherButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
         if(teacherSpinner.getSelectedItemPosition() != 0){
-          Call<TeacherModel> call1 = apiInterface.getIdForTeacherFromName("Aruna Gawde");
+          teacher_selected = teacherSpinner.getSelectedItem().toString();
+          Call<TeacherModel> call1 = apiInterface.getIdForTeacherFromName(teacher_selected);
           call1.enqueue(new Callback<TeacherModel>() {
             @Override
             public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {

@@ -3,6 +3,7 @@ package com.djunicode.queuingapp.rest;
 import com.djunicode.queuingapp.model.LocationTeacher;
 
 
+import com.djunicode.queuingapp.model.TeacherListModel;
 import com.djunicode.queuingapp.model.TeacherModel;
 
 
@@ -70,8 +71,9 @@ public interface ApiInterface {
   @GET("queues/teacher/{name}/")
   Call<TeacherModel> getTeacherId (@Path("name") String name);
 
-
-
+  @FormUrlEncoded
+  @PUT("queues/subject/")
+  Call<TeacherListModel> getTeachers(@Field("name") String name);
 
   @FormUrlEncoded
   @POST("queues/")
