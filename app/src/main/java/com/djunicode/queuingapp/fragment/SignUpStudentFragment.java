@@ -2,6 +2,7 @@ package com.djunicode.queuingapp.fragment;
 
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.djunicode.queuingapp.activity.EmailActivity.id;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,14 @@ import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.LogInActivity;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.model.Student;
+import com.djunicode.queuingapp.model.UserModel;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +49,10 @@ public class SignUpStudentFragment extends Fragment {
   private SharedPreferences sp_student, sp_teacher;
   // Session Manager Class
   SessionManager session;
-
+  private String username, department, year, batch, SAPId, password;
+  //Student's data to be send to server
+  private int userId;
+  private ApiInterface apiInterface;
   public SignUpStudentFragment() {
     // Required empty public constructor
   }
@@ -67,18 +79,23 @@ public class SignUpStudentFragment extends Fragment {
     batchSpinner = (Spinner) view.findViewById(R.id.batchSpinner);
     signUpStudentButton = (CardView) view.findViewById(R.id.signUpStudentButton);
 
+    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+    if (id == null)
+      userId = 3;
+    else
+      userId = id;
+
     //studentSignUpinputLayoutUsername.setError(getString(R.string.err_msg_username));
 
-    String username = usernameEditText.getText().toString();
-    String sapID = sapIDEditText.getText().toString();
-    String password = passwordEditText.getText().toString();
+
     sp_student = getActivity().getSharedPreferences("Student", MODE_PRIVATE);
     sp_teacher = getActivity().getSharedPreferences("Teacher", MODE_PRIVATE);
 
     // To remove Locally stored variables remove the below comment
 
-    /*Editor editor_student = sp_student.edit();
-    Editor editor_teacher = sp_teacher.edit();
+    SharedPreferences.Editor editor_student = sp_student.edit();
+    SharedPreferences.Editor editor_teacher = sp_teacher.edit();
 
     editor_student.remove("student_username");
     editor_student.remove("student_password");
@@ -86,7 +103,7 @@ public class SignUpStudentFragment extends Fragment {
 
     editor_teacher.remove("teacher_username");
     editor_teacher.remove("teacher_password");
-    editor_teacher.commit();*/
+    editor_teacher.commit();
 
     //if SharedPreferences contains username and password then redirect to Home activity
     if (sp_student.contains("student_sapid") && sp_student.contains("student_password")) {
@@ -153,8 +170,26 @@ public class SignUpStudentFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if (validSignUp()) {
+          username = usernameEditText.getText().toString();
+          department = departmentSpinner.getSelectedItem().toString();
+          year = yearSpinner.getSelectedItem().toString();
+          batch = batchSpinner.getSelectedItem().toString();
+          SAPId = sapIDEditText.getText().toString();
+          password = passwordEditText.getText().toString();
+          Log.i("id", Integer.toString(id));
+          Call<Student> call = apiInterface.createStudentAccount(id, username, SAPId, department, year, batch);
+          call.enqueue(new Callback<Student>() {
+          @Override
+          public void onResponse(Call<Student> call, Response<Student> response) {
+            Log.e("studentSignUp", "successful");
+            updateDataOnUserUrl();
+          }
+          @Override
+          public void onFailure(Call<Student> call, Throwable t) {
+            Log.e("studentSignUp", "unsuccessful");
+          }
+          });
           session.createLoginSession(sapIDEditText.getText().toString(),
-
               passwordEditText.getText().toString());
           Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
           startActivity(intent);
@@ -164,6 +199,23 @@ public class SignUpStudentFragment extends Fragment {
           Toast.makeText(getContext(), passwordEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
         }
+      }
+
+      private void updateDataOnUserUrl() {
+
+        Call<UserModel> call1 = apiInterface.updateUserData(userId, username, password);
+        call1.enqueue(new Callback<UserModel>() {
+          @Override
+          public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+            Log.e("studentSignUp", "User data updation successful");
+          }
+
+          @Override
+          public void onFailure(Call<UserModel> call, Throwable t) {
+            Log.e("studentSignUp", "User data updation unsuccessful");
+          }
+        });
+
       }
     });
 

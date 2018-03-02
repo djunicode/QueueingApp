@@ -34,7 +34,7 @@ import retrofit2.Response;
  */
 public class FindTeacherFragment extends Fragment {
 
-  private Spinner subjectSpinner, teacherSpinner;
+  private Spinner subjectSpinner, teacherSpinner, semSpinner;
   private CardView findTeacherButton, sightedTeacherButton;
   ApiInterface apiInterface;
   String location2 = "Dhruv";
@@ -55,22 +55,66 @@ public class FindTeacherFragment extends Fragment {
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
 
+    String[] sem = {"Select", "I", "II", "III", "IV", "V", "VI", "VII", "VIII"};
+
+    String[] sem3_Sub = {"Select", "DLDA", "DS"};
+
+    String[] sem4_Sub = {"Select", "AOA", "OS", "COA", "MATHS-IV", "CG"};
+
     String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
         "nine", "ten"};
 
     subjectSpinner = (Spinner) view.findViewById(R.id.subjectSpinner);
     teacherSpinner = (Spinner) view.findViewById(R.id.teacherSpinner);
+    semSpinner = (Spinner) view.findViewById(R.id.semSpinner);
     findTeacherButton = (CardView) view.findViewById(R.id.findTeacherButton);
     sightedTeacherButton = (CardView) view.findViewById(R.id.sightedTeacherButton);
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
 
+    ArrayAdapter<String> sem_adapter = new ArrayAdapter<String>(getContext(),
+            android.R.layout.simple_spinner_dropdown_item, sem);
+
+    final ArrayAdapter<String> adapter_s3 = new ArrayAdapter<String>(getContext(),
+            android.R.layout.simple_spinner_dropdown_item, sem3_Sub);
+
+
+    final ArrayAdapter<String> adapter_s4 = new ArrayAdapter<String>(getContext(),
+            android.R.layout.simple_spinner_dropdown_item, sem4_Sub);
+
+    semSpinner.setAdapter(sem_adapter);
     subjectSpinner.setAdapter(adapter);
     teacherSpinner.setAdapter(adapter);
 
+    subjectSpinner.setEnabled(false);
+    subjectSpinner.setAlpha(0.4f);
+
     teacherSpinner.setEnabled(false);
     teacherSpinner.setAlpha(0.4f);
+
+    semSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position != 0){
+          subjectSpinner.setEnabled(true);
+          subjectSpinner.setAlpha(1.0f);
+          if (position == 3)
+            subjectSpinner.setAdapter(adapter_s3);
+          subjectSpinner.setEnabled(true);
+          subjectSpinner.setAlpha(1.0f);
+          if (position == 4)
+            subjectSpinner.setAdapter(adapter_s4);
+          subjectSpinner.setEnabled(true);
+          subjectSpinner.setAlpha(1.0f);
+        }
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
 
     subjectSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
@@ -78,6 +122,8 @@ public class FindTeacherFragment extends Fragment {
         if(position != 0){
           teacherSpinner.setEnabled(true);
           teacherSpinner.setAlpha(1.0f);
+          Toast.makeText(getContext(), parent.getItemAtPosition(position).toString(),
+                  Toast.LENGTH_SHORT).show();
         }
       }
 

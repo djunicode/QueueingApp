@@ -1,16 +1,51 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+  android:layout_width="match_parent"
+    tools:context="com.djunicode.queuingapp.fragment.FindTeacherFragment">
+
+  <RelativeLayout
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:padding="10dp"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  tools:context="com.djunicode.queuingapp.fragment.FindTeacherFragment">
+  >
+
+  <LinearLayout
+      android:id="@+id/ll0"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SEM"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"/>
+
+    <Spinner
+        android:id="@+id/semSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/background_dark"/>
+
+  </LinearLayout>
 
   <LinearLayout
     android:id="@+id/ll1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+      android:layout_below="@+id/ll0">
 
     <TextView
       android:layout_width="wrap_content"
@@ -151,3 +186,5 @@
   </android.support.v7.widget.CardView>
 
 </RelativeLayout>
+
+</ScrollView>

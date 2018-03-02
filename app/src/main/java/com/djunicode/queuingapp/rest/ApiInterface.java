@@ -13,6 +13,8 @@ import com.djunicode.queuingapp.model.StudentForId;
 import com.djunicode.queuingapp.model.StudentQueue;
 import com.djunicode.queuingapp.model.StudentSubscriptions;
 import com.djunicode.queuingapp.model.UserEmailVerify;
+import com.djunicode.queuingapp.model.UserModel;
+
 import java.util.List;
 import retrofit2.Call;
 
@@ -36,6 +38,18 @@ public interface ApiInterface {
   Call<Student> createStudentAccount (@Field("user") int user_id, @Field("name") String username,
       @Field("sapID") String sapId, @Field("department") String department,
       @Field("year") String year, @Field("batch") String batch);
+
+  @FormUrlEncoded
+  @PUT("queues/users/{id}/")
+  Call<UserModel> updateUserData (@Path("id") int id, @Field("username") String username,
+                                  @Field("password") String password);
+
+  @FormUrlEncoded
+  @POST("queues/teacher/")
+  Call<TeacherModel> createTeacherAccount (@Field("name") String username, @Field
+          ("user") int user_id, @Field("location") int location, @Field
+          ("subject") String subject, @Field
+          ("sapId") String sapId);
 
   @FormUrlEncoded
   @POST("queues/users/")
@@ -76,7 +90,7 @@ public interface ApiInterface {
       @Field("password") String password);
 
   @FormUrlEncoded
-  @PUT("queues/users/{id}/")
+  @PUT("queues/users/{id}/token/")
   Call<UserEmailVerify> verifyEmail(@Path("id") int id, @Field("token") String token);
 
 

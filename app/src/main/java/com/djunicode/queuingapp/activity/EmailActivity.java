@@ -24,7 +24,7 @@ public class EmailActivity extends AppCompatActivity {
   private EditText signUpEmailEditText, verifyEditText;
   private Button sendCodeButton, verifyEmailButton;
   private ApiInterface apiInterface;
-  private Integer id;
+  public static Integer id;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class EmailActivity extends AppCompatActivity {
       public void onClick(View v) {
         String email = signUpEmailEditText.getText().toString();
 //        email.split("@")[0]
-        Call<UserEmailVerify> call = apiInterface.sendEmail("raj5", email, "demopass");
+        Call<UserEmailVerify> call = apiInterface.sendEmail("Dhruv7", email, "demopass");
         if (user.equals("teacher")) {
           if (email.contains("@djsce.ac.in")) {
             call.enqueue(new Callback<UserEmailVerify>() {
@@ -94,7 +94,7 @@ public class EmailActivity extends AppCompatActivity {
       public void onClick(View v) {
         final Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
 
-       /* Call<UserEmailVerify> call = apiInterface
+        Call<UserEmailVerify> call = apiInterface
             .verifyEmail(id, verifyEditText.getText().toString());
         call.enqueue(new Callback<UserEmailVerify>() {
           @Override
@@ -116,14 +116,14 @@ public class EmailActivity extends AppCompatActivity {
           public void onFailure(Call<UserEmailVerify> call, Throwable t) {
             Log.e("Error:", t.getMessage());
           }
-        });*/
+        });
 
-        if (user.equals("teacher")) {
+        /*if (user.equals("teacher")) {
           intent.putExtra("user", user);
         } else {
           intent.putExtra("user", "student");
         }
-        startActivity(intent);
+        startActivity(intent);*/
 
       }
     });

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,16 @@ import com.djunicode.queuingapp.activity.StudentScreenActivity;
 
 import com.djunicode.queuingapp.activity.SubjectsActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.model.TeacherModel;
+import com.djunicode.queuingapp.model.UserModel;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.djunicode.queuingapp.activity.EmailActivity.id;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +43,8 @@ public class SignUpTeacherFragment extends Fragment {
   private TextInputLayout teacherSignUpinputLayoutUsername, teacherSignUpinputLayoutPassword,
       teacherSignUpinputLayoutDepartment, teacherSignUpinputLayoutSAPId;
   SessionManager session;
+  private String username, dept, sapId, pass;
+  ApiInterface apiInterface;
 
   public SignUpTeacherFragment() {
     // Required empty public constructor
@@ -53,6 +66,8 @@ public class SignUpTeacherFragment extends Fragment {
     departmentTeacherSpinner = (Spinner) view.findViewById(R.id.departmentTeacherSpinner);
     signUpTeacherButton = (CardView) view.findViewById(R.id.signUpTeacherButton);
 
+    apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
     // Session Manager
     session = new SessionManager(getContext(), "Teacher");
 
@@ -60,7 +75,28 @@ public class SignUpTeacherFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if(validSubmission()) {
+          username = usernameTeacherEditText.getText().toString();
+          dept = departmentTeacherSpinner.getSelectedItem().toString();
+          sapId = sapIDTeacherEditText.getText().toString();
+          pass = passwordTeacherEditText.getText().toString();
+          Call<TeacherModel> call = apiInterface.createTeacherAccount(username, 11, 25,
+                  "AOA", sapId);
+          call.enqueue(new Callback<TeacherModel>() {
+            @Override
+            public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+              if (response.isSuccessful()) {
+                Log.e("teacherSignUp", "successful");
+                updateDataOnUserUrl();
+              }
+              else
+                Log.e("teacherSignUp", response.errorBody().toString());
+            }
 
+            @Override
+            public void onFailure(Call<TeacherModel> call, Throwable t) {
+              Log.e("teacherSignUp", "unsuccessful");
+            }
+          });
           session.createLoginSession(usernameTeacherEditText.getText().toString(),
               passwordTeacherEditText.getText().toString());
           Intent intent = new Intent(getContext(), SubjectsActivity.class);
@@ -71,6 +107,23 @@ public class SignUpTeacherFragment extends Fragment {
           Toast.makeText(getContext(), passwordTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
         }
+      }
+
+      private void updateDataOnUserUrl() {
+
+        Call<UserModel> call1 = apiInterface.updateUserData(3, username, pass);
+        call1.enqueue(new Callback<UserModel>() {
+          @Override
+          public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+            Log.e("teacherSignUp", "User data updation successful");
+          }
+
+          @Override
+          public void onFailure(Call<UserModel> call, Throwable t) {
+            Log.e("teacherSignUp", "User data updation unsuccessful");
+          }
+        });
+
       }
     });
 

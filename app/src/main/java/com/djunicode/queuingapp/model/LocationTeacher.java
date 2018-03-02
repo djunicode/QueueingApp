@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by DELL_PC on 13-01-2018.
  */
 
-public class LocationTeacher {
+public class  LocationTeacher {
 
   @SerializedName("id")
   public Integer id;
