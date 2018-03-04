@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationCompat.InboxStyle;
 import android.text.TextUtils;
 import com.djunicode.queuingapp.R;
+import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,33 +43,33 @@ public class NotificationUtils {
     final int icon = R.mipmap.ic_launcher_round;
     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     final PendingIntent pendingIntent = PendingIntent
-        .getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            .getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
     final NotificationCompat.Builder builder = new Builder(context);
     showSmallNotification(builder, icon, title, message, timestamp, pendingIntent);
   }
 
   private void showSmallNotification(Builder builder, int icon, String title, String message,
-      String timestamp, PendingIntent pendingIntent) {
+                                     String timestamp, PendingIntent pendingIntent) {
     NotificationCompat.InboxStyle inboxStyle = new InboxStyle();
     inboxStyle.addLine(message);
 
     Notification notification = builder
-        .setSmallIcon(icon)
-        .setTicker(title)
-        .setWhen(0)
-        .setAutoCancel(true)
-        .setContentTitle(title)
-        .setContentIntent(pendingIntent)
-        .setStyle(inboxStyle)
-        .setWhen(getTimeMilliSec(timestamp))
-        .setSmallIcon(R.mipmap.ic_launcher_round)
-        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), icon))
-        .setContentText(message)
-        .build();
+            .setSmallIcon(icon)
+            .setTicker(title)
+            .setWhen(0)
+            .setAutoCancel(true)
+            .setContentTitle(title)
+            .setContentIntent(pendingIntent)
+            .setStyle(inboxStyle)
+            .setWhen(getTimeMilliSec(timestamp))
+            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), icon))
+            .setContentText(message)
+            .build();
 
     NotificationManager manager = (NotificationManager) context
-        .getSystemService(Context.NOTIFICATION_SERVICE);
+            .getSystemService(Context.NOTIFICATION_SERVICE);
     manager.notify(NOTIFICATION_ID, notification);
   }
 
@@ -77,7 +78,7 @@ public class NotificationUtils {
     ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     if (VERSION.SDK_INT > VERSION_CODES.KITKAT_WATCH) {
       List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = manager
-          .getRunningAppProcesses();
+              .getRunningAppProcesses();
       for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcesses) {
         if (processInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
           for (String activeProcess : processInfo.pkgList) {
@@ -100,7 +101,7 @@ public class NotificationUtils {
 
   public static void clearNotifications(Context context) {
     NotificationManager manager = (NotificationManager) context
-        .getSystemService(Context.NOTIFICATION_SERVICE);
+            .getSystemService(Context.NOTIFICATION_SERVICE);
     manager.cancelAll();
   }
 

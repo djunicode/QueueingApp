@@ -67,7 +67,6 @@ public class QueueDialogClass extends Dialog {
     joinButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (flag == 0) {
           Intent intent = new Intent(activity, StudentQueueActivity.class);
           getContext().startActivity(intent);
           dismiss();
@@ -87,12 +86,8 @@ public class QueueDialogClass extends Dialog {
               Log.i("studentJoining ResF", t.getMessage().toString());
             }
           });
-        }
-        else{
-          Toast.makeText(getContext(), "You are already in the queue", Toast.LENGTH_SHORT).show();
-        }
-        Intent intent = new Intent(activity, StudentQueueActivity.class);
-        getContext().startActivity(intent);
+        Intent intent2 = new Intent(activity, StudentQueueActivity.class);
+        getContext().startActivity(intent2);
         dismiss();
       }
     });

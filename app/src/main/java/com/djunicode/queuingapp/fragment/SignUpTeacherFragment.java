@@ -87,7 +87,7 @@ public class SignUpTeacherFragment extends Fragment {
               if (response.isSuccessful()) {
                 Log.e("teacherSignUp", "successful");
                 updateDataOnUserUrl();
-              }
+            Log.e("studentSignUp", "res unsucc");   }
               else
                 Log.e("teacherSignUp", response.errorBody().toString());
             }

@@ -181,23 +181,33 @@ public class SignUpStudentFragment extends Fragment {
           call.enqueue(new Callback<Student>() {
           @Override
           public void onResponse(Call<Student> call, Response<Student> response) {
-            Log.e("studentSignUp", "successful");
-            updateDataOnUserUrl();
+            if (response.isSuccessful()) {
+              Log.e("studentSignUp", "successful");
+              updateDataOnUserUrl();
+              /*session.createLoginSession(sapIDEditText.getText().toString(),
+                      passwordEditText.getText().toString(), username);
+              Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
+              startActivity(intent);*/
+            }
+            else {
+             Toast.makeText(getActivity(), "SAPId already exist, Try Logging in instead!",
+                     Toast.LENGTH_SHORT).show();
+              session.createLoginSession(sapIDEditText.getText().toString(),
+                      passwordEditText.getText().toString(), username);
+              Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
+              startActivity(intent);
+            }
           }
           @Override
           public void onFailure(Call<Student> call, Throwable t) {
             Log.e("studentSignUp", "unsuccessful");
           }
           });
-          session.createLoginSession(sapIDEditText.getText().toString(),
-              passwordEditText.getText().toString(), username);
-          Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
-          startActivity(intent);
 //          finish();
-          Toast.makeText(getContext(), usernameEditText.getText().toString(),
+          /*Toast.makeText(getContext(), usernameEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
+              Toast.LENGTH_SHORT).show();*/
         }
       }
 

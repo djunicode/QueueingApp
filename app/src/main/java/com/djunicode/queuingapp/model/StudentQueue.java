@@ -52,6 +52,9 @@ public class StudentQueue {
   @SerializedName("items")
   public ArrayList<String> items = new ArrayList<>();
 
+  @SerializedName("index")
+  public Integer index;
+
     /*public Integer id, size, maxLength;
     public Boolean isEmpty, isFull, lock;
     public String subject, queueItems;
@@ -62,7 +65,7 @@ public class StudentQueue {
   public StudentQueue(Integer id, Boolean isEmpty, Boolean isFull, Integer size,
       Integer maxLength, String startTime, String endTime,
       String avgTime, String subject, Boolean lock, String created_at,
-      String updated_at, String queueItems, ArrayList<String> items){
+      String updated_at, String queueItems, ArrayList<String> items, Integer index){
 
     this.id = id;
     this.isEmpty = isEmpty;
@@ -78,6 +81,7 @@ public class StudentQueue {
     this.updated_at = updated_at;
     this.queueItems = queueItems;
     this.items = items;
+    this.index = index;
   }
 
   public Integer getId(){
@@ -190,5 +194,13 @@ public class StudentQueue {
 
   public void setItems(ArrayList<String> items) {
     this.items = items;
+  }
+
+  public void setIndex(Integer index) {
+    this.index = index;
+  }
+
+  public Integer getIndex() {
+    return index;
   }
 }

@@ -10,15 +10,19 @@ public class RecentEvents {
   private String batchName;
   private String startTime;
   private String endTime;
+  private Integer noOfStudents;
   private String location;
+  private Integer serverId;
 
   public RecentEvents(String subjectName, String batchName, String startTime, String endTime,
-      String location){
+                      Integer noOfStudents, String location, Integer serverId){
     this.subjectName = subjectName;
     this.batchName = batchName;
     this.startTime = startTime;
     this.endTime = endTime;
+    this.noOfStudents = noOfStudents;
     this.location = location;
+    this.serverId = serverId;
   }
 
   public void setSubjectName(String subjectName){
@@ -53,11 +57,27 @@ public class RecentEvents {
     return endTime;
   }
 
+  public void setNoOfStudents(Integer noOfStudents) {
+    this.noOfStudents = noOfStudents;
+  }
+
+  public Integer getNoOfStudents() {
+    return noOfStudents;
+  }
+
   public void setLocation(String location) {
     this.location = location;
   }
 
   public String getLocation() {
     return location;
+  }
+
+  public void setServerId(Integer serverId) {
+    this.serverId = serverId;
+  }
+
+  public Integer getServerId() {
+    return serverId;
   }
 }

@@ -3,6 +3,7 @@ package com.djunicode.queuingapp.rest;
 import com.djunicode.queuingapp.model.LocationTeacher;
 
 
+import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.model.TeacherListModel;
 import com.djunicode.queuingapp.model.TeacherModel;
 
@@ -13,6 +14,7 @@ import com.djunicode.queuingapp.model.Student;
 import com.djunicode.queuingapp.model.StudentForId;
 import com.djunicode.queuingapp.model.StudentQueue;
 import com.djunicode.queuingapp.model.StudentSubscriptions;
+import com.djunicode.queuingapp.model.TeachersList;
 import com.djunicode.queuingapp.model.UserEmailVerify;
 import com.djunicode.queuingapp.model.UserModel;
 
@@ -104,6 +106,32 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @PUT("queues/student/{id}/")
-  Call<Student> setStudentSubscriptions(@Path("id") int id, @Field("teacherNames")
-      List<String> subscriptions);
+  Call<StudentSubscriptions> setStudentSubscriptions(@Path("id") int id,
+                                                     @Field("teacherNames") String subscriptions);
+
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/index/")
+  Call<StudentQueue> getUpdatedStudentLocation(@Path("id") int id, @Field("sapID") String sapID);
+
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/deletespecific/")
+  Call<StudentQueue> deleteStudentFromQueue(@Path("id") Integer id, @Field("element") String sapID);
+
+  @FormUrlEncoded
+  @POST("queues/queue/{id}/notification/")
+  Call<TeacherCreateNew> startTheQueue(@Path("id") Integer id,
+                                       @Field("teacherName") String teacherName);
+
+  @DELETE("queues/queue/{id}/")
+  Call<TeacherCreateNew> deleteQueue(@Path("id") Integer id);
+
+  @FormUrlEncoded
+  @PUT("queues/subject/")
+  Call<TeachersList> getTeachersList(@Field("name") String name);
+
+  @FormUrlEncoded
+  @POST("queues/queue/")
+  Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject,
+                                            @Field("startTime") String startTime, @Field("endTime") String endTime,
+                                            @Field("maxLength") Integer noOfStudents, @Field("queueItems") String queueItems);
 }

@@ -165,7 +165,6 @@ public class FindTeacherFragment extends Fragment {
     findTeacherButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        if(teacherSpinner.getSelectedItemPosition() != 0){
           teacher_selected = teacherSpinner.getSelectedItem().toString();
           Call<TeacherModel> call1 = apiInterface.getIdForTeacherFromName(teacher_selected);
           call1.enqueue(new Callback<TeacherModel>() {
@@ -190,10 +189,6 @@ public class FindTeacherFragment extends Fragment {
 //          builder.setMessage(teacherLocation)
 //              .setPositiveButton("OK", null)
 //              .show();
-        }
-        else
-          Toast.makeText(getContext(), "Please Select a teacher!", Toast.LENGTH_SHORT).show();
-
       }
     });
 

@@ -35,6 +35,15 @@
       android:layout_height="56dp"
       android:layout_gravity="center"/>
 
+    <TextView
+        android:id="@+id/emptyQueueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/empty_queue"
+        android:visibility="invisible"/>
+
     <ListView
       android:id="@+id/studentsList"
       android:layout_width="match_parent"

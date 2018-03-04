@@ -1,9 +1,12 @@
 package com.djunicode.queuingapp.service;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 import com.djunicode.queuingapp.activity.MainActivity;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import com.djunicode.queuingapp.utils.NotificationUtils;
@@ -78,7 +81,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
   }
 
   private void showNotification(Context context, String title, String message,
-      String timestamp, Intent intent) {
+                                String timestamp, Intent intent) {
     notificationUtils = new NotificationUtils(context);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     notificationUtils.showNotification(title, message, timestamp, intent);
