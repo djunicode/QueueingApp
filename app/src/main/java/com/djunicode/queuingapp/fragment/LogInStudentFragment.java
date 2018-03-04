@@ -64,7 +64,7 @@ public class LogInStudentFragment extends Fragment {
       public void onClick(View v) {
         if (validLogIn()) {
           session.createLoginSession(sapIdLogInEditText.getText().toString(),
-              passwordLogInEditText.getText().toString());
+              passwordLogInEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),

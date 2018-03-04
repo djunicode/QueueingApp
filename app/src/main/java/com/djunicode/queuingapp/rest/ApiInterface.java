@@ -60,7 +60,7 @@ public interface ApiInterface {
   Call<LocationTeacher> deleteTeacherLocation (@Path("id") int id);
 
   @FormUrlEncoded
-  @PUT("queues/queue/{id}/")
+  @PUT("queues/queue/{id}/add/")
   Call<StudentQueue> studentJoiningTheQueue (@Path("id") int id, @Field("queueItems") String sapID);
 
   @FormUrlEncoded
@@ -85,6 +85,9 @@ public interface ApiInterface {
 
   @GET("queues/teacher/name/{name}/")
   Call<TeacherModel> getIdForTeacherFromName(@Path("name") String name);
+
+  @GET("queues/teacher/name/")
+  Call<TeacherModel> getLocationIntegerForTeacherFromName(@Field("name") String name);
 
   @FormUrlEncoded
   @POST("queues/users/")

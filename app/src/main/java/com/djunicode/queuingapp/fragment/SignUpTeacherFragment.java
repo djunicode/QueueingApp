@@ -98,7 +98,8 @@ public class SignUpTeacherFragment extends Fragment {
             }
           });
           session.createLoginSession(usernameTeacherEditText.getText().toString(),
-              passwordTeacherEditText.getText().toString());
+              passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
+                          toString());
           Intent intent = new Intent(getContext(), SubjectsActivity.class);
           // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);

@@ -57,7 +57,7 @@ public class LogInTeacherFragment extends Fragment {
       public void onClick(View v) {
         if(validTeacherLogIn()) {
           session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
-              passwordLogInTeacherEditText.getText().toString());
+              passwordLogInTeacherEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
           // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);

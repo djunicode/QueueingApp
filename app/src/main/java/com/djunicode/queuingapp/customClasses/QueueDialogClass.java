@@ -71,7 +71,7 @@ public class QueueDialogClass extends Dialog {
           Intent intent = new Intent(activity, StudentQueueActivity.class);
           getContext().startActivity(intent);
           dismiss();
-          Call<StudentQueue> call = apiInterface.studentJoiningTheQueue(1, sapid);
+          Call<StudentQueue> call = apiInterface.studentJoiningTheQueue(2, sapid);
           call.enqueue(new Callback<StudentQueue>() {
             @Override
             public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {

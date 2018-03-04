@@ -190,7 +190,7 @@ public class SignUpStudentFragment extends Fragment {
           }
           });
           session.createLoginSession(sapIDEditText.getText().toString(),
-              passwordEditText.getText().toString());
+              passwordEditText.getText().toString(), username);
           Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
           startActivity(intent);
 //          finish();
