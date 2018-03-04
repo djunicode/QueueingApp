@@ -82,6 +82,11 @@ public interface ApiInterface {
   Call<LocationTeacher> sendTeacherLocation(@Field("floor") Integer floor,
       @Field("department") String department, @Field("room") String room);
 
+  @FormUrlEncoded
+  @POST("queues/")
+  Call<LocationTeacher> sendQueueLocation(@Field("floor") Integer floor, @Field
+          ("department") String department, @Field("room") String room);
+
   @GET("queues/{id}/")
   Call<LocationTeacher> getTeacherLocation(@Path("id") int id);
 
@@ -144,5 +149,11 @@ public interface ApiInterface {
                                    @Field("startTime") String startTime, @Field("endTime") String endTime,
                                    @Field("subject") String subject, @Field("avgTime") String avgTime, @Field("size") int size);
 
-
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/")
+  Call<StudentQueue> editQueueLocation(@Path("id") int id, @Field("maxLength") int maxLength,
+                                       @Field("startTime") String startTime, @Field("endTime")
+                                               String endTime, @Field("subject") String subject,
+                                       @Field("avgTime") String avgTime, @Field("size") int size,
+                                       @Field("location") int location);
 }

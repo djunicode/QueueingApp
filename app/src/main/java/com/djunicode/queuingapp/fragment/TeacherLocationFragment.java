@@ -23,6 +23,7 @@ import com.djunicode.queuingapp.customClasses.TeacherTimerTask;
 import com.djunicode.queuingapp.data.QueuesDbHelper;
 import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.StudentQueue;
 import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.model.TeacherModel;
 import com.djunicode.queuingapp.rest.ApiClient;
@@ -46,9 +47,9 @@ public class TeacherLocationFragment extends Fragment {
   public static String locationString;
   int glo_id=9;
   private ApiInterface apiInterface;
-  private String room, dept, name;
+  private String room, dept, name, toTime, fromTime, avgTime, subject2;
   private Integer floor;
-  private Integer t_id, user;
+  private Integer t_id, user, tempId, noOfStudents2, size;
   private SQLiteDatabase db;
   private Integer queueId;
   private SharedPreferences sp;
@@ -171,7 +172,51 @@ public class TeacherLocationFragment extends Fragment {
                   dbHelper.updateQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
                           locationString, 1));
                   Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+                  tempId = extras.getInt("tempId", -1);
+                  /*extras.putInt("noOfStudents", noOfStudents);
+                  extras.putString("fromTime", fromTime);
+                  extras.putString("toTime", toTime);
+                  extras.putString("subject", subjectSpinner.getSelectedItem().toString());
+                  extras.putString("avgTime", "");
+                  extras.putInt("size", 0);*/
+                  noOfStudents2 = extras.getInt("noOfStudents", -1);
+                  fromTime = extras.getString("fromTime", "");
+                  toTime = extras.getString("toTime", "");
+                  subject2 = extras.getString("subject", "");
+                  avgTime = extras.getString("avgTime", "");
+                  size = extras.getInt("size", -1);
+                  Log.e("Up_loca", Integer.toString(tempId));
+                  Log.e("Up_loca", Integer.toString(floor));
+                  Log.e("Up_loca", dept);
+                  Log.e("Up_loca", room);
+                  Call<LocationTeacher> call1 = apiInterface.sendQueueLocation(floor, dept, room);
+                  call1.enqueue(new Callback<LocationTeacher>() {
+                      @Override
+                      public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
+                          Log.e("Location", response.body().getId().toString());
+                          int id = response.body().getId();
+                          if (response.isSuccessful()) {
+                              Call<StudentQueue> call2 = apiInterface.editQueueLocation(tempId, noOfStudents2,
+                                      fromTime, toTime, subject2, avgTime, size, id);
+                              call2.enqueue(new Callback<StudentQueue>() {
+                                  @Override
+                                  public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
+                                      Log.e("Up_loca", response.body().getId().toString());
+                                  }
 
+                                  @Override
+                                  public void onFailure(Call<StudentQueue> call, Throwable t) {
+
+                                  }
+                              });
+                          }
+                      }
+
+                      @Override
+                      public void onFailure(Call<LocationTeacher> call, Throwable t) {
+
+                      }
+                  });
               } else {
             /*TeacherSubmissionFragment.recentEventsList
                 .add(new RecentEvents(subject, batch, from, to,
