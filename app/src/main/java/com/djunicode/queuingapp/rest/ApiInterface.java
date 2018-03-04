@@ -134,4 +134,15 @@ public interface ApiInterface {
   Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject,
                                             @Field("startTime") String startTime, @Field("endTime") String endTime,
                                             @Field("maxLength") Integer noOfStudents, @Field("queueItems") String queueItems);
+  @FormUrlEncoded
+  @PUT("queues/teacher/{id}/subject/")
+  Call<TeacherModel> addTeacherSubjects(@Path("id") int id, @Field("subject") String subject);
+
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/")
+  Call<StudentQueue> editingQueue (@Path("id") int id, @Field("maxLength") int maxLength,
+                                   @Field("startTime") String startTime, @Field("endTime") String endTime,
+                                   @Field("subject") String subject, @Field("avgTime") String avgTime, @Field("size") int size);
+
+
 }

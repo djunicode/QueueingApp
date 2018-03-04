@@ -83,6 +83,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private String fromTime;
   private String toTime;
   private int noOfStudents;
+  private int numberOfStudents;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
   public static BottomSheetFragment bottomSheetFragment;
   private Bundle globalArgs;
@@ -341,6 +342,7 @@ public class TeacherSubmissionFragment extends Fragment {
               Toast.makeText(getContext(), input.getText().toString() + " students selected",
                       Toast.LENGTH_SHORT).show();
               noOfStudents = Integer.parseInt(input.getText().toString());
+              numberOfStudents = Integer.parseInt(input.getText().toString());
               studentsSelected = true;
             }
           });
@@ -379,6 +381,24 @@ public class TeacherSubmissionFragment extends Fragment {
                                           batchSpinner.getSelectedItem().toString(), fromTime, toTime,
                                           noOfStudents, TeacherLocationFragment.locationString, 1));
                           Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+                          Log.e("Editing", Integer.toString(noOfStudents));
+                          Log.e("Editing", fromTime);
+                          Log.e("Editing", toTime);
+                          Log.e("Editing", subjectSpinner.getSelectedItem().toString());
+                          //Log.e("queueId", Integer.toString(queueId));
+                          Call<StudentQueue> call = apiInterface.editingQueue(26, noOfStudents, fromTime, toTime, subjectSpinner.getSelectedItem().toString(),
+                                  "", 0);
+                          call.enqueue(new Callback<StudentQueue>() {
+                            @Override
+                            public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
+                              Log.i("Subject returned is", response.body().getSubject().toString());
+                            }
+
+                            @Override
+                            public void onFailure(Call<StudentQueue> call, Throwable t) {
+                              Log.i("error", t.getMessage());
+                            }
+                          });
                         }
                         createFab.setImageResource(R.drawable.ic_add);
                       }
@@ -512,6 +532,7 @@ public class TeacherSubmissionFragment extends Fragment {
     extras.putString("From", fromTime);
     extras.putString("To", toTime);
     extras.putInt("noOfStudents", noOfStudents);
+    extras.putInt("numberOfStudents", numberOfStudents);
     if (flag) {
       extras.putInt("Position", globalArgs.getInt("Position"));
     }
