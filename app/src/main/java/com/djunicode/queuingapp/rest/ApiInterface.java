@@ -1,8 +1,6 @@
 package com.djunicode.queuingapp.rest;
 
-import android.content.Intent;
 import com.djunicode.queuingapp.model.LocationTeacher;
-
 
 import com.djunicode.queuingapp.model.RecentEvents;
 import com.djunicode.queuingapp.model.TeacherCreateNew;
@@ -27,7 +25,6 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -86,6 +83,11 @@ public interface ApiInterface {
   Call<LocationTeacher> sendTeacherLocation(@Field("floor") Integer floor,
       @Field("department") String department, @Field("room") String room);
 
+  @FormUrlEncoded
+  @POST("queues/")
+  Call<LocationTeacher> sendQueueLocation(@Field("floor") Integer floor, @Field
+      ("department") String department, @Field("room") String room);
+
   @GET("queues/{id}/")
   Call<LocationTeacher> getTeacherLocation(@Path("id") int id);
 
@@ -122,7 +124,7 @@ public interface ApiInterface {
   Call<StudentQueue> deleteStudentFromQueue(@Path("id") Integer id, @Field("element") String sapID);
 
   @FormUrlEncoded
-  @POST("queues/queue/notification/")
+  @POST("queues/queue/{id}/notification/")
   Call<TeacherCreateNew> startTheQueue(@Path("id") Integer id,
       @Field("teacherName") String teacherName);
 
@@ -137,7 +139,8 @@ public interface ApiInterface {
   @POST("queues/queue/")
   Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject,
       @Field("startTime") String startTime, @Field("endTime") String endTime,
-      @Field("maxLength") Integer noOfStudents, @Field("queueItems") String queueItems);
+      @Field("maxLength") Integer noOfStudents, @Field("queueItems") String queueItems,
+      @Field("location") Integer location);
 
   @FormUrlEncoded
   @PUT("queues/teacher/{id}/addqueue/")
@@ -152,4 +155,22 @@ public interface ApiInterface {
   @FormUrlEncoded
   @POST("queues/teacher/getqueues/")
   Call<List<RecentEvents>> getParticularTeacherQueues(@Field("teacherName") String teacherName);
+
+  @FormUrlEncoded
+  @PUT("queues/teacher/{id}/subject/")
+  Call<TeacherModel> addTeacherSubjects(@Path("id") int id, @Field("subject") String subject);
+
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/")
+  Call<StudentQueue> editingQueue(@Path("id") int id, @Field("maxLength") int maxLength,
+      @Field("startTime") String startTime, @Field("endTime") String endTime,
+      @Field("subject") String subject, @Field("avgTime") String avgTime, @Field("size") int size);
+
+  @FormUrlEncoded
+  @PUT("queues/queue/{id}/")
+  Call<StudentQueue> editQueueLocation(@Path("id") int id, @Field("maxLength") int maxLength,
+      @Field("startTime") String startTime, @Field("endTime")
+      String endTime, @Field("subject") String subject,
+      @Field("avgTime") String avgTime, @Field("size") int size,
+      @Field("location") int location);
 }

@@ -23,6 +23,7 @@ import com.djunicode.queuingapp.customClasses.TeacherTimerTask;
 import com.djunicode.queuingapp.data.QueuesDbHelper;
 import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.RecentEvents;
+import com.djunicode.queuingapp.model.StudentQueue;
 import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.model.TeacherModel;
 import com.djunicode.queuingapp.rest.ApiClient;
@@ -46,9 +47,9 @@ public class TeacherLocationFragment extends Fragment {
   public static String locationString;
   int glo_id = 9;
   private ApiInterface apiInterface;
-  private String room, dept, name;
+  private String room, dept, name, toTime, fromTime, avgTime, subject2;
   private Integer floor;
-  private Integer t_id, user;
+  private Integer t_id, user, tempId, noOfStudents2, size;
   private SQLiteDatabase db;
   private Integer queueId;
   private SharedPreferences sp;
@@ -167,16 +168,63 @@ public class TeacherLocationFragment extends Fragment {
             /*TeacherSubmissionFragment.recentEventsList
                 .set(extras.getInt("Position"), new RecentEvents(subject, batch, from, to,
                     locationString, 1));*/
+            tempId = extras.getInt("tempId", -1);
             dbHelper.updateQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
-                locationString, 1));
+                locationString, tempId));
             Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+                  /*extras.putInt("noOfStudents", noOfStudents);
+                  extras.putString("fromTime", fromTime);
+                  extras.putString("toTime", toTime);
+                  extras.putString("subject", subjectSpinner.getSelectedItem().toString());
+                  extras.putString("avgTime", "");
+                  extras.putInt("size", 0);*/
+            noOfStudents2 = extras.getInt("noOfStudents", -1);
+            fromTime = extras.getString("fromTime", "");
+            toTime = extras.getString("toTime", "");
+            subject2 = extras.getString("subject", "");
+            avgTime = extras.getString("avgTime", "");
+            size = extras.getInt("size", -1);
+            Log.e("Up_loca", Integer.toString(tempId));
+            Log.e("Up_loca", Integer.toString(floor));
+            Log.e("Up_loca", dept);
+            Log.e("Up_loca", room);
+            Call<LocationTeacher> call1 = apiInterface.sendQueueLocation(floor, dept, room);
+            call1.enqueue(new Callback<LocationTeacher>() {
+              @Override
+              public void onResponse(Call<LocationTeacher> call,
+                  Response<LocationTeacher> response) {
+                Log.e("Location", response.body().getId().toString());
+                int id = response.body().getId();
+                if (response.isSuccessful()) {
+                  Call<StudentQueue> call2 = apiInterface.editQueueLocation(tempId, noOfStudents2,
+                      fromTime, toTime, subject2, avgTime, size, id);
+                  call2.enqueue(new Callback<StudentQueue>() {
+                    @Override
+                    public void onResponse(Call<StudentQueue> call,
+                        Response<StudentQueue> response) {
+                      Log.e("Up_loca", response.body().getId().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<StudentQueue> call, Throwable t) {
+
+                    }
+                  });
+                }
+              }
+
+              @Override
+              public void onFailure(Call<LocationTeacher> call, Throwable t) {
+
+              }
+            });
 
           } else {
             /*TeacherSubmissionFragment.recentEventsList
                 .add(new RecentEvents(subject, batch, from, to,
                     locationString, 1));*/
             Call<TeacherCreateNew> call = apiInterface
-                .sendSubmissionData(subject, from + ":00", to + ":00", noOfStudents, "");
+                .sendSubmissionData(subject, from + ":00", to + ":00", noOfStudents, "", 23);
             call.enqueue(new Callback<TeacherCreateNew>() {
 
               @Override
@@ -188,12 +236,12 @@ public class TeacherLocationFragment extends Fragment {
                 dbHelper.addQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
                     locationString, queueId));
                 Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
-                Call<TeacherCreateNew> call2 = apiInterface.linkQueueToTeacher(1, queueId);
+                Call<TeacherCreateNew> call2 = apiInterface.linkQueueToTeacher(4, queueId);
                 call2.enqueue(new Callback<TeacherCreateNew>() {
                   @Override
                   public void onResponse(Call<TeacherCreateNew> call,
                       Response<TeacherCreateNew> response) {
-                    
+
                   }
 
                   @Override

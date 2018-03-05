@@ -83,6 +83,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private String fromTime;
   private String toTime;
   private int noOfStudents;
+  private int numberOfStudents;
   public static List<RecentEvents> recentEventsList = new ArrayList<>();
   public static BottomSheetFragment bottomSheetFragment;
   private Bundle globalArgs;
@@ -91,7 +92,7 @@ public class TeacherSubmissionFragment extends Fragment {
   private NotificationManager notificationManager;
   private ArrayList<String> subjects;
   private ApiInterface apiInterface;
-  private Integer queueId;
+  private Integer queueId, tempId;
 
   public TeacherSubmissionFragment() {
     // Required empty public constructor
@@ -359,8 +360,6 @@ public class TeacherSubmissionFragment extends Fragment {
           Log.i("Position", Integer.toString(args.getInt("Position")));
           recentEventsList = dbHelper.getAllQueues();
           final RecentEvents event = recentEventsList.get(args.getInt("Position"));
-//          recentEventsList.remove(extras.getInt("Position"));
-
           if (toSelected || studentsSelected) {
             AlertDialog.Builder builder = new Builder(getContext());
             builder.setMessage("Do you want to use the last location or set new location?")
@@ -383,6 +382,28 @@ public class TeacherSubmissionFragment extends Fragment {
                               noOfStudents, TeacherLocationFragment.locationString,
                               event.getServerId()));
                       Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+                      tempId = event.getServerId();
+                      Log.e("Editing", Integer.toString(noOfStudents));
+                      Log.e("Editing", fromTime);
+                      Log.e("Editing", toTime);
+                      Log.e("Editing", subjectSpinner.getSelectedItem().toString());
+                      //Log.e("queueId", Integer.toString(queueId));
+                      Call<StudentQueue> call = apiInterface
+                          .editingQueue(tempId, noOfStudents, fromTime, toTime,
+                              subjectSpinner.getSelectedItem().toString(),
+                              "", 0);
+                      call.enqueue(new Callback<StudentQueue>() {
+                        @Override
+                        public void onResponse(Call<StudentQueue> call,
+                            Response<StudentQueue> response) {
+                          Log.i("Subject returned is", response.body().getSubject().toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<StudentQueue> call, Throwable t) {
+                          Log.i("error", t.getMessage());
+                        }
+                      });
                     }
                     createFab.setImageResource(R.drawable.ic_add);
                   }
@@ -390,6 +411,7 @@ public class TeacherSubmissionFragment extends Fragment {
                 .setNegativeButton("NEW", new DialogInterface.OnClickListener() {
                   @Override
                   public void onClick(DialogInterface dialog, int which) {
+                    tempId = event.getServerId();
                     updateLocation(true);
                     createFab.setImageResource(R.drawable.ic_add);
                   }
@@ -451,7 +473,7 @@ public class TeacherSubmissionFragment extends Fragment {
                             TeacherLocationFragment.locationString));*/
                     Call<TeacherCreateNew> call = apiInterface
                         .sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
-                            fromTime + ":00", toTime + ":00", noOfStudents, "");
+                            fromTime + ":00", toTime + ":00", noOfStudents, "", 23);
                     call.enqueue(new Callback<TeacherCreateNew>() {
 
                       @Override
