@@ -43,7 +43,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class RecentsFragment extends Fragment implements
-        RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+    RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
   private RecyclerView recentsRecyclerView;
   private RecentsAdapter adapter;
@@ -60,7 +60,7 @@ public class RecentsFragment extends Fragment implements
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_recents, container, false);
 
@@ -79,11 +79,11 @@ public class RecentsFragment extends Fragment implements
 
     recentsRecyclerView.setItemAnimator(new DefaultItemAnimator());
     recentsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-            DividerItemDecoration.VERTICAL));
+        DividerItemDecoration.VERTICAL));
     recentsRecyclerView.setAdapter(adapter);
 
     ItemTouchHelper.SimpleCallback simpleCallback = new RecyclerItemTouchHelper(0,
-            ItemTouchHelper.LEFT, this);
+        ItemTouchHelper.LEFT, this);
     new ItemTouchHelper(simpleCallback).attachToRecyclerView(recentsRecyclerView);
 
     return view;
@@ -91,7 +91,7 @@ public class RecentsFragment extends Fragment implements
 
   @Override
   public void onSwiped(ViewHolder viewHolder, int direction, int position) {
-    if(viewHolder instanceof RecentsAdapter.MyViewHolder){
+    if (viewHolder instanceof RecentsAdapter.MyViewHolder) {
       final RecentEvents event = recentEventsList.get(viewHolder.getAdapterPosition());
 
       final int deletedIndex = viewHolder.getAdapterPosition();
@@ -104,12 +104,25 @@ public class RecentsFragment extends Fragment implements
         }
 
         public void onFinish() {
-          Call<TeacherCreateNew> call = apiInterface.deleteQueue(event.getServerId());
-          call.enqueue(new Callback<TeacherCreateNew>() {
+          Call<TeacherCreateNew> call1 = apiInterface
+              .deleteQueueLinkFromTeacher(1, event.getServerId());
+          call1.enqueue(new Callback<TeacherCreateNew>() {
             @Override
             public void onResponse(Call<TeacherCreateNew> call,
-                                   Response<TeacherCreateNew> response) {
+                Response<TeacherCreateNew> response) {
+              Call<TeacherCreateNew> call2 = apiInterface.deleteQueue(event.getServerId());
+              call2.enqueue(new Callback<TeacherCreateNew>() {
+                @Override
+                public void onResponse(Call<TeacherCreateNew> call,
+                    Response<TeacherCreateNew> response) {
+                  dbHelper.deleteQueue(event);
+                }
 
+                @Override
+                public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+
+                }
+              });
             }
 
             @Override
@@ -117,12 +130,11 @@ public class RecentsFragment extends Fragment implements
 
             }
           });
-          dbHelper.deleteQueue(event);
         }
       }.start();
 
       Snackbar snackbar = Snackbar
-              .make(relativeLayout, "Removed from recents!", Snackbar.LENGTH_LONG);
+          .make(relativeLayout, "Removed from recents!", Snackbar.LENGTH_LONG);
       snackbar.setAction("UNDO", new View.OnClickListener() {
         @Override
         public void onClick(View view) {

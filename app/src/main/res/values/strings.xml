@@ -103,6 +103,7 @@
   <string name="even_sem">Even Sem</string>
   <string name="empty_queue">No students in the queue.</string>
   <string name="started">Started : </string>
+  <string name="no_queues_found">No Queues found!</string>
 
 </resources>
 
