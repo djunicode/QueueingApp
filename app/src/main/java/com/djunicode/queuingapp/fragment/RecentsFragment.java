@@ -105,7 +105,7 @@ public class RecentsFragment extends Fragment implements
 
         public void onFinish() {
           Call<TeacherCreateNew> call1 = apiInterface
-              .deleteQueueLinkFromTeacher(1, event.getServerId());
+              .deleteQueueLinkFromTeacher(37, event.getServerId());
           call1.enqueue(new Callback<TeacherCreateNew>() {
             @Override
             public void onResponse(Call<TeacherCreateNew> call,

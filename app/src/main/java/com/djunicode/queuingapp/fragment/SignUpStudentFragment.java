@@ -183,9 +183,10 @@ public class SignUpStudentFragment extends Fragment {
               .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
           Log.e("Firebase RegId", preferences.getString("regId", "empty"));
           String reg_id = preferences.getString("regId", "empty");
+          int studentID = preferences.getInt("studentID", 0);
 //          Log.i("id", Integer.toString(id));
           Call<Student> call = apiInterface
-              .createStudentAccount(userId, username, SAPId, department, year, batch, reg_id);
+              .createStudentAccount(studentID, username, SAPId, department, year, batch, reg_id);
           call.enqueue(new Callback<Student>() {
             @Override
             public void onResponse(Call<Student> call, Response<Student> response) {
@@ -200,10 +201,11 @@ public class SignUpStudentFragment extends Fragment {
               } else {
                 Toast.makeText(getActivity(), "SAPId already exist, Try Logging in instead!",
                     Toast.LENGTH_SHORT).show();
-              session.createLoginSession(sapIDEditText.getText().toString(),
-                      passwordEditText.getText().toString(), username);
-              Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
-              startActivity(intent);
+                session.createLoginSession(sapIDEditText.getText().toString(),
+                    passwordEditText.getText().toString(), username);
+                Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
               }
             }
 

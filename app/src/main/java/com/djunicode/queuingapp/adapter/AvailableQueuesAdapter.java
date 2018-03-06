@@ -52,12 +52,13 @@ public class AvailableQueuesAdapter extends
     @Override
     public void onClick(View v) {
       RecentEvents event = recentEventsList.get(getAdapterPosition());
+      String sapId = preferences.getString("student_sapid", "60004160035");
       final Intent intent = new Intent(context, StudentQueueActivity.class);
       intent.putExtra("id", event.getServerId());
+      intent.putExtra("sapId", sapId);
       Log.e("server id", Integer.toString(event.getServerId()));
       Call<StudentQueue> call = apiInterface
-          .studentJoiningTheQueue(event.getServerId(),
-              preferences.getString("student_sapid", "60004160035"));
+          .studentJoiningTheQueue(event.getServerId(), sapId);
       call.enqueue(new Callback<StudentQueue>() {
         @Override
         public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {

@@ -59,7 +59,7 @@ public class LogInTeacherFragment extends Fragment {
           session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
               passwordLogInTeacherEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
-          // StudentScreenActivity just for demo till the time teacher fragments are not ready
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();

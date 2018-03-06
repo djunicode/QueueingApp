@@ -66,6 +66,7 @@ public class LogInStudentFragment extends Fragment {
           session.createLoginSession(sapIdLogInEditText.getText().toString(),
               passwordLogInEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();

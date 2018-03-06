@@ -44,6 +44,7 @@ public class NotificationUtils {
     }
 
     final int icon = R.mipmap.ic_launcher_round;
+    intent = new Intent(context, StudentScreenActivity.class);
     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     final PendingIntent pendingIntent = PendingIntent
         .getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -60,7 +61,7 @@ public class NotificationUtils {
     Notification notification = builder
         .setSmallIcon(icon)
         .setTicker(title)
-        .setWhen(0)
+        .setWhen(System.currentTimeMillis())
         .setAutoCancel(true)
         .setContentTitle(title)
         .setContentIntent(pendingIntent)
@@ -69,6 +70,7 @@ public class NotificationUtils {
         .setSmallIcon(R.mipmap.ic_launcher_round)
         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), icon))
         .setContentText(message)
+        .setPriority(Notification.PRIORITY_MAX)
         .setDefaults(DEFAULT_VIBRATE)
         .build();
 

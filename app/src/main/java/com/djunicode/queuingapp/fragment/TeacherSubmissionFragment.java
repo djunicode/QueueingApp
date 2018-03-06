@@ -391,7 +391,7 @@ public class TeacherSubmissionFragment extends Fragment {
                       Call<StudentQueue> call = apiInterface
                           .editingQueue(tempId, noOfStudents, fromTime, toTime,
                               subjectSpinner.getSelectedItem().toString(),
-                              "", 0);
+                              "", noOfStudents);
                       call.enqueue(new Callback<StudentQueue>() {
                         @Override
                         public void onResponse(Call<StudentQueue> call,
@@ -425,30 +425,6 @@ public class TeacherSubmissionFragment extends Fragment {
         }
       }
     });
-
-    /*startFab.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        animateFab();
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<StudentQueue> call = apiInterface.studentJoiningTheQueue(1, "60004160035");
-        call.enqueue(new Callback<StudentQueue>() {
-          @Override
-          public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
-            List<String> queue = response.body().getItems();
-            Log.e("Items", queue.toString());
-          }
-
-          @Override
-          public void onFailure(Call<StudentQueue> call, Throwable t) {
-
-          }
-        });
-        notificationManager.notify(SUBMISSION_NOTIFICATION_ID, notificationBuilder.build());
-        Intent intent = new Intent(getContext(), StudentListActivity.class);
-        startActivity(intent);
-      }
-    });*/
 
     createNewFab.setOnClickListener(new OnClickListener() {
       @Override
@@ -544,6 +520,7 @@ public class TeacherSubmissionFragment extends Fragment {
     extras.putInt("noOfStudents", noOfStudents);
     if (flag) {
       extras.putInt("Position", globalArgs.getInt("Position"));
+      extras.putInt("tempId", tempId);
     }
 
     FragmentTransaction transaction = getActivity().getSupportFragmentManager()

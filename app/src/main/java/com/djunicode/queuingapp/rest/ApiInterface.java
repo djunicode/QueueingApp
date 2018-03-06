@@ -8,6 +8,7 @@ import com.djunicode.queuingapp.model.TeacherListModel;
 import com.djunicode.queuingapp.model.TeacherModel;
 
 
+import org.json.JSONObject;
 import retrofit2.http.Body;
 
 import com.djunicode.queuingapp.model.Student;
@@ -51,9 +52,9 @@ public interface ApiInterface {
   @FormUrlEncoded
   @POST("queues/teacher/")
   Call<TeacherModel> createTeacherAccount(@Field("name") String username, @Field
-      ("user") int user_id, @Field("location") int location, @Field
-      ("subject") String subject, @Field
-      ("sapId") String sapId);
+      ("user") int user_id, @Field("location") String location, @Field
+      ("subject") String subject, @Field("sapId") String sapId,
+      @Field("register_id") String register_id);
 
   @FormUrlEncoded
   @POST("queues/users/")
@@ -124,8 +125,8 @@ public interface ApiInterface {
   Call<StudentQueue> deleteStudentFromQueue(@Path("id") Integer id, @Field("element") String sapID);
 
   @FormUrlEncoded
-  @POST("queues/queue/{id}/notification/")
-  Call<TeacherCreateNew> startTheQueue(@Path("id") Integer id,
+  @POST("queues/queue/notification/")
+  Call<TeacherCreateNew> startTheQueue(@Field("id") Integer id,
       @Field("teacherName") String teacherName);
 
   @DELETE("queues/queue/{id}/")

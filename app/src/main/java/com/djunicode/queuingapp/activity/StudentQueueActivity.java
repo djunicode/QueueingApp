@@ -34,6 +34,7 @@ public class StudentQueueActivity extends AppCompatActivity {
   private ApiInterface apiInterface;
   private ProgressBar loadingIndicator;
   private Integer queueId;
+  private String sapId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class StudentQueueActivity extends AppCompatActivity {
 
     Intent intent = getIntent();
     queueId = intent.getIntExtra("id", 0);
+    sapId = intent.getStringExtra("sapId");
 
     upToDown = AnimationUtils.loadAnimation(this, R.anim.up_to_down);
     downToUp = AnimationUtils.loadAnimation(this, R.anim.down_to_up);
@@ -92,7 +94,7 @@ public class StudentQueueActivity extends AppCompatActivity {
 
   void updateStudentList() {
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
-    Call<StudentQueue> call = apiInterface.getUpdatedStudentLocation(queueId, "60004160035");
+    Call<StudentQueue> call = apiInterface.getUpdatedStudentLocation(queueId, sapId);
     call.enqueue(new Callback<StudentQueue>() {
       @Override
       public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
@@ -111,7 +113,7 @@ public class StudentQueueActivity extends AppCompatActivity {
   }
 
   private void exitQueue(){
-    Call<StudentQueue> call = apiInterface.deleteStudentFromQueue(queueId, "60004160035");
+    Call<StudentQueue> call = apiInterface.deleteStudentFromQueue(queueId, sapId);
     call.enqueue(new Callback<StudentQueue>() {
       @Override
       public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {

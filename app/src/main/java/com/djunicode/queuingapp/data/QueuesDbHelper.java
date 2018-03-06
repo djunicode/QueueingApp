@@ -104,4 +104,11 @@ public class QueuesDbHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(recentEvents.getServerId()) });
         db.close();
     }
+
+    public void deleteQueueWithId(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(QueuesEntry.TABLE_NAME, QueuesEntry.COLUMN_SERVER_ID + " = ?",
+            new String[] { String.valueOf(id) });
+        db.close();
+    }
 }

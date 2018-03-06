@@ -16,7 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.djunicode.queuingapp.R;
+import com.djunicode.queuingapp.data.QueuesDbHelper;
 import com.djunicode.queuingapp.model.StudentQueue;
+import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.receiver.QueueReceiver;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
@@ -37,6 +39,7 @@ public class StudentListActivity extends AppCompatActivity {
   private TextView emptyQueueTextView;
   private Intent intent;
   private int queueId;
+  private QueuesDbHelper dbHelper;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class StudentListActivity extends AppCompatActivity {
     emptyQueueTextView = (TextView) findViewById(R.id.emptyQueueTextView);
     queueList = new ArrayList<>();
     handler = new Handler();
+    dbHelper = new QueuesDbHelper(this);
     intent = getIntent();
     queueId = intent.getIntExtra("id", 1);
 
@@ -66,6 +70,7 @@ public class StudentListActivity extends AppCompatActivity {
                   @Override
                   public void onClick(DialogInterface dialog, int which) {
                     stopRepeatingTask();
+                    deleteQueue();
                     finish();
                   }
                 }).setNegativeButton("No", null).show();
@@ -116,6 +121,35 @@ public class StudentListActivity extends AppCompatActivity {
     });
   }
 
+  private void deleteQueue(){
+    Call<TeacherCreateNew> call1 = apiInterface
+        .deleteQueueLinkFromTeacher(37, queueId);
+    call1.enqueue(new Callback<TeacherCreateNew>() {
+      @Override
+      public void onResponse(Call<TeacherCreateNew> call,
+          Response<TeacherCreateNew> response) {
+        Call<TeacherCreateNew> call2 = apiInterface.deleteQueue(queueId);
+        call2.enqueue(new Callback<TeacherCreateNew>() {
+          @Override
+          public void onResponse(Call<TeacherCreateNew> call,
+              Response<TeacherCreateNew> response) {
+            dbHelper.deleteQueueWithId(queueId);
+          }
+
+          @Override
+          public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+
+          }
+        });
+      }
+
+      @Override
+      public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+
+      }
+    });
+  }
+
   @Override
   public void onBackPressed() {
     new AlertDialog.Builder(this)
@@ -126,6 +160,7 @@ public class StudentListActivity extends AppCompatActivity {
               @Override
               public void onClick(DialogInterface dialog, int which) {
                 stopRepeatingTask();
+                deleteQueue();
                 finish();
               }
             }).setNegativeButton("No", null).show();
