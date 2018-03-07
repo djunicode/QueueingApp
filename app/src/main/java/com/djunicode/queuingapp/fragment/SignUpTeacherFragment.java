@@ -80,7 +80,7 @@ public class SignUpTeacherFragment extends Fragment {
     preferences = getActivity()
         .getSharedPreferences("com.djunicode.queuingapp", Context.MODE_PRIVATE);
     final String reg_id = preferences.getString("regId", "empty");
-    final int teacherID = preferences.getInt("teacherID", 0);
+    final int teacherUserID = preferences.getInt("teacherUserID", 0);
 
     signUpTeacherButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -91,18 +91,21 @@ public class SignUpTeacherFragment extends Fragment {
           sapId = sapIDTeacherEditText.getText().toString();
           pass = passwordTeacherEditText.getText().toString();
           Call<TeacherModel> call = apiInterface
-              .createTeacherAccount(username, teacherID, "",
+              .createTeacherAccount(username, teacherUserID, "",
                   "", sapId, reg_id);
           call.enqueue(new Callback<TeacherModel>() {
             @Override
             public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-                Log.e("teacherSignUp", response.body().getId().toString());
-                SharedPreferences preferences = getActivity()
-                    .getSharedPreferences("Teacher", Context.MODE_PRIVATE);
-                preferences.edit().putInt("teacherId", response.body().getId());
-                updateDataOnUserUrl();
-                Log.e("studentSignUp", "res unsucc");
-
+                try {
+                  Log.e("teacherSignUp", response.body().getId().toString());
+                  SharedPreferences preferences1 = getActivity()
+                      .getSharedPreferences("Teacher", Context.MODE_PRIVATE);
+                  preferences1.edit().putInt("teacherId", response.body().getId()).apply();
+                  updateDataOnUserUrl();
+                } catch (NullPointerException e){
+                  Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                  Log.e("SignUpTeacher", e.getMessage());
+                }
             }
 
             @Override
@@ -114,7 +117,6 @@ public class SignUpTeacherFragment extends Fragment {
               passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
                   toString());
           Intent intent = new Intent(getContext(), SubjectsActivity.class);
-          // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);
           Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
@@ -125,7 +127,7 @@ public class SignUpTeacherFragment extends Fragment {
 
       private void updateDataOnUserUrl() {
 
-        Call<UserModel> call1 = apiInterface.updateUserData(3, username, pass);
+        Call<UserModel> call1 = apiInterface.updateUserData(teacherUserID, username, pass);
         call1.enqueue(new Callback<UserModel>() {
           @Override
           public void onResponse(Call<UserModel> call, Response<UserModel> response) {

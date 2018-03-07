@@ -1,6 +1,8 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -52,6 +54,8 @@ public class RecentsFragment extends Fragment implements
   private List<RecentEvents> recentEventsList;
   private ApiInterface apiInterface;
   private QueuesDbHelper dbHelper;
+  private SharedPreferences preferences;
+  private Integer teacherId;
 
   public RecentsFragment() {
     // Required empty public constructor
@@ -71,6 +75,10 @@ public class RecentsFragment extends Fragment implements
 
     dbHelper = new QueuesDbHelper(getContext());
     db = dbHelper.getWritableDatabase();
+
+    preferences = getActivity()
+        .getSharedPreferences("Teacher", Context.MODE_PRIVATE);
+    teacherId = preferences.getInt("teacherId", 0);
 
     recentEventsList = dbHelper.getAllQueues();
     Log.i("event size", Integer.toString(recentEventsList.size()));
@@ -105,7 +113,7 @@ public class RecentsFragment extends Fragment implements
 
         public void onFinish() {
           Call<TeacherCreateNew> call1 = apiInterface
-              .deleteQueueLinkFromTeacher(37, event.getServerId());
+              .deleteQueueLinkFromTeacher(teacherId, event.getServerId());
           call1.enqueue(new Callback<TeacherCreateNew>() {
             @Override
             public void onResponse(Call<TeacherCreateNew> call,

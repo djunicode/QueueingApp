@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.model.LocationTeacher;
 import com.djunicode.queuingapp.model.TeacherModel;
@@ -85,8 +86,13 @@ public class SightedTeacherActivity extends AppCompatActivity {
           call.enqueue(new Callback<TeachersList>() {
             @Override
             public void onResponse(Call<TeachersList> call, Response<TeachersList> response) {
-              Log.e("queues/subject/", response.body().getTeachers().toString());
-              teachers = response.body().getTeachers();
+              try {
+                Log.e("queues/subject/", response.body().getTeachers().toString());
+                teachers = response.body().getTeachers();
+              } catch (Exception e) {
+                Toast.makeText(SightedTeacherActivity.this, e.getMessage(), Toast.LENGTH_SHORT)
+                    .show();
+              }
               teacherAdapter = new ArrayAdapter<String>(SightedTeacherActivity.this,
                   android.R.layout.simple_spinner_dropdown_item, teachers);
               teacherSpinner.setAdapter(teacherAdapter);
@@ -162,13 +168,18 @@ public class SightedTeacherActivity extends AppCompatActivity {
         call.enqueue(new Callback<LocationTeacher>() {
           @Override
           public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
-            glo_id = response.body().getId();
-            Log.i("Id", response.body().getId().toString());
-            Log.i("Floor", response.body().getFloor().toString());
-            Log.i("Department", response.body().getDepartment().toString());
-            Log.i("Room", response.body().getRoom().toString());
-            Log.i("Updated At", response.body().getUpdated_at().toString());
-            updateLocation();
+            try{
+              glo_id = response.body().getId();
+              Log.i("Id", response.body().getId().toString());
+              Log.i("Floor", response.body().getFloor().toString());
+              Log.i("Department", response.body().getDepartment().toString());
+              Log.i("Room", response.body().getRoom().toString());
+              Log.i("Updated At", response.body().getUpdated_at().toString());
+              updateLocation();
+            } catch (Exception e){
+              Toast.makeText(SightedTeacherActivity.this, e.getMessage(), Toast.LENGTH_SHORT)
+                  .show();
+            }
           }
 
           private void updateLocation() {
@@ -200,8 +211,13 @@ public class SightedTeacherActivity extends AppCompatActivity {
     call.enqueue(new Callback<TeacherModel>() {
       @Override
       public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-        t_id = response.body().getId();
-        user = response.body().getUser();
+        try{
+          t_id = response.body().getId();
+          user = response.body().getUser();
+        } catch (Exception e){
+          Toast.makeText(SightedTeacherActivity.this, e.getMessage(), Toast.LENGTH_SHORT)
+              .show();
+        }
         Log.e("T_Id", Integer.toString(t_id));
         Log.e("GId", Integer.toString(glo_id));
         Call<TeacherModel> call1 = apiInterface.updateTeachersLocation(t_id, glo_id, user);

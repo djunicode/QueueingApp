@@ -70,7 +70,7 @@ public class SubscriptionsFragment extends Fragment {
     teacherSpinner = (MultiSelectionSpinner) view.findViewById(R.id.teacherSpinner);
     subscriptionsFab = (FloatingActionButton) view.findViewById(R.id.subscriptionsFab);
     preferences = getActivity()
-        .getSharedPreferences("com.djunicode.queuingapp", Context.MODE_PRIVATE);
+        .getSharedPreferences("Student", Context.MODE_PRIVATE);
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     subjectSpinner.setEnabled(false);
@@ -110,35 +110,20 @@ public class SubscriptionsFragment extends Fragment {
         teacherSpinner.setAlpha(1.0f);
         Toast.makeText(getContext(), "Subjects:" + selectedSubjects.toString(), Toast.LENGTH_LONG)
             .show();
-        /*Call<List<TeachersList>> call = apiInterface.getTeacherNames();
-        call.enqueue(new Callback<List<TeachersList>>() {
-          @Override
-          public void onResponse(Call<List<TeachersList>> call, Response<List<TeachersList>> response) {
-//            teachersList = response.body();
-            Log.i("Teacher Names", response.body().toString());
-            teachers = new ArrayList<>();
-            List<TeachersList> teachersList = response.body();
-            for(int i = 0; i < teachersList.size(); i++){
-              teachers.add(teachersList.get(i).getName());
-            }
-            teacherSpinner.setItems(teachers);
-          }
-
-          @Override
-          public void onFailure(Call<List<TeachersList>> call, Throwable t) {
-            Log.e("Teacher error", t.getMessage());
-          }
-        });*/
         teachers = new ArrayList<>();
         for (int i = 0; i < selectedSubjects.size(); i++) {
           Call<TeachersList> call = apiInterface.getTeachersList(selectedSubjects.get(i));
           call.enqueue(new Callback<TeachersList>() {
             @Override
             public void onResponse(Call<TeachersList> call, Response<TeachersList> response) {
-              Log.e("queues/subject/", response.body().getTeachers().toString());
-              List<String> teacherList = response.body().getTeachers();
-              for (int i = 0; i < teacherList.size(); i++) {
-                teachers.add(teacherList.get(i));
+              try {
+                Log.e("queues/subject/", response.body().getTeachers().toString());
+                List<String> teacherList = response.body().getTeachers();
+                for (int i = 0; i < teacherList.size(); i++) {
+                  teachers.add(teacherList.get(i));
+                }
+              } catch (Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
               }
               teacherSpinner.setItems(teachers);
             }
@@ -173,13 +158,18 @@ public class SubscriptionsFragment extends Fragment {
 
         JSONArray jsonArray = new JSONArray(subscriptionList);
         Log.e("JSONArray", jsonArray.toString());
+        Log.e("StudentID", String.valueOf(preferences.getInt("studentID", 0)));
         Call<StudentSubscriptions> call = apiInterface
             .setStudentSubscriptions(preferences.getInt("studentID", 0), jsonArray.toString());
         call.enqueue(new Callback<StudentSubscriptions>() {
           @Override
           public void onResponse(Call<StudentSubscriptions> call,
               Response<StudentSubscriptions> response) {
-            Log.e("Subs", response.body().getSubscription().toString());
+            try {
+              Log.e("Subs", response.body().getSubscription().toString());
+            } catch (Exception e) {
+              Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
           }
 
           @Override

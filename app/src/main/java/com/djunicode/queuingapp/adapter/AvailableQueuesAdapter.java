@@ -52,7 +52,7 @@ public class AvailableQueuesAdapter extends
     @Override
     public void onClick(View v) {
       RecentEvents event = recentEventsList.get(getAdapterPosition());
-      String sapId = preferences.getString("student_sapid", "60004160035");
+      String sapId = preferences.getString("student_sapid", "");
       final Intent intent = new Intent(context, StudentQueueActivity.class);
       intent.putExtra("id", event.getServerId());
       intent.putExtra("sapId", sapId);
