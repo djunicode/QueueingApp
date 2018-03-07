@@ -23,6 +23,13 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.LogInActivity;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
+import com.djunicode.queuingapp.model.Student;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +42,9 @@ public class LogInStudentFragment extends Fragment {
   // Session Manager Class
   SessionManager session;
   SharedPreferences spDemo;
+
+  public Boolean trueLogin;
+  final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
   public LogInStudentFragment() {
     // Required empty public constructor
@@ -87,9 +97,7 @@ public class LogInStudentFragment extends Fragment {
       return false;
     }
 
-    if(!validMatch()){
-      return false;
-    }
+    validMatch();
     return true;
   }
 
@@ -125,18 +133,26 @@ public class LogInStudentFragment extends Fragment {
     return true;
   }
 
-  private boolean validMatch() {
-    if(sapIdLogInEditText.getText().toString().equals("60004160006") &&
+  private void validMatch() {
+    Call<Student> call = apiService.getValidIdStudent(sapIdLogInEditText.getText().toString(),passwordLogInEditText.getText().toString());
+    call.enqueue(new Callback<Student>() {
+      @Override
+      public void onResponse(Call<Student> call, Response<Student> response) {
+        if(response.isSuccessful()) {
+          trueLogin = true;
+        }
+        else {
+          trueLogin = false;
+          Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+        }
+      }
 
-        passwordLogInEditText.getText().toString().equals("demopass")) {
+      @Override
+      public void onFailure(Call<Student> call, Throwable t) {
 
-      return true;
-    }
-    else{
-      Toast.makeText(getContext(), "Doesn't match",
-          Toast.LENGTH_SHORT).show();
-      return false;
-    }
+      }
+    });
+
   }
 
   private void requestFocus (View view) {

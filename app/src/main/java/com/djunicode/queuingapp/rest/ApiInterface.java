@@ -156,4 +156,12 @@ public interface ApiInterface {
                                                String endTime, @Field("subject") String subject,
                                        @Field("avgTime") String avgTime, @Field("size") int size,
                                        @Field("location") int location);
+
+  @FormUrlEncoded
+  @PUT("queues/teacher/login/")
+  Call<TeacherModel> getValidId(@Field("sapId") String sapID, @Field("password") String password);
+
+  @FormUrlEncoded
+  @PUT("queues/student/login/")
+  Call<Student> getValidIdStudent(@Field("sapID") String sapID, @Field("password") String password);
 }
