@@ -75,10 +75,7 @@
       </intent-filter>
     </service>
 
-    <service android:name=".service.UpdateQueueService"/>
-
     <receiver android:name=".receiver.QueueReceiver"/>
-
 
   </application>
 

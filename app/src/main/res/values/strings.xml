@@ -35,9 +35,9 @@
     <item>MECHANICAL</item>
     <item>PRODUCTION</item>
     <item>CHEMICAL</item>
-    <item>ELECTRONICS</item>
+    <item>ETRX</item>
     <item>EXTC</item>
-    <item>BIO-MEDICAL</item>
+    <item>BIO-MED</item>
   </string-array>
 
   <string-array name="year_array">
@@ -103,6 +103,7 @@
   <string name="even_sem">Even Sem</string>
   <string name="empty_queue">No students in the queue.</string>
   <string name="started">Started : </string>
+  <string name="no_queues_found">No Queues found!</string>
 
 </resources>
 

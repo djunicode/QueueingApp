@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class EmailActivity extends AppCompatActivity {
   private Button sendCodeButton, verifyEmailButton;
   private ApiInterface apiInterface;
   public static Integer id;
+  private SharedPreferences preferences;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class EmailActivity extends AppCompatActivity {
     verifyEditText = (EditText) findViewById(R.id.verifyEditText);
     sendCodeButton = (Button) findViewById(R.id.sendCodeButton);
     verifyEmailButton = (Button) findViewById(R.id.verifyEmailButton);
-
+    preferences = this.getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
 
 //    verifyEmailButton.setEnabled(false);
 
@@ -51,7 +53,7 @@ public class EmailActivity extends AppCompatActivity {
       public void onClick(View v) {
         String email = signUpEmailEditText.getText().toString();
 //        email.split("@")[0]
-        Call<UserEmailVerify> call = apiInterface.sendEmail("Dhruv11", email, "demopass");
+        Call<UserEmailVerify> call = apiInterface.sendEmail("Dhruv50", email, "demopass");
         if (user.equals("teacher")) {
           if (email.contains("@djsce.ac.in")) {
             call.enqueue(new Callback<UserEmailVerify>() {
@@ -59,6 +61,7 @@ public class EmailActivity extends AppCompatActivity {
               public void onResponse(@NonNull Call<UserEmailVerify> call,
                   @NonNull Response<UserEmailVerify> response) {
                 id = response.body().getId();
+                preferences.edit().putInt("teacherID", id).apply();
                 Log.i("ID:", Integer.toString(id));
               }
 
@@ -75,6 +78,7 @@ public class EmailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserEmailVerify> call, Response<UserEmailVerify> response) {
               id = response.body().getId();
+              preferences.edit().putInt("studentID", id).apply();
               Log.e("ID:", id.toString());
             }
 
@@ -93,8 +97,8 @@ public class EmailActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         final Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
-
-        /*Call<UserEmailVerify> call = apiInterface
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Call<UserEmailVerify> call = apiInterface
             .verifyEmail(id, verifyEditText.getText().toString());
         call.enqueue(new Callback<UserEmailVerify>() {
           @Override
@@ -116,14 +120,14 @@ public class EmailActivity extends AppCompatActivity {
           public void onFailure(Call<UserEmailVerify> call, Throwable t) {
             Log.e("Error:", t.getMessage());
           }
-        });*/
+        });
 
-        if (user.equals("teacher")) {
+        /*if (user.equals("teacher")) {
           intent.putExtra("user", user);
         } else {
           intent.putExtra("user", "student");
         }
-        startActivity(intent);
+        startActivity(intent);*/
 
       }
     });

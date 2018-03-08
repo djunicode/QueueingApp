@@ -53,6 +53,7 @@ public class SignUpStudentFragment extends Fragment {
   //Student's data to be send to server
   private int userId;
   private ApiInterface apiInterface;
+
   public SignUpStudentFragment() {
     // Required empty public constructor
   }
@@ -64,9 +65,11 @@ public class SignUpStudentFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_sign_up_student, container, false);
 
-    studentSignUpinputLayoutUsername = (TextInputLayout) view.findViewById(R.id.signUp_student_username);
+    studentSignUpinputLayoutUsername = (TextInputLayout) view
+        .findViewById(R.id.signUp_student_username);
     studentSignUpinputLayoutSAPId = (TextInputLayout) view.findViewById(R.id.signUp_student_SAPId);
-    studentSignUpinputLayoutPassword = (TextInputLayout) view.findViewById(R.id.signUp_student_password);
+    studentSignUpinputLayoutPassword = (TextInputLayout) view
+        .findViewById(R.id.signUp_student_password);
     studentSignUpinputLayoutDepartment = (TextInputLayout) view.findViewById(
         R.id.signUp_student_department);
     studentSignUpinputLayoutYear = (TextInputLayout) view.findViewById(R.id.signUp_student_year);
@@ -81,20 +84,20 @@ public class SignUpStudentFragment extends Fragment {
 
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-    if (id == null)
+    if (id == null) {
       userId = 3;
-    else
+    } else {
       userId = id;
+    }
 
     //studentSignUpinputLayoutUsername.setError(getString(R.string.err_msg_username));
-
 
     sp_student = getActivity().getSharedPreferences("Student", MODE_PRIVATE);
     sp_teacher = getActivity().getSharedPreferences("Teacher", MODE_PRIVATE);
 
     // To remove Locally stored variables remove the below comment
 
-    SharedPreferences.Editor editor_student = sp_student.edit();
+    final SharedPreferences.Editor editor_student = sp_student.edit();
     SharedPreferences.Editor editor_teacher = sp_teacher.edit();
 
     editor_student.remove("student_username");
@@ -176,32 +179,40 @@ public class SignUpStudentFragment extends Fragment {
           batch = batchSpinner.getSelectedItem().toString();
           SAPId = sapIDEditText.getText().toString();
           password = passwordEditText.getText().toString();
+          final SharedPreferences preferences = getActivity()
+              .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+          Log.e("Firebase RegId", preferences.getString("regId", "empty"));
+          String reg_id = preferences.getString("regId", "empty");
+          int studentID = preferences.getInt("studentID", 0);
 //          Log.i("id", Integer.toString(id));
-          Call<Student> call = apiInterface.createStudentAccount(userId, username, SAPId, department, year, batch);
+          Call<Student> call = apiInterface
+              .createStudentAccount(studentID, username, SAPId, department, year, batch, reg_id);
           call.enqueue(new Callback<Student>() {
-          @Override
-          public void onResponse(Call<Student> call, Response<Student> response) {
-            if (response.isSuccessful()) {
-              Log.e("studentSignUp", "successful");
-              updateDataOnUserUrl();
-              /*session.createLoginSession(sapIDEditText.getText().toString(),
-                      passwordEditText.getText().toString(), username);
-              Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
-              startActivity(intent);*/
+            @Override
+            public void onResponse(Call<Student> call, Response<Student> response) {
+              if (response.isSuccessful()) {
+                Log.e("studentSignUp", "successful");
+                updateDataOnUserUrl();
+                /*session.createLoginSession(sapIDEditText.getText().toString(),
+                    passwordEditText.getText().toString(), username);
+                editor_student.putInt("studentID", response.body().getStudentID()).apply();
+                Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
+                startActivity(intent);*/
+              } else {
+                Toast.makeText(getActivity(), "SAPId already exist, Try Logging in instead!",
+                    Toast.LENGTH_SHORT).show();
+                session.createLoginSession(sapIDEditText.getText().toString(),
+                    passwordEditText.getText().toString(), username);
+                Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+              }
             }
-            else {
-             Toast.makeText(getActivity(), "SAPId already exist, Try Logging in instead!",
-                     Toast.LENGTH_SHORT).show();
-              session.createLoginSession(sapIDEditText.getText().toString(),
-                      passwordEditText.getText().toString(), username);
-              Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
-              startActivity(intent);
+
+            @Override
+            public void onFailure(Call<Student> call, Throwable t) {
+              Log.e("studentSignUp", "unsuccessful");
             }
-          }
-          @Override
-          public void onFailure(Call<Student> call, Throwable t) {
-            Log.e("studentSignUp", "unsuccessful");
-          }
           });
 //          finish();
           /*Toast.makeText(getContext(), usernameEditText.getText().toString(),
@@ -332,7 +343,8 @@ public class SignUpStudentFragment extends Fragment {
 
   private void requestFocus(View view) {
     if (view.requestFocus()) {
-      getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+      getActivity().getWindow()
+          .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
   }
 }

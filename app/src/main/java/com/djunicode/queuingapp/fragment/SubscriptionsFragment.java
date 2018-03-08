@@ -1,6 +1,8 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -42,6 +44,7 @@ public class SubscriptionsFragment extends Fragment {
   private Integer id;
   private List<String> subscriptionList;
   private List<String> teachers;
+  private SharedPreferences preferences;
 
   public SubscriptionsFragment() {
     // Required empty public constructor
@@ -50,22 +53,24 @@ public class SubscriptionsFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_subscriptions, container, false);
 
     String[] array1 = {"Select Semester", "one", "two", "three", "four", "five", "six", "seven",
-            "eight"};
+        "eight"};
     String[] array2 = {"AOA", "COA"};
     String[] array3 = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-            "ten"};
+        "ten"};
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-            android.R.layout.simple_spinner_dropdown_item, array1);
+        android.R.layout.simple_spinner_dropdown_item, array1);
 
     semesterSpinner = (Spinner) view.findViewById(R.id.semesterSpinner);
     subjectSpinner = (MultiSelectionSpinner) view.findViewById(R.id.subjectSpinner);
     teacherSpinner = (MultiSelectionSpinner) view.findViewById(R.id.teacherSpinner);
     subscriptionsFab = (FloatingActionButton) view.findViewById(R.id.subscriptionsFab);
+    preferences = getActivity()
+        .getSharedPreferences("com.djunicode.queuingapp", Context.MODE_PRIVATE);
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
     subjectSpinner.setEnabled(false);
@@ -104,7 +109,7 @@ public class SubscriptionsFragment extends Fragment {
         teacherSpinner.setEnabled(true);
         teacherSpinner.setAlpha(1.0f);
         Toast.makeText(getContext(), "Subjects:" + selectedSubjects.toString(), Toast.LENGTH_LONG)
-                .show();
+            .show();
         /*Call<List<TeachersList>> call = apiInterface.getTeacherNames();
         call.enqueue(new Callback<List<TeachersList>>() {
           @Override
@@ -166,18 +171,14 @@ public class SubscriptionsFragment extends Fragment {
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.e("RegId", token);
 
-        /*List<String> teacherNames = new ArrayList<>();
-        teacherNames.add("asdkAKSJD139432");
-        teacherNames.add("uiopjop");*/
-
         JSONArray jsonArray = new JSONArray(subscriptionList);
         Log.e("JSONArray", jsonArray.toString());
         Call<StudentSubscriptions> call = apiInterface
-                .setStudentSubscriptions(4, jsonArray.toString());
+            .setStudentSubscriptions(preferences.getInt("studentID", 0), jsonArray.toString());
         call.enqueue(new Callback<StudentSubscriptions>() {
           @Override
           public void onResponse(Call<StudentSubscriptions> call,
-                                 Response<StudentSubscriptions> response) {
+              Response<StudentSubscriptions> response) {
             Log.e("Subs", response.body().getSubscription().toString());
           }
 

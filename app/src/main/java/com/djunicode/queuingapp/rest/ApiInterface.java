@@ -2,12 +2,13 @@ package com.djunicode.queuingapp.rest;
 
 import com.djunicode.queuingapp.model.LocationTeacher;
 
-
+import com.djunicode.queuingapp.model.RecentEvents;
 import com.djunicode.queuingapp.model.TeacherCreateNew;
 import com.djunicode.queuingapp.model.TeacherListModel;
 import com.djunicode.queuingapp.model.TeacherModel;
 
 
+import org.json.JSONObject;
 import retrofit2.http.Body;
 
 import com.djunicode.queuingapp.model.Student;
@@ -38,40 +39,41 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @POST("queues/student/")
-  Call<Student> createStudentAccount (@Field("user") int user_id, @Field("name") String username,
+  Call<Student> createStudentAccount(@Field("user") int user_id, @Field("name") String username,
       @Field("sapID") String sapId, @Field("department") String department,
-      @Field("year") String year, @Field("batch") String batch);
+      @Field("year") String year, @Field("batch") String batch,
+      @Field("register_id") String register_id);
 
   @FormUrlEncoded
   @PUT("queues/users/{id}/")
-  Call<UserModel> updateUserData (@Path("id") int id, @Field("username") String username,
-                                  @Field("password") String password);
+  Call<UserModel> updateUserData(@Path("id") int id, @Field("username") String username,
+      @Field("password") String password);
 
   @FormUrlEncoded
   @POST("queues/teacher/")
-  Call<TeacherModel> createTeacherAccount (@Field("name") String username, @Field
-          ("user") int user_id, @Field("location") int location, @Field
-          ("subject") String subject, @Field
-          ("sapId") String sapId);
+  Call<TeacherModel> createTeacherAccount(@Field("name") String username, @Field
+      ("user") int user_id, @Field("location") String location, @Field
+      ("subject") String subject, @Field("sapId") String sapId,
+      @Field("register_id") String register_id);
 
   @FormUrlEncoded
   @POST("queues/users/")
-  Call<StudentForId> getId (@Field("username") String username, @Field("password") String password);
+  Call<StudentForId> getId(@Field("username") String username, @Field("password") String password);
 
   @DELETE("queues/{id}/")
-  Call<LocationTeacher> deleteTeacherLocation (@Path("id") int id);
+  Call<LocationTeacher> deleteTeacherLocation(@Path("id") int id);
 
   @FormUrlEncoded
   @PUT("queues/queue/{id}/add/")
-  Call<StudentQueue> studentJoiningTheQueue (@Path("id") int id, @Field("queueItems") String sapID);
+  Call<StudentQueue> studentJoiningTheQueue(@Path("id") int id, @Field("queueItems") String sapID);
 
   @FormUrlEncoded
-  @PUT("queues/teacher/{id}/" )
-  Call<TeacherModel> updateTeachersLocation (@Path("id") int id, @Field("location") int location
-          ,@Field("user") int user);
+  @PUT("queues/teacher/{id}/")
+  Call<TeacherModel> updateTeachersLocation(@Path("id") int id, @Field("location") int location
+      , @Field("user") int user);
 
   @GET("queues/teacher/{name}/")
-  Call<TeacherModel> getTeacherId (@Path("name") String name);
+  Call<TeacherModel> getTeacherId(@Path("name") String name);
 
   @FormUrlEncoded
   @PUT("queues/subject/")
@@ -112,7 +114,7 @@ public interface ApiInterface {
   @FormUrlEncoded
   @PUT("queues/student/{id}/")
   Call<StudentSubscriptions> setStudentSubscriptions(@Path("id") int id,
-                                                     @Field("teacherNames") String subscriptions);
+      @Field("teacherNames") String subscriptions);
 
   @FormUrlEncoded
   @PUT("queues/queue/{id}/index/")
@@ -123,9 +125,9 @@ public interface ApiInterface {
   Call<StudentQueue> deleteStudentFromQueue(@Path("id") Integer id, @Field("element") String sapID);
 
   @FormUrlEncoded
-  @POST("queues/queue/{id}/notification/")
-  Call<TeacherCreateNew> startTheQueue(@Path("id") Integer id,
-                                       @Field("teacherName") String teacherName);
+  @POST("queues/queue/notification/")
+  Call<TeacherCreateNew> startTheQueue(@Field("id") Integer id,
+      @Field("teacherName") String teacherName);
 
   @DELETE("queues/queue/{id}/")
   Call<TeacherCreateNew> deleteQueue(@Path("id") Integer id);
@@ -137,8 +139,24 @@ public interface ApiInterface {
   @FormUrlEncoded
   @POST("queues/queue/")
   Call<TeacherCreateNew> sendSubmissionData(@Field("subject") String subject,
-                                            @Field("startTime") String startTime, @Field("endTime") String endTime,
-                                            @Field("maxLength") Integer noOfStudents, @Field("queueItems") String queueItems);
+      @Field("startTime") String startTime, @Field("endTime") String endTime,
+      @Field("maxLength") Integer noOfStudents, @Field("queueItems") String queueItems,
+      @Field("location") Integer location);
+
+  @FormUrlEncoded
+  @PUT("queues/teacher/{id}/addqueue/")
+  Call<TeacherCreateNew> linkQueueToTeacher(@Path("id") Integer teacherId,
+      @Field("id") Integer queueId);
+
+  @FormUrlEncoded
+  @PUT("queues/teacher/{id}/deletequeue/")
+  Call<TeacherCreateNew> deleteQueueLinkFromTeacher(@Path("id") Integer teacherId,
+      @Field("id") Integer queueId);
+
+  @FormUrlEncoded
+  @POST("queues/teacher/getqueues/")
+  Call<List<RecentEvents>> getParticularTeacherQueues(@Field("teacherName") String teacherName);
+
   @FormUrlEncoded
   @PUT("queues/teacher/{id}/subject/")
   Call<TeacherModel> addTeacherSubjects(@Path("id") int id, @Field("subject") String subject);
@@ -158,10 +176,10 @@ public interface ApiInterface {
                                        @Field("location") int location);
 
   @FormUrlEncoded
-  @PUT("queues/teacher/login/")
+  @POST("queues/teacher/login/")
   Call<TeacherModel> getValidId(@Field("sapId") String sapID, @Field("password") String password);
 
   @FormUrlEncoded
-  @PUT("queues/student/login/")
+  @POST("queues/student/login/")
   Call<Student> getValidIdStudent(@Field("sapID") String sapID, @Field("password") String password);
 }

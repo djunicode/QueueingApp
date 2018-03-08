@@ -86,7 +86,8 @@ public class StudentScreenActivity extends AppCompatActivity {
   private void displayFirebaseRegId() {
     SharedPreferences preferences = getApplicationContext()
         .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
-    Log.e("Firebase RegId", preferences.getString("regId", "empty"));}
+    Log.e("Firebase RegId", preferences.getString("regId", "empty"));
+  }
 
   private void loadSubmissionFragment() {
     SubmissionFragment fragment = new SubmissionFragment();

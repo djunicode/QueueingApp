@@ -1,10 +1,12 @@
 package com.djunicode.queuingapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -96,6 +98,15 @@ public class LogInActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    finish();
+    new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Are you sure?")
+        .setMessage("If you exit at this point you can't sign up again! Exit the app?")
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            finish();
+          }
+        }).setNegativeButton("No", null).show();
   }
 }

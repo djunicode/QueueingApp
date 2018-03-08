@@ -43,7 +43,7 @@ public class LogInStudentFragment extends Fragment {
   SessionManager session;
   SharedPreferences spDemo;
 
-  public Boolean trueLogin;
+  public Boolean trueLogin = false;
   final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
   public LogInStudentFragment() {
@@ -72,10 +72,11 @@ public class LogInStudentFragment extends Fragment {
     logInStudentButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (validLogIn()) {
+        if (validLogIn()  && trueLogin) {
           session.createLoginSession(sapIdLogInEditText.getText().toString(),
               passwordLogInEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();

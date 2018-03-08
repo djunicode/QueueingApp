@@ -1,17 +1,26 @@
 package com.djunicode.queuingapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Ruturaj on 20-01-2018.
  */
 
 public class RecentEvents {
 
+  @SerializedName("subject")
   private String subjectName;
+
   private String batchName;
+  @SerializedName("startTime")
   private String startTime;
+  @SerializedName("endTime")
   private String endTime;
+  @SerializedName("size")
   private Integer noOfStudents;
+  @SerializedName("location")
   private String location;
+  @SerializedName("id")
   private Integer serverId;
 
   public RecentEvents(String subjectName, String batchName, String startTime, String endTime,

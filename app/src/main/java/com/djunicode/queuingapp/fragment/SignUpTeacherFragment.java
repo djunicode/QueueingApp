@@ -1,7 +1,9 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import com.djunicode.queuingapp.model.UserModel;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
 
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +48,7 @@ public class SignUpTeacherFragment extends Fragment {
   SessionManager session;
   private String username, dept, sapId, pass;
   ApiInterface apiInterface;
+  private SharedPreferences preferences;
 
   public SignUpTeacherFragment() {
     // Required empty public constructor
@@ -56,9 +60,12 @@ public class SignUpTeacherFragment extends Fragment {
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_sign_up_teacher, container, false);
 
-    teacherSignUpinputLayoutUsername = (TextInputLayout) view.findViewById(R.id.signUp_teacher_username);
-    teacherSignUpinputLayoutPassword = (TextInputLayout) view.findViewById(R.id.signUp_teacher_password);
-    teacherSignUpinputLayoutDepartment = (TextInputLayout) view.findViewById(R.id.signUp_teacher_Department);
+    teacherSignUpinputLayoutUsername = (TextInputLayout) view
+        .findViewById(R.id.signUp_teacher_username);
+    teacherSignUpinputLayoutPassword = (TextInputLayout) view
+        .findViewById(R.id.signUp_teacher_password);
+    teacherSignUpinputLayoutDepartment = (TextInputLayout) view
+        .findViewById(R.id.signUp_teacher_Department);
     teacherSignUpinputLayoutSAPId = (TextInputLayout) view.findViewById(R.id.signUp_teacher_SAPId);
     usernameTeacherEditText = (EditText) view.findViewById(R.id.usernameTeacherEditText);
     passwordTeacherEditText = (EditText) view.findViewById(R.id.passwordTeacherEditText);
@@ -70,26 +77,32 @@ public class SignUpTeacherFragment extends Fragment {
 
     // Session Manager
     session = new SessionManager(getContext(), "Teacher");
+    preferences = getActivity()
+        .getSharedPreferences("com.djunicode.queuingapp", Context.MODE_PRIVATE);
+    final String reg_id = preferences.getString("regId", "empty");
+    final int teacherID = preferences.getInt("teacherID", 0);
 
     signUpTeacherButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if(validSubmission()) {
+        if (validSubmission()) {
           username = usernameTeacherEditText.getText().toString();
           dept = departmentTeacherSpinner.getSelectedItem().toString();
           sapId = sapIDTeacherEditText.getText().toString();
           pass = passwordTeacherEditText.getText().toString();
-          Call<TeacherModel> call = apiInterface.createTeacherAccount(username, 11, 25,
-                  "AOA", sapId);
+          Call<TeacherModel> call = apiInterface
+              .createTeacherAccount(username, teacherID, "",
+                  "", sapId, reg_id);
           call.enqueue(new Callback<TeacherModel>() {
             @Override
             public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-              if (response.isSuccessful()) {
-                Log.e("teacherSignUp", "successful");
+                Log.e("teacherSignUp", response.body().getId().toString());
+                SharedPreferences preferences = getActivity()
+                    .getSharedPreferences("Teacher", Context.MODE_PRIVATE);
+                preferences.edit().putInt("teacherId", response.body().getId());
                 updateDataOnUserUrl();
-            Log.e("studentSignUp", "res unsucc");   }
-              else
-                Log.e("teacherSignUp", response.errorBody().toString());
+                Log.e("studentSignUp", "res unsucc");
+
             }
 
             @Override
@@ -99,7 +112,7 @@ public class SignUpTeacherFragment extends Fragment {
           });
           session.createLoginSession(usernameTeacherEditText.getText().toString(),
               passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
-                          toString());
+                  toString());
           Intent intent = new Intent(getContext(), SubjectsActivity.class);
           // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);
@@ -131,7 +144,7 @@ public class SignUpTeacherFragment extends Fragment {
     return view;
   }
 
-  private Boolean validSubmission () {
+  private Boolean validSubmission() {
 
     if (!validateUsername()) {
       return false;
@@ -158,10 +171,11 @@ public class SignUpTeacherFragment extends Fragment {
       requestFocus(usernameTeacherEditText);
       return false;
     } else if ((usernameTeacherEditText.getText().toString().length() < 5)) {
-      teacherSignUpinputLayoutUsername.setError(getString(R.string.err_msg_username_inappropriate_length));
+      teacherSignUpinputLayoutUsername
+          .setError(getString(R.string.err_msg_username_inappropriate_length));
       requestFocus(usernameTeacherEditText);
       return false;
-    }else {
+    } else {
       teacherSignUpinputLayoutUsername.setErrorEnabled(false);
     }
 
@@ -174,10 +188,11 @@ public class SignUpTeacherFragment extends Fragment {
       requestFocus(sapIDTeacherEditText);
       return false;
     } else if ((sapIDTeacherEditText.getText().toString().length() != 11)) {
-      teacherSignUpinputLayoutSAPId.setError(getString(R.string.err_msg_SAPId_inappropriate_length));
+      teacherSignUpinputLayoutSAPId
+          .setError(getString(R.string.err_msg_SAPId_inappropriate_length));
       requestFocus(sapIDTeacherEditText);
       return false;
-    }else {
+    } else {
       teacherSignUpinputLayoutSAPId.setErrorEnabled(false);
     }
 
@@ -190,10 +205,11 @@ public class SignUpTeacherFragment extends Fragment {
       requestFocus(passwordTeacherEditText);
       return false;
     } else if ((passwordTeacherEditText.getText().toString().length() < 5)) {
-      teacherSignUpinputLayoutPassword.setError(getString(R.string.err_msg_password_inappropriate_length));
+      teacherSignUpinputLayoutPassword
+          .setError(getString(R.string.err_msg_password_inappropriate_length));
       requestFocus(passwordTeacherEditText);
       return false;
-    }else {
+    } else {
       teacherSignUpinputLayoutPassword.setErrorEnabled(false);
     }
 
@@ -201,20 +217,19 @@ public class SignUpTeacherFragment extends Fragment {
   }
 
   private boolean validateDepartment() {
-    if(departmentTeacherSpinner.getSelectedItemPosition() == 0) {
+    if (departmentTeacherSpinner.getSelectedItemPosition() == 0) {
       teacherSignUpinputLayoutDepartment.setError(getString(R.string.err_msg_department));
       requestFocusSpinner(departmentTeacherSpinner);
       return false;
-    }
-    else {
+    } else {
       teacherSignUpinputLayoutDepartment.setError("");
       return true;
     }
   }
 
-  private void requestFocus (View view) {
+  private void requestFocus(View view) {
 
-    if(view.requestFocus()){
+    if (view.requestFocus()) {
       getActivity().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
   }

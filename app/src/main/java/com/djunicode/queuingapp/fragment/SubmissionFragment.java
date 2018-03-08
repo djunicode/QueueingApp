@@ -1,6 +1,8 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -36,6 +38,7 @@ public class SubmissionFragment extends Fragment {
   private List<String> teachers;
   private ArrayAdapter<String> teacherAdapter;
   private ApiInterface apiInterface;
+  private SharedPreferences preferences;
 
   public SubmissionFragment() {
     // Required empty public constructor
@@ -44,7 +47,7 @@ public class SubmissionFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_submission, container, false);
 
     String[] array = {"Select", "AOA", "COA", "DS"};
@@ -53,8 +56,11 @@ public class SubmissionFragment extends Fragment {
     fab = (FloatingActionButton) view.findViewById(R.id.submissionFab);
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
+    preferences = getActivity()
+        .getSharedPreferences("Student", Context.MODE_PRIVATE);
+
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-            android.R.layout.simple_spinner_dropdown_item, array);
+        android.R.layout.simple_spinner_dropdown_item, array);
 
     subjectSpinner.setAdapter(adapter);
     teacherNameSpinner.setAdapter(adapter);
@@ -73,14 +79,14 @@ public class SubmissionFragment extends Fragment {
 
           teachers = new ArrayList<>();
           Call<TeachersList> call = apiInterface
-                  .getTeachersList(subjectSpinner.getItemAtPosition(position).toString());
+              .getTeachersList(subjectSpinner.getItemAtPosition(position).toString());
           call.enqueue(new Callback<TeachersList>() {
             @Override
             public void onResponse(Call<TeachersList> call, Response<TeachersList> response) {
               Log.e("queues/subject/", response.body().getTeachers().toString());
               teachers = response.body().getTeachers();
               teacherAdapter = new ArrayAdapter<String>(getContext(),
-                      android.R.layout.simple_spinner_dropdown_item, teachers);
+                  android.R.layout.simple_spinner_dropdown_item, teachers);
               teacherNameSpinner.setAdapter(teacherAdapter);
             }
 
@@ -116,6 +122,8 @@ public class SubmissionFragment extends Fragment {
       @Override
       public void onClick(View v) {
         QueueDialogClass queueDialog = new QueueDialogClass(getActivity());
+        preferences.edit().putString("teacherName", teacherNameSpinner.getSelectedItem().toString())
+            .apply();
         queueDialog.show();
       }
     });

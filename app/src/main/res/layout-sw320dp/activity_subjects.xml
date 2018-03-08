@@ -7,6 +7,7 @@
   android:layout_height="match_parent"
   android:padding="8dp"
   android:theme="@style/MyTheme"
+  android:background="@color/light_gray"
   tools:context="com.djunicode.queuingapp.activity.SubjectsActivity">
 
   <TextView

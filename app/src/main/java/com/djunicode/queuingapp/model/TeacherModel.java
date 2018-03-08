@@ -35,6 +35,9 @@ public class TeacherModel {
     @SerializedName("location")
     public Integer location;
 
+    @SerializedName("password")
+    public String password;
+
     TeacherModel(Integer id, String name, Boolean isFree, String sapId, String subject,
                  Integer user, String created, String updated, Integer location){
 

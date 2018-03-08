@@ -5,6 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/light_gray"
   tools:context="com.djunicode.queuingapp.activity.StudentScreenActivity">
 
   <android.support.design.widget.AppBarLayout
@@ -24,7 +25,8 @@
   <FrameLayout
     android:id="@+id/containerLayout"
     android:layout_below="@id/appBarLayout"
-    android:layout_marginTop="20dp"
+    android:layout_above="@id/bottomNavigationView"
+    android:layout_marginTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="10dp"/>
@@ -36,6 +38,6 @@
     android:layout_alignParentBottom="true"
     app:menu="@menu/menu_bottom_nav"
     android:background="@android:color/white"
-    android:elevation="8dp"/>
+    app:elevation="8dp"/>
 
 </RelativeLayout>

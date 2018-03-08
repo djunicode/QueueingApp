@@ -45,7 +45,7 @@ public class TeacherLocationFragment extends Fragment {
   private FloatingActionButton locationUpdateFab;
   public static boolean locationUpdated = false;
   public static String locationString;
-  int glo_id=9;
+  int glo_id = 9;
   private ApiInterface apiInterface;
   private String room, dept, name, toTime, fromTime, avgTime, subject2;
   private Integer floor;
@@ -70,9 +70,7 @@ public class TeacherLocationFragment extends Fragment {
     Timer t = new Timer();
     t.schedule(timerTask, 6000,360000);*/
 
-
-    String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
-        "nine", "ten"};
+    String[] array = {"Select", "1", "2", "3", "4", "5", "6"};
 
     final Bundle extras = getArguments();
 
@@ -104,7 +102,7 @@ public class TeacherLocationFragment extends Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position != 0) {
-          floor = position+1;
+          floor = position + 1;
 
           departmentSpinner.setEnabled(true);
           departmentSpinner.setAlpha(1.0f);
@@ -150,26 +148,26 @@ public class TeacherLocationFragment extends Fragment {
     locationUpdateFab.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-          locationUpdated = true;
-          locationString = "Floor-" + floorSpinner.getSelectedItem().toString() +
-                  " Dept-" + departmentSpinner.getSelectedItem().toString() + " Room-" +
-                  roomSpinner.getSelectedItem().toString();
+        locationUpdated = true;
+        locationString = "Floor-" + floorSpinner.getSelectedItem().toString() +
+            " Dept-" + departmentSpinner.getSelectedItem().toString() + " Room-" +
+            roomSpinner.getSelectedItem().toString();
 
-          boolean flag = false;
+        boolean flag = false;
 
-          if (extras != null) {
-              flag = extras.getBoolean("Flag");
-              final String subject = extras.getString("Subject");
-              final String batch = extras.getString("Batch");
-              final String from = extras.getString("From");
-              final String to = extras.getString("To", "00:00:00");
-              final int noOfStudents = extras.getInt("noOfStudents", 50);
+        if (extras != null) {
+          flag = extras.getBoolean("Flag");
+          final String subject = extras.getString("Subject");
+          final String batch = extras.getString("Batch");
+          final String from = extras.getString("From");
+          final String to = extras.getString("To", "00:00:00");
+          final int noOfStudents = extras.getInt("noOfStudents", 50);
 
-              if (flag) {
+          if (flag) {
             /*TeacherSubmissionFragment.recentEventsList
                 .set(extras.getInt("Position"), new RecentEvents(subject, batch, from, to,
                     locationString, 1));*/
-                  dbHelper.updateQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
+            dbHelper.updateQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
                           locationString, 1));
                   Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
                   tempId = extras.getInt("tempId", -1);
@@ -221,106 +219,136 @@ public class TeacherLocationFragment extends Fragment {
             /*TeacherSubmissionFragment.recentEventsList
                 .add(new RecentEvents(subject, batch, from, to,
                     locationString, 1));*/
-                  Call<TeacherCreateNew> call = apiInterface
-                          .sendSubmissionData(subject, from + ":00", to + ":00", noOfStudents, "");
-                  call.enqueue(new Callback<TeacherCreateNew>() {
 
+            Call<LocationTeacher> call1 = apiInterface
+                .sendQueueLocation(Integer.parseInt(floorSpinner.getSelectedItem().toString()),
+                    departmentSpinner.getSelectedItem().toString(),
+                    roomSpinner.getSelectedItem().toString());
+            call1.enqueue(new Callback<LocationTeacher>() {
+              @Override
+              public void onResponse(Call<LocationTeacher> call3,
+                  Response<LocationTeacher> response) {
+                int queueLocationId = response.body().getId();
+                Call<TeacherCreateNew> call = apiInterface
+                    .sendSubmissionData(subject, from + ":00", to + ":00", noOfStudents, "",
+                        queueLocationId);
+                call.enqueue(new Callback<TeacherCreateNew>() {
+
+                  @Override
+                  public void onResponse(Call<TeacherCreateNew> call,
+                      Response<TeacherCreateNew> response) {
+                    Bundle ids = new Bundle();
+                    queueId = response.body().getId();
+                    ids.putString("ids", Integer.toString(queueId));
+                    dbHelper.addQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
+                        locationString, queueId));
+                    Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
+                    Call<TeacherCreateNew> call2 = apiInterface.linkQueueToTeacher(4, queueId);
+                    call2.enqueue(new Callback<TeacherCreateNew>() {
                       @Override
                       public void onResponse(Call<TeacherCreateNew> call,
-                                             Response<TeacherCreateNew> response) {
-                          Bundle ids = new Bundle();
-                          queueId = response.body().getId();
-                          ids.putString("ids", Integer.toString(queueId));
-                          dbHelper.addQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
-                                  locationString, queueId));
-                          Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
-                          if (response.isSuccessful()) {
-                              Log.d("Response succ", response.body().toString());
-                          } else {
-                              Log.d("Response fail", response.errorBody().toString());
-                          }
+                          Response<TeacherCreateNew> response) {
+
                       }
 
                       @Override
                       public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
-                          Toast.makeText(getContext(), "Submission failed", Toast.LENGTH_SHORT).show();
+
                       }
-                  });
+                    });
+                    if (response.isSuccessful()) {
+                      Log.d("Response succ", response.body().toString());
+                    } else {
+                      Log.d("Response fail", response.errorBody().toString());
+                    }
+                  }
+
+                  @Override
+                  public void onFailure(Call<TeacherCreateNew> call, Throwable t) {
+                    Toast.makeText(getContext(), "Submission failed", Toast.LENGTH_SHORT).show();
+                  }
+                });
+              }
+
+              @Override
+              public void onFailure(Call<LocationTeacher> call3, Throwable t) {
 
               }
+            });
+
+
           }
-          else {
-              Toast.makeText(getContext(), "Clicked!", Toast.LENGTH_LONG).show();
-              Call<LocationTeacher> call = apiInterface.sendTeacherLocation(floor, dept, room);
-              call.enqueue(new Callback<LocationTeacher>() {
-                  @Override
-                  public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
-                      glo_id = response.body().getId();
-                      Log.i("Id", response.body().getId().toString());
-                      Log.i("Floor", response.body().getFloor().toString());
-                      Log.i("Department", response.body().getDepartment().toString());
-                      Log.i("Room", response.body().getRoom().toString());
-                      Log.i("Updated At", response.body().getUpdated_at().toString());
-                      updateLocation();
-                  }
+        } else {
+          Toast.makeText(getContext(), "Clicked!", Toast.LENGTH_LONG).show();
+          Call<LocationTeacher> call = apiInterface.sendTeacherLocation(floor, dept, room);
+          call.enqueue(new Callback<LocationTeacher>() {
+            @Override
+            public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
+              glo_id = response.body().getId();
+              Log.i("Id", response.body().getId().toString());
+              Log.i("Floor", response.body().getFloor().toString());
+              Log.i("Department", response.body().getDepartment().toString());
+              Log.i("Room", response.body().getRoom().toString());
+              Log.i("Updated At", response.body().getUpdated_at().toString());
+              updateLocation();
+            }
 
-                  private void updateLocation() {
-                      if (name.equals("no name")){
-                          Log.e("no name", "no name");
-                      }
-                      else
-                        getTeacherId(name);
+            private void updateLocation() {
+              if (name.equals("no name")) {
+                Log.e("no name", "no name");
+              } else {
+                getTeacherId(name);
+              }
 
 
+            }
 
-                  }
-
-                  @Override
-                  public void onFailure(Call<LocationTeacher> call, Throwable t) {
-                      if (t != null) {/* TeacherTimerTask timerTask = new TeacherTimerTask();
+            @Override
+            public void onFailure(Call<LocationTeacher> call, Throwable t) {
+              if (t != null) {/* TeacherTimerTask timerTask = new TeacherTimerTask();
     Timer t = new Timer();
     t.schedule(timerTask, 6000,360000);*/
-                          int i = Log.i("info: ", t.getMessage());
-                      } else {
-                          Log.i("info: ", "failed");
-                      }
-                  }
-              });
-          }
+                int i = Log.i("info: ", t.getMessage());
+              } else {
+                Log.i("info: ", "failed");
+              }
+            }
+          });
+        }
       }
     });
 
     return view;
   }
 
-  private void getTeacherId(String name){
+  private void getTeacherId(String name) {
 
     Call<TeacherModel> call = apiInterface.getIdForTeacherFromName(name);
     call.enqueue(new Callback<TeacherModel>() {
-        @Override
-        public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-            t_id = response.body().getId();
-            user = response.body().getUser();
-            Log.e("T_Id", Integer.toString(t_id));
-            Log.e("GId", Integer.toString(glo_id));
-            Call<TeacherModel> call1 = apiInterface.updateTeachersLocation(t_id, glo_id, user);
-            call1.enqueue(new Callback<TeacherModel>() {
-                @Override
-                public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-                    Log.e("Dhruv", "Response successfull");
-                }
+      @Override
+      public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+        t_id = response.body().getId();
+        user = response.body().getUser();
+        Log.e("T_Id", Integer.toString(t_id));
+        Log.e("GId", Integer.toString(glo_id));
+        Call<TeacherModel> call1 = apiInterface.updateTeachersLocation(t_id, glo_id, user);
+        call1.enqueue(new Callback<TeacherModel>() {
+          @Override
+          public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+            Log.e("Dhruv", "Response successfull");
+          }
 
-                @Override
-                public void onFailure(Call<TeacherModel> call, Throwable t) {
-                    Log.e("Dhruv", "Response unsuccessfull");
-                }
-            });
-        }
+          @Override
+          public void onFailure(Call<TeacherModel> call, Throwable t) {
+            Log.e("Dhruv", "Response unsuccessfull");
+          }
+        });
+      }
 
-        @Override
-        public void onFailure(Call<TeacherModel> call, Throwable t) {
-            t_id = 0;
-        }
+      @Override
+      public void onFailure(Call<TeacherModel> call, Throwable t) {
+        t_id = 0;
+      }
     });
   }
 
