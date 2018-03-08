@@ -195,7 +195,11 @@ public class SignUpStudentFragment extends Fragment {
                 updateDataOnUserUrl();
                 session.createLoginSession(sapIDEditText.getText().toString(),
                     passwordEditText.getText().toString(), username);
-                editor_student.putInt("studentID", response.body().getStudentID()).apply();
+                try {
+                  editor_student.putInt("studentID", response.body().getStudentID()).apply();
+                } catch (Exception e){
+                  Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
                 startActivity(intent);
               } else {

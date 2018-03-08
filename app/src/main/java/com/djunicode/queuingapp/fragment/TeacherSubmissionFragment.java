@@ -122,14 +122,10 @@ public class TeacherSubmissionFragment extends Fragment {
     studentsButton = (ImageButton) view.findViewById(R.id.studentsButton);
     timerButton = (ImageButton) view.findViewById(R.id.timerButton);
     createFab = (FloatingActionButton) view.findViewById(R.id.createFab);
-//    startFab = (FloatingActionButton) view.findViewById(R.id.startFab);
-//    cancelFab = (FloatingActionButton) view.findViewById(R.id.cancelFab);
     createNewFab = (FloatingActionButton) view.findViewById(R.id.createNewFab);
     editFab = (FloatingActionButton) view.findViewById(R.id.editFab);
     coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.teacherCoordinatorLayout);
     relativeLayout = (RelativeLayout) view.findViewById(R.id.submissionRelativeLayout);
-//    fabLL1 = (LinearLayout) view.findViewById(R.id.fabLL1);
-//    fabLL2 = (LinearLayout) view.findViewById(R.id.fabLL2);
     fabLL3 = (LinearLayout) view.findViewById(R.id.fabLL3);
     fabLL4 = (LinearLayout) view.findViewById(R.id.fabLL4);
     fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
@@ -169,7 +165,6 @@ public class TeacherSubmissionFragment extends Fragment {
         .setContentTitle("Submission started.")
         .setContentText("The submission for DLDA is started.")
         .setAutoCancel(true);
-
     Intent queueActivityIntent = new Intent(getContext(), StudentQueueActivity.class);
     TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(getContext());
     taskStackBuilder.addNextIntentWithParentStack(queueActivityIntent);
@@ -361,7 +356,7 @@ public class TeacherSubmissionFragment extends Fragment {
           recentEventsList = dbHelper.getAllQueues();
           final RecentEvents event = recentEventsList.get(args.getInt("Position"));
           if (toSelected || studentsSelected) {
-            AlertDialog.Builder builder = new Builder(getContext());
+            /*AlertDialog.Builder builder = new Builder(getContext());
             builder.setMessage("Do you want to use the last location or set new location?")
                 .setPositiveButton("LAST", new DialogInterface.OnClickListener() {
                   @Override
@@ -371,11 +366,11 @@ public class TeacherSubmissionFragment extends Fragment {
                       String message = "No last location set! Please update your location.";
                       Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                     } else {
-                      /*recentEventsList
+                      *//*recentEventsList
                           .set(args.getInt("Position"),
                               new RecentEvents(subjectSpinner.getSelectedItem().toString(),
                                   batchSpinner.getSelectedItem().toString(), fromTime, toTime,
-                                  TeacherLocationFragment.locationString));*/
+                                  TeacherLocationFragment.locationString));*//*
                       dbHelper
                           .updateQueue(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
                               batchSpinner.getSelectedItem().toString(), fromTime, toTime,
@@ -416,7 +411,10 @@ public class TeacherSubmissionFragment extends Fragment {
                     createFab.setImageResource(R.drawable.ic_add);
                   }
                 });
-            builder.show();
+            builder.show();*/
+            tempId = event.getServerId();
+            updateLocation(true);
+            createFab.setImageResource(R.drawable.ic_add);
           } else {
             Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
           }
@@ -432,7 +430,7 @@ public class TeacherSubmissionFragment extends Fragment {
         animateFab();
 
         if (toSelected || studentsSelected) {
-          AlertDialog.Builder builder = new Builder(getContext());
+          /*AlertDialog.Builder builder = new Builder(getContext());
           builder.setMessage("Do you want to use the last location or set new location?")
               .setPositiveButton("LAST", new DialogInterface.OnClickListener() {
                 @Override
@@ -443,10 +441,10 @@ public class TeacherSubmissionFragment extends Fragment {
                     String message = "No last location set! Please update your location.";
                     Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                   } else {
-                    /*recentEventsList
+                    *//*recentEventsList
                         .add(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
                             batchSpinner.getSelectedItem().toString(), fromTime, toTime,
-                            TeacherLocationFragment.locationString));*/
+                            TeacherLocationFragment.locationString));*//*
                     Call<TeacherCreateNew> call = apiInterface
                         .sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
                             fromTime + ":00", toTime + ":00", noOfStudents, "", 23);
@@ -491,7 +489,9 @@ public class TeacherSubmissionFragment extends Fragment {
                 }
               });
 
-          builder.show();
+          builder.show();*/
+          updateLocation(false);
+          createFab.setImageResource(R.drawable.ic_add);
         } else {
           Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
         }
