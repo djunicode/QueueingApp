@@ -1,5 +1,6 @@
 package com.djunicode.queuingapp.activity;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -220,7 +221,10 @@ public class SightedTeacherActivity extends AppCompatActivity {
         }
         Log.e("T_Id", Integer.toString(t_id));
         Log.e("GId", Integer.toString(glo_id));
-        Call<TeacherModel> call1 = apiInterface.updateTeachersLocation(t_id, glo_id, user);
+        final SharedPreferences preferences2 = getApplication().getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+        Log.e("Firebase RegId", preferences2.getString("regId", "empty"));
+        String reg_id = preferences2.getString("regId", "empty");
+        Call<TeacherModel> call1 = apiInterface.updateTeachersLocation(t_id, glo_id, user, reg_id);
         call1.enqueue(new Callback<TeacherModel>() {
           @Override
           public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {

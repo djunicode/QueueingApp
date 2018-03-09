@@ -49,6 +49,7 @@ public class SignUpTeacherFragment extends Fragment {
   private String username, dept, sapId, pass;
   ApiInterface apiInterface;
   private SharedPreferences preferences;
+  private Integer teacherId;
 
   public SignUpTeacherFragment() {
     // Required empty public constructor
@@ -100,8 +101,23 @@ public class SignUpTeacherFragment extends Fragment {
                   Log.e("teacherSignUp", response.body().getId().toString());
                   SharedPreferences preferences1 = getActivity()
                       .getSharedPreferences("Teacher", Context.MODE_PRIVATE);
+                  teacherId = response.body().getId();
                   preferences1.edit().putInt("teacherId", response.body().getId()).apply();
                   updateDataOnUserUrl();
+
+
+                  session.createLoginSession(usernameTeacherEditText.getText().toString(),
+                          passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
+                                  toString());
+                  Intent intent = new Intent(getContext(), SubjectsActivity.class);
+                  intent.putExtra("teacherId", teacherId);
+                  startActivity(intent);
+                  Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),
+                          Toast.LENGTH_SHORT).show();
+                  Toast.makeText(getContext(), passwordTeacherEditText.getText().toString(),
+                          Toast.LENGTH_SHORT).show();
+
+
                 } catch (NullPointerException e){
                   Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                   Log.e("SignUpTeacher", e.getMessage());
@@ -113,15 +129,7 @@ public class SignUpTeacherFragment extends Fragment {
               Log.e("teacherSignUp", "unsuccessful");
             }
           });
-          session.createLoginSession(usernameTeacherEditText.getText().toString(),
-              passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
-                  toString());
-          Intent intent = new Intent(getContext(), SubjectsActivity.class);
-          startActivity(intent);
-          Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
-          Toast.makeText(getContext(), passwordTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
+
         }
       }
 

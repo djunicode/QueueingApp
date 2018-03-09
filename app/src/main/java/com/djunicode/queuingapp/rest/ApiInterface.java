@@ -26,6 +26,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -68,9 +69,9 @@ public interface ApiInterface {
   Call<StudentQueue> studentJoiningTheQueue(@Path("id") int id, @Field("queueItems") String sapID);
 
   @FormUrlEncoded
-  @PUT("queues/teacher/{id}/")
+  @PATCH("queues/teacher/{id}/")
   Call<TeacherModel> updateTeachersLocation(@Path("id") int id, @Field("location") int location
-      , @Field("user") int user);
+      , @Field("user") int user, @Field("register_id") String register_id);
 
   @GET("queues/teacher/{name}/")
   Call<TeacherModel> getTeacherId(@Path("name") String name);

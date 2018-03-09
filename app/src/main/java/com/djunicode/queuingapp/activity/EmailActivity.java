@@ -54,7 +54,7 @@ public class EmailActivity extends AppCompatActivity {
       public void onClick(View v) {
         String email = signUpEmailEditText.getText().toString();
 //        email.split("@")[0]
-        Call<UserEmailVerify> call = apiInterface.sendEmail("Ruturaj0", email, "demopass");
+        Call<UserEmailVerify> call = apiInterface.sendEmail("Ruturaj68473", email, "demopass");
         if (user.equals("teacher")) {
           if (email.contains("@djsce.ac.in")) {
             /*call.enqueue(new Callback<UserEmailVerify>() {

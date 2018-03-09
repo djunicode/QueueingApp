@@ -374,8 +374,12 @@ public class TeacherLocationFragment extends Fragment {
     });*/
     Log.e("tId, glo_id, tUId",
         teacherId.toString() + " " + Integer.toString(glo_id) + " " + teacherUserID.toString());
+    final SharedPreferences preferences2 = getActivity()
+            .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+    Log.e("Firebase RegId", preferences2.getString("regId", "empty"));
+    String reg_id = preferences2.getString("regId", "empty");
     Call<TeacherModel> call1 = apiInterface
-        .updateTeachersLocation(teacherId, glo_id, teacherUserID);
+        .updateTeachersLocation(teacherId, glo_id, teacherUserID, reg_id);
     call1.enqueue(new Callback<TeacherModel>() {
       @Override
       public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
