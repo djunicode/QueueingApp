@@ -60,6 +60,111 @@
     <item>B4</item>
   </string-array>
 
+  <string-array name="sem_1">
+    <item>Maths1</item>
+    <item>Physics1</item>
+    <item>Chemistry1</item>
+    <item>Mechanics</item>
+    <item>BEE</item>
+    <item>EVS</item>
+  </string-array>
+
+  <string-array name="sem_2">
+    <item>Maths2</item>
+    <item>Physics2</item>
+    <item>Chemistry2</item>
+    <item>SPA</item>
+    <item>ED</item>
+    <item>CS</item>
+  </string-array>
+
+  <string-array name="sem_3">
+    <item>Maths3</item>
+    <item>DLDA</item>
+    <item>DS</item>
+    <item>ECCF</item>
+    <item>DIS</item>
+  </string-array>
+
+  <string-array name="sem_4">
+    <item>Maths4</item>
+    <item>OS</item>
+    <item>COA</item>
+    <item>AOA</item>
+    <item>CG</item>
+  </string-array>
+
+  <string-array name="sem_5">
+    <item>Microprocessor</item>
+    <item>DBMS</item>
+    <item>TCS</item>
+    <item>CN</item>
+    <item>Advanced OS</item>
+  </string-array>
+
+  <string-array name="sem_6">
+    <item>SE</item>
+    <item>SPCC</item>
+    <item>DWM</item>
+    <item>CSS</item>
+    <item>ML</item>
+  </string-array>
+
+  <string-array name="sem_7">
+    <item>DSIP</item>
+    <item>MCC</item>
+    <item>AISC</item>
+    <item>PLM</item>
+    <item>Big Data</item>
+  </string-array>
+
+  <string-array name="sem_8">
+    <item>HMI</item>
+    <item>DC</item>
+    <item>HRM</item>
+    <item>NLP</item>
+  </string-array>
+
+  <string-array name="floor_6">
+    <item>Computer</item>
+    <item>IT</item>
+  </string-array>
+
+  <string-array name="comps_odd">
+    <item>Maths3</item>
+    <item>DLDA</item>
+    <item>DS</item>
+    <item>ECCF</item>
+    <item>DIS</item>
+    <item>Microprocessor</item>
+    <item>DBMS</item>
+    <item>TCS</item>
+    <item>CN</item>
+    <item>Advanced OS</item>
+    <item>DSIP</item>
+    <item>MCC</item>
+    <item>AISC</item>
+    <item>PLM</item>
+    <item>Big Data</item>
+  </string-array>
+
+  <string-array name="comps_even">
+    <item>Maths4</item>
+    <item>OS</item>
+    <item>COA</item>
+    <item>AOA</item>
+    <item>CG</item>
+    <item>SE</item>
+    <item>SPCC</item>
+    <item>DWM</item>
+    <item>CSS</item>
+    <item>ML</item>
+    <item>HMI</item>
+    <item>DC</item>
+    <item>HRM</item>
+    <item>NLP</item>
+  </string-array>
+
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="semester">Semester</string>

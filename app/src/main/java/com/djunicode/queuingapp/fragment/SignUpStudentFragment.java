@@ -4,6 +4,7 @@ package com.djunicode.queuingapp.fragment;
 import static android.content.Context.MODE_PRIVATE;
 import static com.djunicode.queuingapp.activity.EmailActivity.id;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class SignUpStudentFragment extends Fragment {
   //Student's data to be send to server
   private int userId;
   private ApiInterface apiInterface;
+  private ProgressDialog progressDialog;
 
   public SignUpStudentFragment() {
     // Required empty public constructor
@@ -173,6 +175,7 @@ public class SignUpStudentFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if (validSignUp()) {
+          progressDialog = ProgressDialog.show(getContext(), "Signing Up", "Please wait...");
           username = usernameEditText.getText().toString();
           department = departmentSpinner.getSelectedItem().toString();
           year = yearSpinner.getSelectedItem().toString();
@@ -195,9 +198,10 @@ public class SignUpStudentFragment extends Fragment {
                 updateDataOnUserUrl();
                 session.createLoginSession(sapIDEditText.getText().toString(),
                     passwordEditText.getText().toString(), username);
+                progressDialog.dismiss();
                 try {
                   editor_student.putInt("studentID", response.body().getStudentID()).apply();
-                } catch (Exception e){
+                } catch (Exception e) {
                   Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 Intent intent = new Intent(getActivity(), StudentScreenActivity.class);

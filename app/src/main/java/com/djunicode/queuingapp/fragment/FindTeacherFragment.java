@@ -4,6 +4,7 @@ package com.djunicode.queuingapp.fragment;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -48,6 +49,7 @@ public class FindTeacherFragment extends Fragment {
   private List<String> list;
   ArrayAdapter<String> teacher_adapter;
   String teacher_selected;
+  private Resources resources;
 
   public FindTeacherFragment() {
     // Required empty public constructor
@@ -60,7 +62,6 @@ public class FindTeacherFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_find_teacher, container, false);
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
 
     String[] sem = {"Select", "I", "II", "III", "IV", "V", "VI", "VII", "VIII"};
 
@@ -83,16 +84,13 @@ public class FindTeacherFragment extends Fragment {
         android.R.layout.simple_spinner_dropdown_item, array);
 
     ArrayAdapter<String> sem_adapter = new ArrayAdapter<String>(getContext(),
-            android.R.layout.simple_spinner_dropdown_item, sem);
+        android.R.layout.simple_spinner_dropdown_item, sem);
 
     final ArrayAdapter<String> adapter_s3 = new ArrayAdapter<String>(getContext(),
-            android.R.layout.simple_spinner_dropdown_item, sem3_Sub);
-
+        android.R.layout.simple_spinner_dropdown_item, sem3_Sub);
 
     final ArrayAdapter<String> adapter_s4 = new ArrayAdapter<String>(getContext(),
-            android.R.layout.simple_spinner_dropdown_item, sem4_Sub);
-
-
+        android.R.layout.simple_spinner_dropdown_item, sem4_Sub);
 
     semSpinner.setAdapter(sem_adapter);
     subjectSpinner.setAdapter(adapter);
@@ -107,13 +105,51 @@ public class FindTeacherFragment extends Fragment {
     semSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position != 0){
-          if (position == 3)
-            subjectSpinner.setAdapter(adapter_s3);
-          if (position == 4)
-            subjectSpinner.setAdapter(adapter_s4);
+        if (position != 0) {
           subjectSpinner.setEnabled(true);
           subjectSpinner.setAlpha(1.0f);
+        }
+        switch (position) {
+          case 1:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_1)));
+            break;
+          case 2:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_2)));
+            break;
+          case 3:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_3)));
+            break;
+          case 4:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_4)));
+            break;
+          case 5:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_5)));
+            break;
+          case 6:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_6)));
+            break;
+          case 7:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_7)));
+            break;
+          case 8:
+            subjectSpinner.setAdapter(new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.sem_8)));
+            break;
         }
       }
 
@@ -126,19 +162,20 @@ public class FindTeacherFragment extends Fragment {
     subjectSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position != 0){
+        if (position != 0) {
           Call<TeacherListModel> call = apiInterface.getTeachers(subjectSpinner.getSelectedItem()
-                  .toString());
+              .toString());
           call.enqueue(new Callback<TeacherListModel>() {
             @Override
-            public void onResponse(Call<TeacherListModel> call, Response<TeacherListModel> response) {
+            public void onResponse(Call<TeacherListModel> call,
+                Response<TeacherListModel> response) {
               try {
                 list = response.body().getTeachers();
-              } catch (Exception e){
+              } catch (Exception e) {
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
               }
               teacher_adapter = new ArrayAdapter<String>(getContext(),
-                      android.R.layout.simple_spinner_dropdown_item, list);
+                  android.R.layout.simple_spinner_dropdown_item, list);
               teacherSpinner.setAdapter(teacher_adapter);
             }
 
@@ -150,7 +187,7 @@ public class FindTeacherFragment extends Fragment {
           teacherSpinner.setEnabled(true);
           teacherSpinner.setAlpha(1.0f);
           Toast.makeText(getContext(), parent.getItemAtPosition(position).toString(),
-                  Toast.LENGTH_SHORT).show();
+              Toast.LENGTH_SHORT).show();
         }
       }
 
@@ -160,35 +197,33 @@ public class FindTeacherFragment extends Fragment {
       }
     });
 
-
-
     findTeacherButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-          teacher_selected = teacherSpinner.getSelectedItem().toString();
-          Call<TeacherModel> call1 = apiInterface.getIdForTeacherFromName(teacher_selected);
-          call1.enqueue(new Callback<TeacherModel>() {
-            @Override
-            public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-              if (response.isSuccessful()){
-                try {
-                  teacher_location_id = response.body().getLocation();
-                  getTLocation();
-                  Log.e("FindTeacherFragment", "success");
-                } catch (Exception e){
-                  Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+        teacher_selected = teacherSpinner.getSelectedItem().toString();
+        Call<TeacherModel> call1 = apiInterface.getIdForTeacherFromName(teacher_selected);
+        call1.enqueue(new Callback<TeacherModel>() {
+          @Override
+          public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+            if (response.isSuccessful()) {
+              try {
+                teacher_location_id = response.body().getLocation();
+                getTLocation();
+                Log.e("FindTeacherFragment", "success");
+              } catch (Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
               }
             }
+          }
 
-            @Override
-            public void onFailure(Call<TeacherModel> call, Throwable t) {
-              Log.e("T_l", "failed");
-            }
-          });
+          @Override
+          public void onFailure(Call<TeacherModel> call, Throwable t) {
+            Log.e("T_l", "failed");
+          }
+        });
 
-           teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
-              " " +  "Department: " + "Waiting for Teacher, please try again";
+        teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
+            " " + "Department: " + "Waiting for Teacher, please try again";
 //          AlertDialog.Builder builder = new Builder(getActivity());
 //          builder.setMessage(teacherLocation)
 //              .setPositiveButton("OK", null)
@@ -228,7 +263,7 @@ public class FindTeacherFragment extends Fragment {
             builder.setMessage(teacherLocation)
                 .setPositiveButton("OK", null)
                 .show();
-          } catch (Exception e){
+          } catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
           }
           //+ " Floor: "

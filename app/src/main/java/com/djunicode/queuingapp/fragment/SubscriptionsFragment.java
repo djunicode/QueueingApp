@@ -3,6 +3,7 @@ package com.djunicode.queuingapp.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class SubscriptionsFragment extends Fragment {
   private List<String> subscriptionList;
   private List<String> teachers;
   private SharedPreferences preferences;
+  private Resources resources;
 
   public SubscriptionsFragment() {
     // Required empty public constructor
@@ -58,9 +60,6 @@ public class SubscriptionsFragment extends Fragment {
 
     String[] array1 = {"Select Semester", "one", "two", "three", "four", "five", "six", "seven",
         "eight"};
-    String[] array2 = {"AOA", "COA"};
-    String[] array3 = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-        "ten"};
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array1);
@@ -72,14 +71,13 @@ public class SubscriptionsFragment extends Fragment {
     preferences = getActivity()
         .getSharedPreferences("Student", Context.MODE_PRIVATE);
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
+    resources = getResources();
 
     subjectSpinner.setEnabled(false);
     subjectSpinner.setAlpha(0.4f);
-    subjectSpinner.setItems(array2);
 
     teacherSpinner.setEnabled(false);
     teacherSpinner.setAlpha(0.4f);
-    teacherSpinner.setItems(array3);
 
     semesterSpinner.setAdapter(adapter);
     semesterSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -89,6 +87,32 @@ public class SubscriptionsFragment extends Fragment {
         if (position != 0) {
           subjectSpinner.setEnabled(true);
           subjectSpinner.setAlpha(1.0f);
+        }
+        switch (position){
+          case 1:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_1));
+            break;
+          case 2:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_2));
+            break;
+          case 3:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_3));
+            break;
+          case 4:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_4));
+            break;
+          case 5:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_5));
+            break;
+          case 6:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_6));
+            break;
+          case 7:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_7));
+            break;
+          case 8:
+            subjectSpinner.setItems(resources.getStringArray(R.array.sem_8));
+            break;
         }
       }
 
@@ -167,6 +191,7 @@ public class SubscriptionsFragment extends Fragment {
               Response<StudentSubscriptions> response) {
             try {
               Log.e("Subs", response.body().getSubscription().toString());
+              Toast.makeText(getContext(), "Subscribed successfully", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
               Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }

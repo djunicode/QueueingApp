@@ -2,6 +2,7 @@ package com.djunicode.queuingapp.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,14 +38,10 @@ public class SubjectsActivity extends AppCompatActivity {
 
     final SharedPreferences preferences = this
         .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+    Resources res = getResources();
 
-    String[] array = {"Select", "one", "two", "three", "four", "five", "six", "seven", "eight",
-        "nine", "ten"};
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-        android.R.layout.simple_spinner_dropdown_item, array);
-
-    oddSemSpinner.setItems(array);
-    evenSemSpinner.setItems(array);
+    oddSemSpinner.setItems(res.getStringArray(R.array.comps_odd));
+    evenSemSpinner.setItems(res.getStringArray(R.array.comps_even));
 
     fab.setEnabled(false);
 

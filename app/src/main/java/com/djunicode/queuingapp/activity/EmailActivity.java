@@ -1,5 +1,6 @@
 package com.djunicode.queuingapp.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ public class EmailActivity extends AppCompatActivity {
   private ApiInterface apiInterface;
   public static Integer id;
   private SharedPreferences preferences;
+  private ProgressDialog progressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +49,19 @@ public class EmailActivity extends AppCompatActivity {
     verifyEmailButton = (Button) findViewById(R.id.verifyEmailButton);
     preferences = this.getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
 
+    verifyEditText.setEnabled(false);
+    verifyEditText.setAlpha(0.4f);
+
     verifyEmailButton.setEnabled(false);
 
     sendCodeButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
+        progressDialog = ProgressDialog
+            .show(EmailActivity.this, "Sending code.", "Please wait...");
         String email = signUpEmailEditText.getText().toString();
 //        email.split("@")[0]
-        Call<UserEmailVerify> call = apiInterface.sendEmail("Ruturaj0", email, "demopass");
+        Call<UserEmailVerify> call = apiInterface.sendEmail("Ruturaj122", email, "demopass");
         if (user.equals("teacher")) {
           if (email.contains("@djsce.ac.in")) {
             /*call.enqueue(new Callback<UserEmailVerify>() {
@@ -87,6 +94,11 @@ public class EmailActivity extends AppCompatActivity {
                 preferences.edit().putInt("teacherUserID", id).apply();
                 Log.i("ID:", Integer.toString(id));
                 verifyEmailButton.setEnabled(true);
+                progressDialog.dismiss();
+                Toast.makeText(EmailActivity.this, "Code sent, please check your email.",
+                    Toast.LENGTH_LONG).show();
+                verifyEditText.setEnabled(true);
+                verifyEditText.setAlpha(1.0f);
               } catch (Exception e) {
                 Toast.makeText(EmailActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("TeEx", e.getMessage());
@@ -107,6 +119,11 @@ public class EmailActivity extends AppCompatActivity {
                 preferences.edit().putInt("studentID", id).apply();
                 Log.e("ID:", id.toString());
                 verifyEmailButton.setEnabled(true);
+                progressDialog.dismiss();
+                Toast.makeText(EmailActivity.this, "Code sent, please check your email.",
+                    Toast.LENGTH_LONG).show();
+                verifyEditText.setEnabled(true);
+                verifyEditText.setAlpha(1.0f);
               } catch (Exception e) {
                 Toast.makeText(EmailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
               }
@@ -125,6 +142,8 @@ public class EmailActivity extends AppCompatActivity {
     verifyEmailButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
+        progressDialog = ProgressDialog
+            .show(EmailActivity.this, "Verifying.", "Please wait...");
         final Intent intent = new Intent(EmailActivity.this, LogInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         Call<UserEmailVerify> call = apiInterface
@@ -135,7 +154,7 @@ public class EmailActivity extends AppCompatActivity {
             try {
               Boolean valid = response.body().getValid();
               Log.e("Valid:", valid.toString());
-
+              progressDialog.dismiss();
               if (valid) {
                 if (user.equals("teacher")) {
                   intent.putExtra("user", "teacher");
@@ -143,6 +162,8 @@ public class EmailActivity extends AppCompatActivity {
                   intent.putExtra("user", "student");
                 }
                 startActivity(intent);
+              } else {
+                Toast.makeText(EmailActivity.this, "Invalid Token!", Toast.LENGTH_SHORT).show();
               }
             } catch (Exception e) {
               Toast.makeText(EmailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
