@@ -70,10 +70,10 @@ public class LogInTeacherFragment extends Fragment {
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
-          Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
+          /*Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
+              Toast.LENGTH_SHORT).show();*/
         }
       }
     });
