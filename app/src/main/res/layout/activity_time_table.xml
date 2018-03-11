@@ -13,6 +13,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionName="timeTable"
-    android:src="@drawable/timetable"/>
+    android:src="@drawable/upload_time_table"/>
 
 </RelativeLayout>

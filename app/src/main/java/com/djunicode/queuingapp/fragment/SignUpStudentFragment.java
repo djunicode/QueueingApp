@@ -147,6 +147,7 @@ public class SignUpStudentFragment extends Fragment {
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String year = parent.getItemAtPosition(position).toString();
         Log.i("Year", year);
+        sp_student.edit().putString("year", year).apply();
       }
 
       @Override

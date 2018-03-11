@@ -69,7 +69,7 @@ public class QueuesDbHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                RecentEvents event = new RecentEvents(null, null, null, null, null, null, null);
+                RecentEvents event = new RecentEvents(null, null, null, null, null, null, null, null);
                 event.setSubjectName(cursor.getString(1));
                 event.setBatchName(cursor.getString(2));
                 event.setStartTime(cursor.getString(3));

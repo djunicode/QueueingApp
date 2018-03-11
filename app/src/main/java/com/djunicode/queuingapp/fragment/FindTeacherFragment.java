@@ -80,6 +80,8 @@ public class FindTeacherFragment extends Fragment {
     findTeacherButton = (CardView) view.findViewById(R.id.findTeacherButton);
     sightedTeacherButton = (CardView) view.findViewById(R.id.sightedTeacherButton);
 
+    resources = getResources();
+
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
 
@@ -257,7 +259,7 @@ public class FindTeacherFragment extends Fragment {
             floor = response.body().getFloor().toString();
             room = response.body().getRoom();
             teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
-                " is in Department: " + dept + " at Floor: " + floor + " in Room: "
+                " was last seen in Department: " + dept + " at Floor: " + floor + " in Room: "
                 + room;
             AlertDialog.Builder builder = new Builder(getActivity());
             builder.setMessage(teacherLocation)

@@ -93,6 +93,9 @@ public interface ApiInterface {
   @GET("queues/{id}/")
   Call<LocationTeacher> getTeacherLocation(@Path("id") int id);
 
+  @GET("queues/{id}/")
+  Call<LocationTeacher> getQueueLocation(@Path("id") int id);
+
   @GET("queues/teacher/name/{name}/")
   Call<TeacherModel> getIdForTeacherFromName(@Path("name") String name);
 
@@ -156,7 +159,7 @@ public interface ApiInterface {
 
   @FormUrlEncoded
   @POST("queues/teacher/getqueues/")
-  Call<List<RecentEvents>> getParticularTeacherQueues(@Field("teacherName") String teacherName);
+  Call<List<TeacherCreateNew>> getParticularTeacherQueues(@Field("teacherName") String teacherName);
 
   @FormUrlEncoded
   @PUT("queues/teacher/{id}/subject/")

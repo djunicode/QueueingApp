@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,16 +42,18 @@ public class TeacherProfileActivity extends AppCompatActivity {
   private LinearLayout submissionLL, subscribersLL, xyzLL;
   private Animation upToDown, leftToRight, rightToLeft, scale;
   private FloatingActionButton uploadFab;
+  private SharedPreferences preferences;
+  private String profileUri, timeTableUri;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+    /*if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
       getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-      /*getWindow().setExitTransition(new Fade());
-      getWindow().setEnterTransition(new Slide());*/
+      *//*getWindow().setExitTransition(new Fade());
+      getWindow().setEnterTransition(new Slide());*//*
       this.overridePendingTransition(0, 0);
-    }
+    }*/
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_teacher_profile);
@@ -64,8 +67,35 @@ public class TeacherProfileActivity extends AppCompatActivity {
     uploadFab = (FloatingActionButton) findViewById(R.id.uploadFab);
     resources = getResources();
 
-    src = BitmapFactory.decodeResource(resources, R.drawable.profile_back);
-    createCircularImage(src);
+    preferences = this.getSharedPreferences("Teacher", MODE_PRIVATE);
+    profileUri = preferences.getString("profileUri", "");
+    timeTableUri = preferences.getString("timeTableUri", "");
+
+    if(!profileUri.equals("")){
+      try {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(profileUri));
+        createCircularImage(bitmap);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    if(!timeTableUri.equals("")){
+      try {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(timeTableUri));
+        timeTableImageView.setImageBitmap(bitmap);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    Thread thread = new Thread(){
+      @Override
+      public void run() {
+        new DecodeImageResource().run();
+      }
+    };
+    thread.start();
 
     upToDown = AnimationUtils.loadAnimation(this, R.anim.up_to_down);
     leftToRight = AnimationUtils.loadAnimation(this, R.anim.enter_from_left);
@@ -101,8 +131,17 @@ public class TeacherProfileActivity extends AppCompatActivity {
     });
   }
 
+  private class DecodeImageResource implements Runnable {
+    @Override
+    public void run() {
+      src = BitmapFactory.decodeResource(resources, R.drawable.profile_back);
+      createCircularImage(src);
+    }
+  }
+
   public void onClick(View v) {
     Intent intent = new Intent(this, timeTableActivity.class);
+    intent.putExtra("timeTable", timeTableUri);
     if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP){
       timeTableImageView.setTransitionName("timeTable");
       ActivityOptionsCompat options = ActivityOptionsCompat
@@ -129,9 +168,11 @@ public class TeacherProfileActivity extends AppCompatActivity {
     if (PICK_IMAGE_REQUEST == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
       Uri uri = data.getData();
+      preferences.edit().putString("profileUri", uri.toString()).apply();
 
       try {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+        profileUri = uri.toString();
         // Log.d(TAG, String.valueOf(bitmap));
         createCircularImage(bitmap);
       } catch (IOException e) {
@@ -140,6 +181,8 @@ public class TeacherProfileActivity extends AppCompatActivity {
     } else if (PICK_IMAGE_REQUEST == 0 && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
       Uri uri = data.getData();
+      preferences.edit().putString("timeTableUri", uri.toString()).apply();
+      timeTableUri = uri.toString();
 
       try {
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);

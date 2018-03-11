@@ -34,11 +34,11 @@ public class TeacherScreenActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+    /*if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
       getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
       getWindow().setExitTransition(new Explode());
       getWindow().setAllowEnterTransitionOverlap(true);
-    }
+    }*/
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_teacher_screen);
 
@@ -122,13 +122,14 @@ public class TeacherScreenActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     if(item.getItemId() == R.id.action_profile){
       Intent intent = new Intent(this, TeacherProfileActivity.class);
-      if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP){
+      /*if(VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP){
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         this.overridePendingTransition(0,0);
       } else {
         startActivity(intent);
         this.overridePendingTransition(0,0);
-      }
+      }*/
+      startActivity(intent);
     }
     return super.onOptionsItemSelected(item);
   }

@@ -165,6 +165,44 @@
     <item>NLP</item>
   </string-array>
 
+  <string-array name="comps_se">
+    <item>Maths3</item>
+    <item>DLDA</item>
+    <item>DS</item>
+    <item>ECCF</item>
+    <item>DIS</item>
+    <item>Maths4</item>
+    <item>OS</item>
+    <item>COA</item>
+    <item>AOA</item>
+    <item>CG</item>
+  </string-array>
+
+  <string-array name="comps_te">
+    <item>Microprocessor</item>
+    <item>DBMS</item>
+    <item>TCS</item>
+    <item>CN</item>
+    <item>Advanced OS</item>
+    <item>SE</item>
+    <item>SPCC</item>
+    <item>DWM</item>
+    <item>CSS</item>
+    <item>ML</item>
+  </string-array>
+
+  <string-array name="comps_be">
+    <item>DSIP</item>
+    <item>MCC</item>
+    <item>AISC</item>
+    <item>PLM</item>
+    <item>Big Data</item>
+    <item>HMI</item>
+    <item>DC</item>
+    <item>HRM</item>
+    <item>NLP</item>
+  </string-array>
+
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="semester">Semester</string>

@@ -3,6 +3,7 @@ package com.djunicode.queuingapp.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -58,6 +59,8 @@ public class SubmissionFragment extends Fragment {
 
     preferences = getActivity()
         .getSharedPreferences("Student", Context.MODE_PRIVATE);
+    String year = preferences.getString("year", "");
+    Resources res = getResources();
 
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
         android.R.layout.simple_spinner_dropdown_item, array);
@@ -70,32 +73,48 @@ public class SubmissionFragment extends Fragment {
 
     fab.setEnabled(false);
 
+    switch (year) {
+      case "SE":
+        subjectSpinner.setAdapter(
+            new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,
+                res.getStringArray(R.array.comps_se)));
+        break;
+      case "TE":
+        subjectSpinner.setAdapter(
+            new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,
+                res.getStringArray(R.array.comps_te)));
+        break;
+      case "BE":
+        subjectSpinner.setAdapter(
+            new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,
+                res.getStringArray(R.array.comps_be)));
+        break;
+    }
+
     subjectSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position != 0) {
-          teacherNameSpinner.setEnabled(true);
-          teacherNameSpinner.setAlpha(1.0f);
+        teacherNameSpinner.setEnabled(true);
+        teacherNameSpinner.setAlpha(1.0f);
 
-          teachers = new ArrayList<>();
-          Call<TeachersList> call = apiInterface
-              .getTeachersList(subjectSpinner.getItemAtPosition(position).toString());
-          call.enqueue(new Callback<TeachersList>() {
-            @Override
-            public void onResponse(Call<TeachersList> call, Response<TeachersList> response) {
-              Log.e("queues/subject/", response.body().getTeachers().toString());
-              teachers = response.body().getTeachers();
-              teacherAdapter = new ArrayAdapter<String>(getContext(),
-                  android.R.layout.simple_spinner_dropdown_item, teachers);
-              teacherNameSpinner.setAdapter(teacherAdapter);
-            }
+        teachers = new ArrayList<>();
+        Call<TeachersList> call = apiInterface
+            .getTeachersList(subjectSpinner.getItemAtPosition(position).toString());
+        call.enqueue(new Callback<TeachersList>() {
+          @Override
+          public void onResponse(Call<TeachersList> call, Response<TeachersList> response) {
+            Log.e("queues/subject/", response.body().getTeachers().toString());
+            teachers = response.body().getTeachers();
+            teacherAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, teachers);
+            teacherNameSpinner.setAdapter(teacherAdapter);
+          }
 
-            @Override
-            public void onFailure(Call<TeachersList> call, Throwable t) {
+          @Override
+          public void onFailure(Call<TeachersList> call, Throwable t) {
 
-            }
-          });
-        }
+          }
+        });
       }
 
       @Override
@@ -107,9 +126,7 @@ public class SubmissionFragment extends Fragment {
     teacherNameSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position != 0) {
-          fab.setEnabled(true);
-        }
+        fab.setEnabled(true);
       }
 
       @Override
@@ -122,9 +139,13 @@ public class SubmissionFragment extends Fragment {
       @Override
       public void onClick(View v) {
         QueueDialogClass queueDialog = new QueueDialogClass(getActivity());
-        preferences.edit().putString("teacherName", teacherNameSpinner.getSelectedItem().toString())
-            .apply();
-        queueDialog.show();
+        try {
+          preferences.edit().putString("teacherName", teacherNameSpinner.getSelectedItem().toString())
+              .apply();
+          queueDialog.show();
+        } catch (Exception e){
+          e.printStackTrace();
+        }
       }
     });
     return view;
