@@ -131,11 +131,15 @@ public class LogInTeacherFragment extends Fragment {
     call.enqueue(new Callback<TeacherModel>() {
       @Override
       public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
-        if(response.isSuccessful())
-          trueLogin = true;
+        try{
+          if(response.isSuccessful())
+            trueLogin = true;
 
-        else {
-          trueLogin = false;
+          else {
+            trueLogin = false;
+            Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+          }
+        } catch (Exception e){
           Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
         }
       }

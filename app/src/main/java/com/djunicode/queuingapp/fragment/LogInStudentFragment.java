@@ -109,22 +109,26 @@ public class LogInStudentFragment extends Fragment {
     call.enqueue(new Callback<Student>() {
       @Override
       public void onResponse(Call<Student> call, Response<Student> response) {
-        if(response.isSuccessful()) {
-          trueLogin = true;
-          session.createLoginSession(sapIdLogInEditText.getText().toString(),
-                  passwordLogInEditText.getText().toString(), "demo_username");
-          pd.dismiss();
-          Intent intent = new Intent(getContext(), StudentScreenActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-          startActivity(intent);
-          Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
-                  Toast.LENGTH_SHORT).show();
-          Toast.makeText(getContext(), passwordLogInEditText.getText().toString(),
-                  Toast.LENGTH_SHORT).show();
-        }
-        else {
-          trueLogin = false;
-          pd.dismiss();
+        try{
+          if(response.isSuccessful()) {
+            trueLogin = true;
+            session.createLoginSession(sapIdLogInEditText.getText().toString(),
+                passwordLogInEditText.getText().toString(), "demo_username");
+            pd.dismiss();
+            Intent intent = new Intent(getContext(), StudentScreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
+                Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), passwordLogInEditText.getText().toString(),
+                Toast.LENGTH_SHORT).show();
+          }
+          else {
+            trueLogin = false;
+            pd.dismiss();
+            Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+          }
+        } catch (Exception e){
           Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
         }
       }
