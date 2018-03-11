@@ -61,7 +61,7 @@ public class EmailActivity extends AppCompatActivity {
             .show(EmailActivity.this, "Sending code.", "Please wait...");
         String email = signUpEmailEditText.getText().toString();
 //        email.split("@")[0]
-        Call<UserEmailVerify> call = apiInterface.sendEmail("Ruturaj122", email, "demopass");
+        Call<UserEmailVerify> call = apiInterface.sendEmail("dhruc99", email, "demopass");
         if (user.equals("teacher")) {
           if (email.contains("@djsce.ac.in")) {
             /*call.enqueue(new Callback<UserEmailVerify>() {
@@ -100,8 +100,9 @@ public class EmailActivity extends AppCompatActivity {
                 verifyEditText.setEnabled(true);
                 verifyEditText.setAlpha(1.0f);
               } catch (Exception e) {
-                Toast.makeText(EmailActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(EmailActivity.this, "Invalid e-mail", Toast.LENGTH_LONG).show();
                 Log.e("TeEx", e.getMessage());
+                progressDialog.dismiss();
               }
             }
 

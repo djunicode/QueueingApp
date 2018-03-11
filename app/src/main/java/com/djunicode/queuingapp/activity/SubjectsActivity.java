@@ -80,8 +80,8 @@ public class SubjectsActivity extends AppCompatActivity {
         }
         evenSemSpinner.setEnabled(false);
         fab.setEnabled(true);
-        Toast.makeText(SubjectsActivity.this, "Subjects:" + strings.toString(), Toast.LENGTH_LONG)
-            .show();
+        /*Toast.makeText(SubjectsActivity.this, "Subjects:" + strings.toString(), Toast.LENGTH_LONG)
+            .show();*/
       }
     });
 

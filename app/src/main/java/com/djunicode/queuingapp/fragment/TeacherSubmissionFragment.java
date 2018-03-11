@@ -203,7 +203,7 @@ public class TeacherSubmissionFragment extends Fragment {
                   if (hourOfDay <= 11 && minute <= 59) {
                     Snackbar.make(coordinatorLayout,
                         "Submission is from " + hourOfDay + ":" + minute + "am",
-                        Snackbar.LENGTH_LONG).show();
+                        Snackbar.LENGTH_SHORT).show();
                     if (hourOfDay < 10) {
                       hour = "0" + Integer.toString(hourOfDay);
                     } else {
@@ -221,10 +221,10 @@ public class TeacherSubmissionFragment extends Fragment {
                       min = "0" + Integer.toString(minute);
                       Snackbar.make(coordinatorLayout,
                           "Submission is from " + hourOfDay + ":" + minute + "pm",
-                          Snackbar.LENGTH_LONG).show();
+                          Snackbar.LENGTH_SHORT).show();
                       Snackbar.make(coordinatorLayout,
                           "Submission is from " + hourOfDay + ":" + minute + "pm",
-                          Snackbar.LENGTH_LONG).show();
+                          Snackbar.LENGTH_SHORT).show();
                       fromTime =
                           hour + ":" + min;
                     } else {
@@ -241,7 +241,7 @@ public class TeacherSubmissionFragment extends Fragment {
                       }
                       Snackbar.make(coordinatorLayout,
                           "Submission is from " + hourOfDay + ":" + minute + "pm",
-                          Snackbar.LENGTH_LONG).show();
+                          Snackbar.LENGTH_SHORT).show();
                       fromTime =
                           hour + ":" + min;
                     }
@@ -279,7 +279,7 @@ public class TeacherSubmissionFragment extends Fragment {
                     }
                     Snackbar.make(coordinatorLayout,
                         "Submission is till " + hourOfDay + ":" + minute + "am",
-                        Snackbar.LENGTH_LONG).show();
+                        Snackbar.LENGTH_SHORT).show();
                     toTime = hour + ":" + min;
                   } else {
                     if (hourOfDay == 12 && minute == 0) {
@@ -287,7 +287,7 @@ public class TeacherSubmissionFragment extends Fragment {
                       min = "0" + Integer.toString(minute);
                       Snackbar.make(coordinatorLayout,
                           "Submission is till " + hourOfDay + ":" + minute + "pm",
-                          Snackbar.LENGTH_LONG).show();
+                          Snackbar.LENGTH_SHORT).show();
                       toTime = hour + ":" + min;
                     } else {
                       hourOfDay -= 12;
@@ -303,7 +303,7 @@ public class TeacherSubmissionFragment extends Fragment {
                       }
                       Snackbar.make(coordinatorLayout,
                           "Submission is till " + hourOfDay + ":" + minute + "pm",
-                          Snackbar.LENGTH_LONG).show();
+                          Snackbar.LENGTH_SHORT).show();
                       toTime = hour + ":" + min;
                     }
                   }

@@ -132,8 +132,8 @@ public class SubscriptionsFragment extends Fragment {
       public void selectedStrings(List<String> selectedSubjects) {
         teacherSpinner.setEnabled(true);
         teacherSpinner.setAlpha(1.0f);
-        Toast.makeText(getContext(), "Subjects:" + selectedSubjects.toString(), Toast.LENGTH_LONG)
-            .show();
+        //Toast.makeText(getContext(), "Subjects:" + selectedSubjects.toString(), Toast.LENGTH_LONG)
+          //  .show();
         teachers = new ArrayList<>();
         for (int i = 0; i < selectedSubjects.size(); i++) {
           Call<TeachersList> call = apiInterface.getTeachersList(selectedSubjects.get(i));
@@ -170,7 +170,7 @@ public class SubscriptionsFragment extends Fragment {
       @Override
       public void selectedStrings(List<String> strings) {
         subscriptionList = strings;
-        Toast.makeText(getContext(), "Teachers:" + strings.toString(), Toast.LENGTH_LONG).show();
+      //  Toast.makeText(getContext(), "Teachers:" + strings.toString(), Toast.LENGTH_LONG).show();
       }
     });
 

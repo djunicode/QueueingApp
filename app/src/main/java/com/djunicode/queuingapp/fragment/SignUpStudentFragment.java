@@ -114,6 +114,7 @@ public class SignUpStudentFragment extends Fragment {
     if (sp_student.contains("student_sapid") && sp_student.contains("student_password")) {
 
       Intent in = new Intent(getContext(), StudentScreenActivity.class);
+      in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
       startActivity(in);
 
     } else {
@@ -122,6 +123,7 @@ public class SignUpStudentFragment extends Fragment {
 
         Toast.makeText(getActivity(), "I got it!", Toast.LENGTH_SHORT).show();
         Intent in = new Intent(getContext(), TeacherScreenActivity.class);
+        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         // StudentScreenActivity just for demo till the time teacher fragments are not ready
         startActivity(in);
 
@@ -206,6 +208,7 @@ public class SignUpStudentFragment extends Fragment {
                   Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
               } else {
                 Toast.makeText(getActivity(), "SAPId already exist, Try Logging in instead!",

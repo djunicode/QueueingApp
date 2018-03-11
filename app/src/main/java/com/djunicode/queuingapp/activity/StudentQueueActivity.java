@@ -79,7 +79,7 @@ public class StudentQueueActivity extends AppCompatActivity {
     public void run() {
       updateStudentList();
       handler.postDelayed(statusChecker, 10000);
-      Toast.makeText(StudentQueueActivity.this, "Location Updated", Toast.LENGTH_SHORT).show();
+     // Toast.makeText(StudentQueueActivity.this, "Location Updated", Toast.LENGTH_SHORT).show();
     }
   };
 

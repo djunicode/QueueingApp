@@ -111,6 +111,7 @@ public class SignUpTeacherFragment extends Fragment {
                           toString());
                   progressDialog.dismiss();
                   Intent intent = new Intent(getContext(), SubjectsActivity.class);
+                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                   intent.putExtra("teacherId", response.body().getId());
                   startActivity(intent);
                   Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),
