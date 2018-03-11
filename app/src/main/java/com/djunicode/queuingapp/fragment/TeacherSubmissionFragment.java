@@ -122,14 +122,10 @@ public class TeacherSubmissionFragment extends Fragment {
     studentsButton = (ImageButton) view.findViewById(R.id.studentsButton);
     timerButton = (ImageButton) view.findViewById(R.id.timerButton);
     createFab = (FloatingActionButton) view.findViewById(R.id.createFab);
-//    startFab = (FloatingActionButton) view.findViewById(R.id.startFab);
-//    cancelFab = (FloatingActionButton) view.findViewById(R.id.cancelFab);
     createNewFab = (FloatingActionButton) view.findViewById(R.id.createNewFab);
     editFab = (FloatingActionButton) view.findViewById(R.id.editFab);
     coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.teacherCoordinatorLayout);
     relativeLayout = (RelativeLayout) view.findViewById(R.id.submissionRelativeLayout);
-//    fabLL1 = (LinearLayout) view.findViewById(R.id.fabLL1);
-//    fabLL2 = (LinearLayout) view.findViewById(R.id.fabLL2);
     fabLL3 = (LinearLayout) view.findViewById(R.id.fabLL3);
     fabLL4 = (LinearLayout) view.findViewById(R.id.fabLL4);
     fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
@@ -169,7 +165,6 @@ public class TeacherSubmissionFragment extends Fragment {
         .setContentTitle("Submission started.")
         .setContentText("The submission for DLDA is started.")
         .setAutoCancel(true);
-
     Intent queueActivityIntent = new Intent(getContext(), StudentQueueActivity.class);
     TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(getContext());
     taskStackBuilder.addNextIntentWithParentStack(queueActivityIntent);
@@ -342,7 +337,6 @@ public class TeacherSubmissionFragment extends Fragment {
               Toast.makeText(getContext(), input.getText().toString() + " students selected",
                   Toast.LENGTH_SHORT).show();
               noOfStudents = Integer.parseInt(input.getText().toString());
-              numberOfStudents = Integer.parseInt(input.getText().toString());
               studentsSelected = true;
             }
           });
@@ -362,7 +356,7 @@ public class TeacherSubmissionFragment extends Fragment {
           recentEventsList = dbHelper.getAllQueues();
           final RecentEvents event = recentEventsList.get(args.getInt("Position"));
           if (toSelected || studentsSelected) {
-            AlertDialog.Builder builder = new Builder(getContext());
+            /*AlertDialog.Builder builder = new Builder(getContext());
             builder.setMessage("Do you want to use the last location or set new location?")
                 .setPositiveButton("LAST", new DialogInterface.OnClickListener() {
                   @Override
@@ -372,48 +366,55 @@ public class TeacherSubmissionFragment extends Fragment {
                       String message = "No last location set! Please update your location.";
                       Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                     } else {
-                      /*recentEventsList
+                      *//*recentEventsList
                           .set(args.getInt("Position"),
                               new RecentEvents(subjectSpinner.getSelectedItem().toString(),
                                   batchSpinner.getSelectedItem().toString(), fromTime, toTime,
-                                  TeacherLocationFragment.locationString));*/
-                          dbHelper
-                                  .updateQueue(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
-                                          batchSpinner.getSelectedItem().toString(), fromTime, toTime,
-                                          noOfStudents, TeacherLocationFragment.locationString, event.getServerId()));
-                          Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
-                          tempId = event.getServerId();
-                          Log.e("Editing", Integer.toString(noOfStudents));
-                          Log.e("Editing", fromTime);
-                          Log.e("Editing", toTime);
-                          Log.e("Editing", subjectSpinner.getSelectedItem().toString());
-                          //Log.e("queueId", Integer.toString(queueId));
-                          Call<StudentQueue> call = apiInterface.editingQueue(tempId, noOfStudents, fromTime, toTime, subjectSpinner.getSelectedItem().toString(),
-                                  "", 0);
-                          call.enqueue(new Callback<StudentQueue>() {
-                            @Override
-                            public void onResponse(Call<StudentQueue> call, Response<StudentQueue> response) {
-                              Log.i("Subject returned is", response.body().getSubject().toString());
-                            }
-
-                            @Override
-                            public void onFailure(Call<StudentQueue> call, Throwable t) {
-                              Log.i("error", t.getMessage());
-                            }
-                          });
+                                  TeacherLocationFragment.locationString));*//*
+                      dbHelper
+                          .updateQueue(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
+                              batchSpinner.getSelectedItem().toString(), fromTime, toTime,
+                              noOfStudents, TeacherLocationFragment.locationString,
+                              event.getServerId()));
+                      Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
+                      tempId = event.getServerId();
+                      Log.e("Editing", Integer.toString(noOfStudents));
+                      Log.e("Editing", fromTime);
+                      Log.e("Editing", toTime);
+                      Log.e("Editing", subjectSpinner.getSelectedItem().toString());
+                      //Log.e("queueId", Integer.toString(queueId));
+                      Call<StudentQueue> call = apiInterface
+                          .editingQueue(tempId, noOfStudents, fromTime, toTime,
+                              subjectSpinner.getSelectedItem().toString(),
+                              "", noOfStudents);
+                      call.enqueue(new Callback<StudentQueue>() {
+                        @Override
+                        public void onResponse(Call<StudentQueue> call,
+                            Response<StudentQueue> response) {
+                          Log.i("Subject returned is", response.body().getSubject().toString());
                         }
-                        createFab.setImageResource(R.drawable.ic_add);
-                      }
-                    })
-                    .setNegativeButton("NEW", new DialogInterface.OnClickListener() {
-                      @Override
-                      public void onClick(DialogInterface dialog, int which) {
-                        tempId = event.getServerId();
-                        updateLocation(true);
-                        createFab.setImageResource(R.drawable.ic_add);
-                      }
-                    });
-            builder.show();
+
+                        @Override
+                        public void onFailure(Call<StudentQueue> call, Throwable t) {
+                          Log.i("error", t.getMessage());
+                        }
+                      });
+                    }
+                    createFab.setImageResource(R.drawable.ic_add);
+                  }
+                })
+                .setNegativeButton("NEW", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+                    tempId = event.getServerId();
+                    updateLocation(true);
+                    createFab.setImageResource(R.drawable.ic_add);
+                  }
+                });
+            builder.show();*/
+            tempId = event.getServerId();
+            updateLocation(true);
+            createFab.setImageResource(R.drawable.ic_add);
           } else {
             Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
           }
@@ -429,7 +430,7 @@ public class TeacherSubmissionFragment extends Fragment {
         animateFab();
 
         if (toSelected || studentsSelected) {
-          AlertDialog.Builder builder = new Builder(getContext());
+          /*AlertDialog.Builder builder = new Builder(getContext());
           builder.setMessage("Do you want to use the last location or set new location?")
               .setPositiveButton("LAST", new DialogInterface.OnClickListener() {
                 @Override
@@ -440,10 +441,10 @@ public class TeacherSubmissionFragment extends Fragment {
                     String message = "No last location set! Please update your location.";
                     Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                   } else {
-                    /*recentEventsList
+                    *//*recentEventsList
                         .add(new RecentEvents(subjectSpinner.getSelectedItem().toString(),
                             batchSpinner.getSelectedItem().toString(), fromTime, toTime,
-                            TeacherLocationFragment.locationString));*/
+                            TeacherLocationFragment.locationString));*//*
                     Call<TeacherCreateNew> call = apiInterface
                         .sendSubmissionData(subjectSpinner.getSelectedItem().toString(),
                             fromTime + ":00", toTime + ":00", noOfStudents, "", 23);
@@ -488,7 +489,9 @@ public class TeacherSubmissionFragment extends Fragment {
                 }
               });
 
-          builder.show();
+          builder.show();*/
+          updateLocation(false);
+          createFab.setImageResource(R.drawable.ic_add);
         } else {
           Toast.makeText(getContext(), "Please select all fields.", Toast.LENGTH_SHORT).show();
         }
@@ -515,17 +518,9 @@ public class TeacherSubmissionFragment extends Fragment {
     extras.putString("From", fromTime);
     extras.putString("To", toTime);
     extras.putInt("noOfStudents", noOfStudents);
-    extras.putInt("numberOfStudents", numberOfStudents);
     if (flag) {
       extras.putInt("Position", globalArgs.getInt("Position"));
       extras.putInt("tempId", tempId);
-      extras.putInt("noOfStudents", noOfStudents);
-      extras.putString("fromTime", fromTime);
-      extras.putString("toTime", toTime);
-      extras.putString("subject", subjectSpinner.getSelectedItem().toString());
-      extras.putString("avgTime", "");
-      extras.putInt("size", 0);
-      Log.e("Up_loca", Integer.toString(tempId));
     }
 
     FragmentTransaction transaction = getActivity().getSupportFragmentManager()

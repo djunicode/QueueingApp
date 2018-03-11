@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*sp_student = getSharedPreferences("Student", MODE_PRIVATE);
     sp_teacher = getSharedPreferences("Teacher", MODE_PRIVATE);
-
+//dlmsmkfnkfls
     if (sp_student.contains("student_sapid") && sp_student.contains("student_password")) {
       Intent in = new Intent(this, StudentScreenActivity.class);
       startActivity(in);

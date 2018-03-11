@@ -193,19 +193,23 @@ public class SignUpStudentFragment extends Fragment {
               if (response.isSuccessful()) {
                 Log.e("studentSignUp", "successful");
                 updateDataOnUserUrl();
-                /*session.createLoginSession(sapIDEditText.getText().toString(),
+                session.createLoginSession(sapIDEditText.getText().toString(),
                     passwordEditText.getText().toString(), username);
-                editor_student.putInt("studentID", response.body().getStudentID()).apply();
+                try {
+                  editor_student.putInt("studentID", response.body().getStudentID()).apply();
+                } catch (Exception e){
+                  Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
-                startActivity(intent);*/
+                startActivity(intent);
               } else {
                 Toast.makeText(getActivity(), "SAPId already exist, Try Logging in instead!",
                     Toast.LENGTH_SHORT).show();
-                session.createLoginSession(sapIDEditText.getText().toString(),
+                /*session.createLoginSession(sapIDEditText.getText().toString(),
                     passwordEditText.getText().toString(), username);
                 Intent intent = new Intent(getActivity(), StudentScreenActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                startActivity(intent);*/
               }
             }
 

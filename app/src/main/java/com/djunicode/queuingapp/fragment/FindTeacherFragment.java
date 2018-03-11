@@ -108,12 +108,8 @@ public class FindTeacherFragment extends Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position != 0){
-          subjectSpinner.setEnabled(true);
-          subjectSpinner.setAlpha(1.0f);
           if (position == 3)
             subjectSpinner.setAdapter(adapter_s3);
-          subjectSpinner.setEnabled(true);
-          subjectSpinner.setAlpha(1.0f);
           if (position == 4)
             subjectSpinner.setAdapter(adapter_s4);
           subjectSpinner.setEnabled(true);
@@ -136,7 +132,11 @@ public class FindTeacherFragment extends Fragment {
           call.enqueue(new Callback<TeacherListModel>() {
             @Override
             public void onResponse(Call<TeacherListModel> call, Response<TeacherListModel> response) {
-              list = response.body().getTeachers();
+              try {
+                list = response.body().getTeachers();
+              } catch (Exception e){
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+              }
               teacher_adapter = new ArrayAdapter<String>(getContext(),
                       android.R.layout.simple_spinner_dropdown_item, list);
               teacherSpinner.setAdapter(teacher_adapter);
@@ -171,9 +171,13 @@ public class FindTeacherFragment extends Fragment {
             @Override
             public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
               if (response.isSuccessful()){
-                teacher_location_id = response.body().getLocation();
-                getTLocation();
-                Log.e("FindTeacherFragment", "success");
+                try {
+                  teacher_location_id = response.body().getLocation();
+                  getTLocation();
+                  Log.e("FindTeacherFragment", "success");
+                } catch (Exception e){
+                  Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
               }
             }
 
@@ -211,20 +215,22 @@ public class FindTeacherFragment extends Fragment {
       public void onResponse(Call<LocationTeacher> call, Response<LocationTeacher> response) {
         Log.e("Dhruv", "inside onResponse");
         if (response.isSuccessful()) {
-          Log.e("Dhruv", "Successfull");
-          Log.e("Dhruv", response.body().getDepartment());
-          dept = response.body().getDepartment();
-          floor = response.body().getFloor().toString();
-          room = response.body().getRoom();
-          teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
-                  " is in Department: " + dept + " at Floor: " + floor + " in Room: "
-                  + room;
-          AlertDialog.Builder builder = new Builder(getActivity());
-          builder.setMessage(teacherLocation)
-                  .setPositiveButton("OK", null)
-                  .show();
-
-
+          try {
+            Log.e("Dhruv", "Successfull");
+            Log.e("Dhruv", response.body().getDepartment());
+            dept = response.body().getDepartment();
+            floor = response.body().getFloor().toString();
+            room = response.body().getRoom();
+            teacherLocation = "Prof. " + teacherSpinner.getSelectedItem().toString() +
+                " is in Department: " + dept + " at Floor: " + floor + " in Room: "
+                + room;
+            AlertDialog.Builder builder = new Builder(getActivity());
+            builder.setMessage(teacherLocation)
+                .setPositiveButton("OK", null)
+                .show();
+          } catch (Exception e){
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+          }
           //+ " Floor: "
           //+ response.body().getFloor().toString() + " Room: " + response.body().getRoom();
         }
