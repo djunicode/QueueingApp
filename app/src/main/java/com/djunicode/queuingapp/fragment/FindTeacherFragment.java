@@ -213,7 +213,11 @@ public class FindTeacherFragment extends Fragment {
                 getTLocation();
                 Log.e("FindTeacherFragment", "success");
               } catch (Exception e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new Builder(getActivity());
+                builder.setMessage("Location Unknown.")
+                        .setPositiveButton("OK", null)
+                        .show();
+                //Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
               }
             }
           }
@@ -266,7 +270,11 @@ public class FindTeacherFragment extends Fragment {
                 .setPositiveButton("OK", null)
                 .show();
           } catch (Exception e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new Builder(getActivity());
+            builder.setMessage("Location Unknown.")
+                .setPositiveButton("OK", null)
+                .show();
+//            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
           }
           //+ " Floor: "
           //+ response.body().getFloor().toString() + " Room: " + response.body().getRoom();
