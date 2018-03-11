@@ -8,69 +8,82 @@ import com.google.gson.annotations.SerializedName;
 
 public class TeacherCreateNew {
 
-    @SerializedName("subject")
-    public String subject;
-    @SerializedName("size")
-    public int size;
-    @SerializedName("startTime")
-    public String from;
-    @SerializedName("endTime")
-    public String to;
-    @SerializedName("maxLength")
-    public Integer noOfStudents;
-    @SerializedName("queueItems")
-    public String queueItems;
-    @SerializedName("id")
-    public int id;
-    @SerializedName("teacherName")
-    public String teacherName;
+  @SerializedName("subject")
+  public String subject;
+  @SerializedName("size")
+  public int size;
+  @SerializedName("startTime")
+  public String from;
+  @SerializedName("endTime")
+  public String to;
+  @SerializedName("maxLength")
+  public Integer noOfStudents;
+  @SerializedName("queueItems")
+  public String queueItems;
+  @SerializedName("id")
+  public int id;
+  @SerializedName("teacherName")
+  public String teacherName;
+  @SerializedName("flag")
+  public Integer flag;
+  @SerializedName("location")
+  public Integer location;
 
+  public TeacherCreateNew(int id, String subject, int size, String from, String to,
+      Integer noOfStudents, String queueItems, String teacherName, Integer flag, Integer location) {
+    this.subject = subject;
+    this.size = size;
+    this.from = from;
+    this.to = to;
+    this.noOfStudents = noOfStudents;
+    this.queueItems = queueItems;
+    this.id = id;
+    this.teacherName = teacherName;
+    this.flag = flag;
+    this.location = location;
+  }
 
-    public TeacherCreateNew(int id, String subject, int size, String from, String to,
-                            Integer noOfStudents, String queueItems, String teacherName) {
-        this.subject = subject;
-        this.size = size;
-        this.from = from;
-        this.to = to;
-        this.noOfStudents = noOfStudents;
-        this.queueItems = queueItems;
-        this.id = id;
-        this.teacherName = teacherName;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public String getSubject() {
+    return subject;
+  }
 
-    public String getSubject() {
-        return subject;
-    }
+  public int getSize() {
+    return size;
+  }
 
-    public int getSize() {
-        return size;
-    }
+  public String getFrom() {
+    return from;
+  }
 
-    public String getFrom() {
-        return from;
-    }
+  public String getTo() {
+    return to;
+  }
 
-    public String getTo() {
-        return to;
-    }
+  public Integer getNoOfStudents() {
+    return noOfStudents;
+  }
 
-    public Integer getNoOfStudents() {
-        return noOfStudents;
-    }
+  public String getQueueItems() {
+    return queueItems;
+  }
 
-    public String getQueueItems() {
-        return queueItems;
-    }
+  public void setNoOfStudents(Integer noOfStudents) {
+    this.noOfStudents = noOfStudents;
+  }
 
-    public void setNoOfStudents(Integer noOfStudents) {
-        this.noOfStudents = noOfStudents;
-    }
+  public String getTeacherName() {
+    return teacherName;
+  }
 
-    public String getTeacherName() {
-        return teacherName;
-    }
+  public Integer getFlag() {
+    return flag;
+  }
+
+  public Integer getLocation() {
+    return location;
+  }
 }

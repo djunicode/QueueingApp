@@ -12,12 +12,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationCompat.InboxStyle;
 import android.text.TextUtils;
+import android.util.Log;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import java.text.ParseException;
@@ -58,6 +61,9 @@ public class NotificationUtils {
     NotificationCompat.InboxStyle inboxStyle = new InboxStyle();
     inboxStyle.addLine(message);
 
+    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    long[] pattern = {500,500,500,500,500};
+
     Notification notification = builder
         .setSmallIcon(icon)
         .setTicker(title)
@@ -71,8 +77,11 @@ public class NotificationUtils {
         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), icon))
         .setContentText(message)
         .setPriority(Notification.PRIORITY_MAX)
-        .setDefaults(DEFAULT_VIBRATE)
+        .setVibrate(pattern)
+        .setSound(defaultSoundUri)
         .build();
+
+    Log.e("Notification", "Arrived");
 
     NotificationManager manager = (NotificationManager) context
         .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -90,6 +99,7 @@ public class NotificationUtils {
           for (String activeProcess : processInfo.pkgList) {
             if (activeProcess.equals(context.getPackageName())) {
               isInBackground = false;
+              Log.e("Background", "False");
             }
           }
         }
@@ -99,6 +109,7 @@ public class NotificationUtils {
       ComponentName componentName = runningTaskInfos.get(0).topActivity;
       if (componentName.getPackageName().equals(context.getPackageName())) {
         isInBackground = false;
+        Log.e("Background", "False");
       }
     }
 

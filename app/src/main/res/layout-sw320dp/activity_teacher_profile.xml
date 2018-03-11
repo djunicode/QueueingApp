@@ -164,7 +164,7 @@
     android:layout_below="@+id/timeTableTV"
     android:layout_centerHorizontal="true"
     android:layout_marginTop="10dp"
-    android:src="@drawable/timetable"
+    android:src="@drawable/upload_time_table"
     android:onClick="onClick"/>
 
   <android.support.design.widget.FloatingActionButton

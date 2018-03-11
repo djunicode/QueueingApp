@@ -145,11 +145,11 @@ public class SubscriptionsFragment extends Fragment {
                 List<String> teacherList = response.body().getTeachers();
                 for (int i = 0; i < teacherList.size(); i++) {
                   teachers.add(teacherList.get(i));
+                  teacherSpinner.setItems(teachers);
                 }
               } catch (Exception e) {
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
               }
-              teacherSpinner.setItems(teachers);
             }
 
             @Override

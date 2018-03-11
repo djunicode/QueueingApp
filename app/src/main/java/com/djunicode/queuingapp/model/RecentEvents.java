@@ -22,9 +22,11 @@ public class RecentEvents {
   private String location;
   @SerializedName("id")
   private Integer serverId;
+  @SerializedName("flag")
+  private Integer flag;
 
   public RecentEvents(String subjectName, String batchName, String startTime, String endTime,
-                      Integer noOfStudents, String location, Integer serverId){
+                      Integer noOfStudents, String location, Integer serverId, Integer flag){
     this.subjectName = subjectName;
     this.batchName = batchName;
     this.startTime = startTime;
@@ -32,6 +34,7 @@ public class RecentEvents {
     this.noOfStudents = noOfStudents;
     this.location = location;
     this.serverId = serverId;
+    this.flag = flag;
   }
 
   public void setSubjectName(String subjectName){
@@ -88,5 +91,13 @@ public class RecentEvents {
 
   public Integer getServerId() {
     return serverId;
+  }
+
+  public void setFlag(Integer flag) {
+    this.flag = flag;
+  }
+
+  public Integer getFlag() {
+    return flag;
   }
 }

@@ -28,6 +28,7 @@ import com.djunicode.queuingapp.model.TeachersList;
 import com.djunicode.queuingapp.rest.ApiClient;
 import com.djunicode.queuingapp.rest.ApiInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,9 +46,9 @@ public class QueueDialogClass extends Dialog {
   private Activity activity;
   ApiInterface apiInterface;
   private SharedPreferences sp_student;
-  private List<RecentEvents> teachers;
+  private List<TeacherCreateNew> teachers;
   String sapid;
-  public static int flag=0;
+  public static int flag = 0;
   private RecyclerView recyclerView;
   private AvailableQueuesAdapter adapter;
   private ProgressBar loadingIndicator;
@@ -72,8 +73,11 @@ public class QueueDialogClass extends Dialog {
         DividerItemDecoration.VERTICAL));
     sp_student = getContext().getSharedPreferences("Student", MODE_PRIVATE);
     sapid = sp_student.getString("student_sapid", "missing");
-    if (sapid.equals("missing"))
+    if (sapid.equals("missing")) {
       sapid = "90";
+    }
+
+    teachers = new ArrayList<>();
 
     apiInterface = ApiClient.getClient().create(ApiInterface.class);
     loadingIndicator.setVisibility(View.VISIBLE);
@@ -81,24 +85,28 @@ public class QueueDialogClass extends Dialog {
     noQueuesTextView.setVisibility(View.GONE);
     final String teacherName = sp_student.getString("teacherName", "");
     Log.e("teacherName", teacherName);
-    Call<List<RecentEvents>> call = apiInterface.getParticularTeacherQueues(teacherName);
-    call.enqueue(new Callback<List<RecentEvents>>() {
+    Call<List<TeacherCreateNew>> call = apiInterface.getParticularTeacherQueues(teacherName);
+    call.enqueue(new Callback<List<TeacherCreateNew>>() {
       @Override
-      public void onResponse(Call<List<RecentEvents>> call, Response<List<RecentEvents>> response) {
-        teachers = response.body();
-        if(teachers.size() == 0){
-          loadingIndicator.setVisibility(View.GONE);
-          noQueuesTextView.setVisibility(View.VISIBLE);
-        } else {
-          adapter = new AvailableQueuesAdapter(getContext(), teachers);
-          recyclerView.setAdapter(adapter);
-          loadingIndicator.setVisibility(View.GONE);
-          recyclerView.setVisibility(View.VISIBLE);
+      public void onResponse(Call<List<TeacherCreateNew>> call, Response<List<TeacherCreateNew>> response) {
+        try {
+          teachers = response.body();
+          if (teachers.size() == 0) {
+            loadingIndicator.setVisibility(View.GONE);
+            noQueuesTextView.setVisibility(View.VISIBLE);
+          } else {
+            adapter = new AvailableQueuesAdapter(getContext(), teachers);
+            recyclerView.setAdapter(adapter);
+            loadingIndicator.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
         }
       }
 
       @Override
-      public void onFailure(Call<List<RecentEvents>> call, Throwable t) {
+      public void onFailure(Call<List<TeacherCreateNew>> call, Throwable t) {
 
       }
     });

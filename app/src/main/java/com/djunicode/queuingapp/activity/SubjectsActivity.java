@@ -57,6 +57,8 @@ public class SubjectsActivity extends AppCompatActivity {
         .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
     Resources res = getResources();
 
+    Log.e("teacherId", id.toString());
+
     oddSemSpinner.setItems(res.getStringArray(R.array.comps_odd));
     evenSemSpinner.setItems(res.getStringArray(R.array.comps_even));
 

@@ -78,6 +78,10 @@ public class TeacherLocationFragment extends Fragment {
     final String[] array3 = {"C1", "C2", "C3", "L1", "L2", "L3", "L4", "L5", "L6", "Staff Lounge"};
 
     final Bundle extras = getArguments();
+    if (extras != null) {
+      Toast.makeText(getContext(), "Set the location of submission.", Toast.LENGTH_SHORT)
+          .show();
+    }
 
     floorSpinner = (Spinner) view.findViewById(R.id.floorSpinner);
     departmentSpinner = (Spinner) view.findViewById(R.id.departmentSpinner);
@@ -98,7 +102,6 @@ public class TeacherLocationFragment extends Fragment {
         android.R.layout.simple_spinner_dropdown_item, array);
 
     floorSpinner.setAdapter(adapter);
-    roomSpinner.setAdapter(adapter);
 
     departmentSpinner.setEnabled(false);
     departmentSpinner.setAlpha(0.4f);
@@ -165,7 +168,6 @@ public class TeacherLocationFragment extends Fragment {
     locationUpdateFab.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        progressDialog = ProgressDialog.show(getContext(), "Updating location", "Please wait...");
         locationUpdated = true;
         locationString = "Floor-" + floorSpinner.getSelectedItem().toString() +
             " Dept-" + departmentSpinner.getSelectedItem().toString() + " Room-" +
@@ -174,8 +176,7 @@ public class TeacherLocationFragment extends Fragment {
         boolean flag = false;
 
         if (extras != null) {
-          Toast.makeText(getContext(), "Set the location of submission.", Toast.LENGTH_SHORT)
-              .show();
+
           flag = extras.getBoolean("Flag");
           final String subject = extras.getString("Subject");
           final String batch = extras.getString("Batch");
@@ -184,9 +185,10 @@ public class TeacherLocationFragment extends Fragment {
           final int noOfStudents = extras.getInt("noOfStudents", 50);
 
           if (flag) {
+            progressDialog = ProgressDialog.show(getContext(), "Updating data", "Please wait...");
             tempId = extras.getInt("tempId", -1);
             dbHelper.updateQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
-                locationString, tempId));
+                locationString, tempId, 0));
             Toast.makeText(getContext(), "Data updated!", Toast.LENGTH_SHORT).show();
                   /*extras.putInt("noOfStudents", noOfStudents);
                   extras.putString("fromTime", fromTime);
@@ -223,6 +225,7 @@ public class TeacherLocationFragment extends Fragment {
                         Response<StudentQueue> response) {
                       try {
                         Log.e("Up_loca", response.body().getId().toString());
+                        progressDialog.dismiss();
                       } catch (Exception e) {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         Log.e("Up_location", e.getMessage());
@@ -244,6 +247,7 @@ public class TeacherLocationFragment extends Fragment {
             });
 
           } else {
+            progressDialog = ProgressDialog.show(getContext(), "Creating event", "Please wait...");
             Call<LocationTeacher> call1 = apiInterface
                 .sendQueueLocation(Integer.parseInt(floorSpinner.getSelectedItem().toString()),
                     departmentSpinner.getSelectedItem().toString(),
@@ -266,7 +270,8 @@ public class TeacherLocationFragment extends Fragment {
                       queueId = response.body().getId();
                       ids.putString("ids", Integer.toString(queueId));
                       dbHelper.addQueue(new RecentEvents(subject, batch, from, to, noOfStudents,
-                          locationString, queueId));
+                          locationString, queueId, 0));
+                      progressDialog.dismiss();
                       Toast.makeText(getContext(), "Created new event!", Toast.LENGTH_SHORT).show();
                       Log.e("teacherId queueId", teacherId.toString() + " " + queueId.toString());
                       Call<TeacherCreateNew> call2 = apiInterface
@@ -308,6 +313,7 @@ public class TeacherLocationFragment extends Fragment {
             }
           }
         } else {
+          progressDialog = ProgressDialog.show(getContext(), "Updating location", "Please wait...");
           Log.e("Floor", floor.toString());
           Call<LocationTeacher> call = apiInterface.sendTeacherLocation(floor, dept, room);
           call.enqueue(new Callback<LocationTeacher>() {
@@ -320,6 +326,7 @@ public class TeacherLocationFragment extends Fragment {
                 Log.i("Department", response.body().getDepartment().toString());
                 Log.i("Room", response.body().getRoom().toString());
                 Log.i("Updated At", response.body().getUpdated_at().toString());
+                progressDialog.dismiss();
               } catch (NullPointerException e) {
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("Up_location", e.getMessage());
@@ -389,7 +396,7 @@ public class TeacherLocationFragment extends Fragment {
     Log.e("tId, glo_id, tUId",
         teacherId.toString() + " " + Integer.toString(glo_id) + " " + teacherUserID.toString());
     final SharedPreferences preferences2 = getActivity()
-            .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+        .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
     Log.e("Firebase RegId", preferences2.getString("regId", "empty"));
     String reg_id = preferences2.getString("regId", "empty");
     Call<TeacherModel> call1 = apiInterface

@@ -42,6 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
       try{
         JSONObject jsonObject = new JSONObject(remoteMessage.getData().toString());
         handleDataMessage(jsonObject);
+        Log.e("Notification", "Message0");
       } catch (JSONException e) {
         e.printStackTrace();
       }
@@ -69,10 +70,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
       if(!NotificationUtils.isAppInBackground(getApplicationContext())){
         Intent intent = new Intent(PUSH_NOTIFICATION);
         intent.putExtra("message", message);
+        Log.e("Notification", "Message1");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
       } else {
         Intent intent = new Intent(getApplicationContext(), StudentScreenActivity.class);
         intent.putExtra("message", message);
+        Log.e("Notification", "Message2");
         showNotification(getApplicationContext(), title, message, timestamp, intent);
       }
     } catch (JSONException e) {
