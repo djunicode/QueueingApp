@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,6 +50,7 @@ public class SignUpTeacherFragment extends Fragment {
   private String username, dept, sapId, pass;
   ApiInterface apiInterface;
   private SharedPreferences preferences;
+  private ProgressDialog progressDialog;
 
   public SignUpTeacherFragment() {
     // Required empty public constructor
@@ -86,6 +88,7 @@ public class SignUpTeacherFragment extends Fragment {
       @Override
       public void onClick(View v) {
         if (validSubmission()) {
+          progressDialog = ProgressDialog.show(getContext(), "Signing Up", "Please wait...");
           username = usernameTeacherEditText.getText().toString();
           dept = departmentTeacherSpinner.getSelectedItem().toString();
           sapId = sapIDTeacherEditText.getText().toString();
@@ -101,7 +104,18 @@ public class SignUpTeacherFragment extends Fragment {
                   SharedPreferences preferences1 = getActivity()
                       .getSharedPreferences("Teacher", Context.MODE_PRIVATE);
                   preferences1.edit().putInt("teacherId", response.body().getId()).apply();
+                  preferences.edit().putString("teacherDept", dept).apply();
                   updateDataOnUserUrl();
+                  session.createLoginSession(usernameTeacherEditText.getText().toString(),
+                      passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
+                          toString());
+                  progressDialog.dismiss();
+                  Intent intent = new Intent(getContext(), SubjectsActivity.class);
+                  startActivity(intent);
+                  Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),
+                      Toast.LENGTH_SHORT).show();
+                  Toast.makeText(getContext(), passwordTeacherEditText.getText().toString(),
+                      Toast.LENGTH_SHORT).show();
                 } catch (NullPointerException e){
                   Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                   Log.e("SignUpTeacher", e.getMessage());
@@ -113,15 +127,6 @@ public class SignUpTeacherFragment extends Fragment {
               Log.e("teacherSignUp", "unsuccessful");
             }
           });
-          session.createLoginSession(usernameTeacherEditText.getText().toString(),
-              passwordTeacherEditText.getText().toString(), usernameTeacherEditText.getText().
-                  toString());
-          Intent intent = new Intent(getContext(), SubjectsActivity.class);
-          startActivity(intent);
-          Toast.makeText(getContext(), usernameTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
-          Toast.makeText(getContext(), passwordTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
         }
       }
 

@@ -1,6 +1,7 @@
 package com.djunicode.queuingapp.fragment;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,6 +55,7 @@ public class TeacherLocationFragment extends Fragment {
   private SQLiteDatabase db;
   private Integer queueId, teacherId, teacherUserID;
   private SharedPreferences sp, preferences;
+  private ProgressDialog progressDialog;
 
   public TeacherLocationFragment() {
     // Required empty public constructor
@@ -72,6 +74,8 @@ public class TeacherLocationFragment extends Fragment {
     t.schedule(timerTask, 6000,360000);*/
 
     String[] array = {"Select", "1", "2", "3", "4", "5", "6"};
+    final String[] array2 = {"Computer", "IT"};
+    final String[] array3 = {"C1", "C2", "C3", "L1", "L2", "L3", "L4", "L5", "L6", "Staff Lounge"};
 
     final Bundle extras = getArguments();
 
@@ -109,7 +113,11 @@ public class TeacherLocationFragment extends Fragment {
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position != 0) {
           floor = position;
-
+          if (position == 6) {
+            departmentSpinner.setAdapter(
+                new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,
+                    array2));
+          }
           departmentSpinner.setEnabled(true);
           departmentSpinner.setAlpha(1.0f);
         }
@@ -124,11 +132,14 @@ public class TeacherLocationFragment extends Fragment {
     departmentSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position != 0) {
-          dept = departmentSpinner.getItemAtPosition(position).toString();
-          roomSpinner.setEnabled(true);
-          roomSpinner.setAlpha(1.0f);
+        dept = departmentSpinner.getItemAtPosition(position).toString();
+        if (dept.equals("Computer")) {
+          roomSpinner.setAdapter(
+              new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,
+                  array3));
         }
+        roomSpinner.setEnabled(true);
+        roomSpinner.setAlpha(1.0f);
       }
 
       @Override
@@ -154,6 +165,7 @@ public class TeacherLocationFragment extends Fragment {
     locationUpdateFab.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
+        progressDialog = ProgressDialog.show(getContext(), "Updating location", "Please wait...");
         locationUpdated = true;
         locationString = "Floor-" + floorSpinner.getSelectedItem().toString() +
             " Dept-" + departmentSpinner.getSelectedItem().toString() + " Room-" +
@@ -162,6 +174,8 @@ public class TeacherLocationFragment extends Fragment {
         boolean flag = false;
 
         if (extras != null) {
+          Toast.makeText(getContext(), "Set the location of submission.", Toast.LENGTH_SHORT)
+              .show();
           flag = extras.getBoolean("Flag");
           final String subject = extras.getString("Subject");
           final String batch = extras.getString("Batch");
@@ -374,8 +388,12 @@ public class TeacherLocationFragment extends Fragment {
     });*/
     Log.e("tId, glo_id, tUId",
         teacherId.toString() + " " + Integer.toString(glo_id) + " " + teacherUserID.toString());
+    final SharedPreferences preferences2 = getActivity()
+            .getSharedPreferences("com.djunicode.queuingapp", MODE_PRIVATE);
+    Log.e("Firebase RegId", preferences2.getString("regId", "empty"));
+    String reg_id = preferences2.getString("regId", "empty");
     Call<TeacherModel> call1 = apiInterface
-        .updateTeachersLocation(teacherId, glo_id, teacherUserID);
+        .updateTeachersLocation(teacherId, glo_id, teacherUserID, reg_id);
     call1.enqueue(new Callback<TeacherModel>() {
       @Override
       public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {

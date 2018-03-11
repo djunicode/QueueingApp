@@ -14,7 +14,7 @@ import com.djunicode.queuingapp.R;
 /**
  * Main Activity for app.
  */
-public class MainActivity extends AppCompatActivity {
+public class  MainActivity extends AppCompatActivity {
 
   private CardView signUpStudentCardView, logInStudentCardView, signUpTeacherCardView, logInTeacherCardView;
   private SharedPreferences sp_student, sp_teacher;
