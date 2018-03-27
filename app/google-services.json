@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "141601391720",
+    "firebase_url": "https://queueing-app-f382e.firebaseio.com",
+    "project_id": "queueing-app-f382e",
+    "storage_bucket": "queueing-app-f382e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141601391720:android:0dd893ae3b2d9cfa",
+        "android_client_info": {
+          "package_name": "com.djunicode.queuingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141601391720-3ilvnfrb6cnvpeht8k6q53bg3opb93pv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCBr0A5e7loo7EQ9dS8u6ZTyyzK7fsZyk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
