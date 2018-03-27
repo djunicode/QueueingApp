@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+  <LinearLayout
+    android:id="@+id/ll1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    android:orientation="horizontal">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/location"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+    <TextView
+      android:id="@+id/locationTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/ll2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/ll1"
+    android:padding="2dp"
+    android:orientation="horizontal">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/from"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+    <TextView
+      android:id="@+id/fromTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/ll3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/ll2"
+    android:padding="2dp"
+    android:orientation="horizontal">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/to"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+    <TextView
+      android:id="@+id/toTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/ll4"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/ll3"
+    android:padding="2dp"
+    android:orientation="horizontal">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Subject : "
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+    <TextView
+      android:id="@+id/subjectTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/ll5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/ll4"
+    android:padding="2dp"
+    android:orientation="horizontal">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/started"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+    <TextView
+      android:id="@+id/startedTextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:textColor="@android:color/holo_red_dark"
+      android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
+
+  </LinearLayout>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/black"
+    android:layout_below="@id/ll5"
+    android:layout_marginTop="5dp"/>
+
+</RelativeLayout>

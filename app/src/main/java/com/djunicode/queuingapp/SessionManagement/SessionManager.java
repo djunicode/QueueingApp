@@ -30,25 +30,31 @@ public class SessionManager {
     editor = sharedPreferences.edit();
   }
 
-  public void createLoginSession(String username, String password){
+  public void createLoginSession(String sapid, String password, String name){
+
 
     if (prefName.equals("Teacher")){
 
-      // Storing name in sharedPreferences
-      editor.putString("teacher_username", username);
+      // Storing sapID in sharedPreferences
+      editor.putString("teacher_sapid", sapid);
 
       // Storing password in sharedPreferences
       editor.putString("teacher_password", password);
 
+      // Storing Name in sharedPreferences
+      editor.putString("teacher_name", name);
     }
 
     else {
 
-      editor.putString("student_username", username);
+      // Storing sapid in sharedPreferences
+      editor.putString("student_sapid", sapid);
 
       // Storing password in sharedPreferences
       editor.putString("student_password", password);
 
+      // Storing Name in sharedPreferences
+      editor.putString("student_name", name);
     }
 
     // commit changes

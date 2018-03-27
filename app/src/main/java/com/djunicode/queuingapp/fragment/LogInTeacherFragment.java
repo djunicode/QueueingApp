@@ -18,6 +18,13 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
 import com.djunicode.queuingapp.activity.TeacherScreenActivity;
+import com.djunicode.queuingapp.model.TeacherModel;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +37,8 @@ public class LogInTeacherFragment extends Fragment {
   // Session Manager Class
   SessionManager session;
   SharedPreferences spDemo;
+  public Boolean trueLogin;
+  final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
   public LogInTeacherFragment() {
     // Required empty public constructor
   }
@@ -57,14 +66,14 @@ public class LogInTeacherFragment extends Fragment {
       public void onClick(View v) {
         if(validTeacherLogIn()) {
           session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
-              passwordLogInTeacherEditText.getText().toString());
+              passwordLogInTeacherEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
-          // StudentScreenActivity just for demo till the time teacher fragments are not ready
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
-          Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
+          /*Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
+              Toast.LENGTH_SHORT).show();*/
         }
       }
     });
@@ -81,9 +90,7 @@ public class LogInTeacherFragment extends Fragment {
       return false;
     }
 
-    if(!validMatch()){
-      return false;
-    }
+    validMatch();
     return true;
   }
 
@@ -119,17 +126,29 @@ public class LogInTeacherFragment extends Fragment {
     return true;
   }
 
-  private boolean validMatch() {
-    if(sapIdLogInTeacherEditText.getText().toString().equals("dhruv") &&
-        passwordLogInTeacherEditText.getText().toString().equals("demopass")) {
+  private void validMatch() {
+    Call<TeacherModel> call = apiService.getValidId(sapIdLogInTeacherEditText.getText().toString(),passwordLogInTeacherEditText.getText().toString());
+    call.enqueue(new Callback<TeacherModel>() {
+      @Override
+      public void onResponse(Call<TeacherModel> call, Response<TeacherModel> response) {
+        try{
+          if(response.isSuccessful())
+            trueLogin = true;
 
-      return true;
-    }
-    else {
-      Toast.makeText(getContext(), "Doesn't match!",
-          Toast.LENGTH_SHORT).show();
-      return false;
-    }
+          else {
+            trueLogin = false;
+            Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+          }
+        } catch (Exception e){
+          Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+        }
+      }
+      @Override
+      public void onFailure(Call<TeacherModel> call, Throwable t) {
+
+
+      }
+    });
   }
 
   private void requestFocus (View view) {

@@ -3,12 +3,14 @@ package com.djunicode.queuingapp.fragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,13 @@ import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.SessionManagement.SessionManager;
 import com.djunicode.queuingapp.activity.LogInActivity;
 import com.djunicode.queuingapp.activity.StudentScreenActivity;
+import com.djunicode.queuingapp.model.Student;
+import com.djunicode.queuingapp.rest.ApiClient;
+import com.djunicode.queuingapp.rest.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +44,10 @@ public class LogInStudentFragment extends Fragment {
   // Session Manager Class
   SessionManager session;
   SharedPreferences spDemo;
+  private ProgressDialog pd;
+
+  public Boolean trueLogin = false;
+  final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
   public LogInStudentFragment() {
     // Required empty public constructor
@@ -62,16 +75,21 @@ public class LogInStudentFragment extends Fragment {
     logInStudentButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (validLogIn()) {
-          session.createLoginSession(sapIdLogInEditText.getText().toString(),
-              passwordLogInEditText.getText().toString());
+        Log.e("Clicked", "cl");
+        pd = ProgressDialog.show(getContext(), "Logging In!", "Please wait...");
+        /*boolean valid = validLogIn();
+        if (valid && trueLogin) {
+          *//*session.createLoginSession(sapIdLogInEditText.getText().toString(),
+              passwordLogInEditText.getText().toString(), "demo_username");
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();
-        }
+              Toast.LENGTH_SHORT).show();*//*
+        }*/
+        validLogIn();
       }
     });
     return view;
@@ -87,9 +105,39 @@ public class LogInStudentFragment extends Fragment {
       return false;
     }
 
-    if(!validMatch()){
-      return false;
-    }
+    Call<Student> call = apiService.getValidIdStudent(sapIdLogInEditText.getText().toString(),passwordLogInEditText.getText().toString());
+    call.enqueue(new Callback<Student>() {
+      @Override
+      public void onResponse(Call<Student> call, Response<Student> response) {
+        try{
+          if(response.isSuccessful()) {
+            trueLogin = true;
+            session.createLoginSession(sapIdLogInEditText.getText().toString(),
+                passwordLogInEditText.getText().toString(), "demo_username");
+            pd.dismiss();
+            Intent intent = new Intent(getContext(), StudentScreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
+                Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), passwordLogInEditText.getText().toString(),
+                Toast.LENGTH_SHORT).show();
+          }
+          else {
+            trueLogin = false;
+            pd.dismiss();
+            Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+          }
+        } catch (Exception e){
+          Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<Student> call, Throwable t) {
+
+      }
+    });
     return true;
   }
 
@@ -125,18 +173,6 @@ public class LogInStudentFragment extends Fragment {
     return true;
   }
 
-  private boolean validMatch() {
-    if(sapIdLogInEditText.getText().toString().equals("dhruv") &&
-        passwordLogInEditText.getText().toString().equals("demopass")) {
-
-      return true;
-    }
-    else{
-      Toast.makeText(getContext(), "Doesn't match",
-          Toast.LENGTH_SHORT).show();
-      return false;
-    }
-  }
 
   private void requestFocus (View view) {
 

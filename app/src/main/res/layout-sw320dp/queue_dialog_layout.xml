@@ -5,11 +5,11 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:cardElevation="8dp"
   app:cardCornerRadius="4dp"
+  app:cardElevation="8dp"
   tools:context="com.djunicode.queuingapp.activity.StudentQueueActivity">
 
-  <RelativeLayout
+  <!--<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -131,6 +131,28 @@
       android:text="@string/join"
       android:layout_marginBottom="10dp"/>
 
-  </RelativeLayout>
+  </RelativeLayout>-->
+
+  <ProgressBar
+    android:id="@+id/loadingIndicator"
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:layout_gravity="center"/>
+
+  <TextView
+    android:id="@+id/noQueuesTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/no_queues_found"
+    android:layout_gravity="center"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:visibility="invisible"/>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/available_queues_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="invisible"
+    android:scrollbars="vertical"/>
 
 </android.support.v7.widget.CardView>

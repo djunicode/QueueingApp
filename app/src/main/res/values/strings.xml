@@ -24,9 +24,9 @@
   <string name="err_msg_password">Enter the password</string>
   <string name="err_msg_password_inappropriate_length">Password should be at least 5 characters</string>
   <string name="err_msg_username_password_dont_match">Username and password does not match</string>
+  <string name="err_msg_batch">Enter your batch</string>
   <string name="err_msg_department">Enter your department</string>
   <string name="err_msg_year">Enter your year</string>
-
 
   <string-array name="dept_array">
     <item>SELECT DEPARTMENT</item>
@@ -35,9 +35,9 @@
     <item>MECHANICAL</item>
     <item>PRODUCTION</item>
     <item>CHEMICAL</item>
-    <item>ELECTRONICS</item>
+    <item>ETRX</item>
     <item>EXTC</item>
-    <item>BIO-MEDICAL</item>
+    <item>BIO-MED</item>
   </string-array>
 
   <string-array name="year_array">
@@ -58,6 +58,149 @@
     <item>B2</item>
     <item>B3</item>
     <item>B4</item>
+  </string-array>
+
+  <string-array name="sem_1">
+    <item>Maths1</item>
+    <item>Physics1</item>
+    <item>Chemistry1</item>
+    <item>Mechanics</item>
+    <item>BEE</item>
+    <item>EVS</item>
+  </string-array>
+
+  <string-array name="sem_2">
+    <item>Maths2</item>
+    <item>Physics2</item>
+    <item>Chemistry2</item>
+    <item>SPA</item>
+    <item>ED</item>
+    <item>CS</item>
+  </string-array>
+
+  <string-array name="sem_3">
+    <item>Maths3</item>
+    <item>DLDA</item>
+    <item>DS</item>
+    <item>ECCF</item>
+    <item>DIS</item>
+  </string-array>
+
+  <string-array name="sem_4">
+    <item>Maths4</item>
+    <item>OS</item>
+    <item>COA</item>
+    <item>AOA</item>
+    <item>CG</item>
+  </string-array>
+
+  <string-array name="sem_5">
+    <item>Microprocessor</item>
+    <item>DBMS</item>
+    <item>TCS</item>
+    <item>CN</item>
+    <item>Advanced OS</item>
+  </string-array>
+
+  <string-array name="sem_6">
+    <item>SE</item>
+    <item>SPCC</item>
+    <item>DWM</item>
+    <item>CSS</item>
+    <item>ML</item>
+  </string-array>
+
+  <string-array name="sem_7">
+    <item>DSIP</item>
+    <item>MCC</item>
+    <item>AISC</item>
+    <item>PLM</item>
+    <item>Big Data</item>
+  </string-array>
+
+  <string-array name="sem_8">
+    <item>HMI</item>
+    <item>DC</item>
+    <item>HRM</item>
+    <item>NLP</item>
+  </string-array>
+
+  <string-array name="floor_6">
+    <item>Computer</item>
+    <item>IT</item>
+  </string-array>
+
+  <string-array name="comps_odd">
+    <item>Maths3</item>
+    <item>DLDA</item>
+    <item>DS</item>
+    <item>ECCF</item>
+    <item>DIS</item>
+    <item>Microprocessor</item>
+    <item>DBMS</item>
+    <item>TCS</item>
+    <item>CN</item>
+    <item>Advanced OS</item>
+    <item>DSIP</item>
+    <item>MCC</item>
+    <item>AISC</item>
+    <item>PLM</item>
+    <item>Big Data</item>
+  </string-array>
+
+  <string-array name="comps_even">
+    <item>Maths4</item>
+    <item>OS</item>
+    <item>COA</item>
+    <item>AOA</item>
+    <item>CG</item>
+    <item>SE</item>
+    <item>SPCC</item>
+    <item>DWM</item>
+    <item>CSS</item>
+    <item>ML</item>
+    <item>HMI</item>
+    <item>DC</item>
+    <item>HRM</item>
+    <item>NLP</item>
+  </string-array>
+
+  <string-array name="comps_se">
+    <item>Maths3</item>
+    <item>DLDA</item>
+    <item>DS</item>
+    <item>ECCF</item>
+    <item>DIS</item>
+    <item>Maths4</item>
+    <item>OS</item>
+    <item>COA</item>
+    <item>AOA</item>
+    <item>CG</item>
+  </string-array>
+
+  <string-array name="comps_te">
+    <item>Microprocessor</item>
+    <item>DBMS</item>
+    <item>TCS</item>
+    <item>CN</item>
+    <item>AdvancedOS</item>
+    <item>SE</item>
+    <item>SPCC</item>
+    <item>DWM</item>
+    <item>CSS</item>
+    <item>ML</item>
+  </string-array>
+
+  <string-array name="comps_be">
+    <item>DSIP</item>
+    <item>MCC</item>
+    <item>AISC</item>
+    <item>PLM</item>
+    <item>BigData</item>
+    <item>HMI</item>
+    <item>DC</item>
+    <item>HRM</item>
+    <item>NLP</item>
   </string-array>
 
   <!-- TODO: Remove or change this placeholder text -->
@@ -93,5 +236,17 @@
   <string name="create_new">Create new</string>
   <string name="delete">Delete</string>
   <string name="edit">Edit</string>
+  <string name="enter_your_e_mail">Enter your E-mail</string>
+  <string name="enter_the_code">Enter the code</string>
+  <string name="send_code">Send Code</string>
+  <string name="verify_email">Verify Email</string>
+  <string name="welcome_back_user">WELCOME BACK USER!</string>
+  <string name="which_subjects_do_you_teach">Which subjects do you teach?</string>
+  <string name="odd_sem">Odd Sem</string>
+  <string name="even_sem">Even Sem</string>
+  <string name="empty_queue">No students in the queue.</string>
+  <string name="started">Started : </string>
+  <string name="no_queues_found">No Queues found!</string>
 
 </resources>
+

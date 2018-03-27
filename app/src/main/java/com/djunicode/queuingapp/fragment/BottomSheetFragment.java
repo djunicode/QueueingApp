@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import com.djunicode.queuingapp.R;
 import com.djunicode.queuingapp.adapter.BottomSheetAdapter;
+import com.djunicode.queuingapp.data.QueuesDbHelper;
+import com.djunicode.queuingapp.model.RecentEvents;
+import java.util.List;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
 
@@ -23,20 +26,22 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
 
     RecyclerView bottomRecyclerView = (RecyclerView) view
-        .findViewById(R.id.bottomSheetRecyclerView);
+            .findViewById(R.id.bottomSheetRecyclerView);
 
-    BottomSheetAdapter adapter = new BottomSheetAdapter(getContext(),
-        TeacherSubmissionFragment.recentEventsList);
+    QueuesDbHelper dbHelper = new QueuesDbHelper(getContext());
+    List<RecentEvents> recentEventsList = dbHelper.getAllQueues();
+
+    BottomSheetAdapter adapter = new BottomSheetAdapter(getContext(), recentEventsList);
 
     bottomRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     bottomRecyclerView.setItemAnimator(new DefaultItemAnimator());
     bottomRecyclerView
-        .addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            .addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     bottomRecyclerView.setAdapter(adapter);
     return view;
   }
