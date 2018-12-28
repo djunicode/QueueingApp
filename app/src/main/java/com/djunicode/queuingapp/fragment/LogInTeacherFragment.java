@@ -66,14 +66,14 @@ public class LogInTeacherFragment extends Fragment {
       public void onClick(View v) {
         if(validTeacherLogIn()) {
           session.createLoginSession(sapIdLogInTeacherEditText.getText().toString(),
-              passwordLogInTeacherEditText.getText().toString(), "demo_username");
+              passwordLogInTeacherEditText.getText().toString());
           Intent intent = new Intent(getContext(), TeacherScreenActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+          // StudentScreenActivity just for demo till the time teacher fragments are not ready
           startActivity(intent);
-          /*Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
+          Toast.makeText(getContext(), sapIdLogInTeacherEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInTeacherEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();*/
+              Toast.LENGTH_SHORT).show();
         }
       }
     });
@@ -90,7 +90,9 @@ public class LogInTeacherFragment extends Fragment {
       return false;
     }
 
-    validMatch();
+    if(!validMatch()){
+      return false;
+    }
     return true;
   }
 

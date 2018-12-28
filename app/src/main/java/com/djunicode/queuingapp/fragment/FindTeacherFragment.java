@@ -164,32 +164,9 @@ public class FindTeacherFragment extends Fragment {
     subjectSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position != 0) {
-          Call<TeacherListModel> call = apiInterface.getTeachers(subjectSpinner.getSelectedItem()
-              .toString());
-          call.enqueue(new Callback<TeacherListModel>() {
-            @Override
-            public void onResponse(Call<TeacherListModel> call,
-                Response<TeacherListModel> response) {
-              try {
-                list = response.body().getTeachers();
-              } catch (Exception e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-              }
-              teacher_adapter = new ArrayAdapter<String>(getContext(),
-                  android.R.layout.simple_spinner_dropdown_item, list);
-              teacherSpinner.setAdapter(teacher_adapter);
-            }
-
-            @Override
-            public void onFailure(Call<TeacherListModel> call, Throwable t) {
-
-            }
-          });
+        if(position != 0){
           teacherSpinner.setEnabled(true);
           teacherSpinner.setAlpha(1.0f);
-          Toast.makeText(getContext(), parent.getItemAtPosition(position).toString(),
-              Toast.LENGTH_SHORT).show();
         }
       }
 

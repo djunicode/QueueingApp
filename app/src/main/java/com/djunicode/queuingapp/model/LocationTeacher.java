@@ -1,30 +1,25 @@
 package com.djunicode.queuingapp.model;
 
 import com.google.gson.annotations.Expose;
-
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by DELL_PC on 13-01-2018.
  */
 
-public class  LocationTeacher {
+public class LocationTeacher {
 
   @SerializedName("id")
   public Integer id;
 
-
-  @SerializedName("room")
-  public String room;
-
+  @SerializedName("floor")
+  public Integer floor;
 
   @SerializedName("department")
   public String department;
 
-
-  @SerializedName("floor")
-  public Integer floor;
-
+  @SerializedName("room")
+  public String room;
 
   @SerializedName("updated_at")
   public String updated_at;

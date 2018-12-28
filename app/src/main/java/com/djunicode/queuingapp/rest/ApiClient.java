@@ -1,4 +1,3 @@
-package com.djunicode.queuingapp.rest;
 
 
 import com.google.gson.GsonBuilder;

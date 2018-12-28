@@ -75,21 +75,17 @@ public class LogInStudentFragment extends Fragment {
     logInStudentButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Log.e("Clicked", "cl");
-        pd = ProgressDialog.show(getContext(), "Logging In!", "Please wait...");
-        /*boolean valid = validLogIn();
-        if (valid && trueLogin) {
-          *//*session.createLoginSession(sapIdLogInEditText.getText().toString(),
-              passwordLogInEditText.getText().toString(), "demo_username");
+        if (validLogIn()) {
+          session.createLoginSession(sapIdLogInEditText.getText().toString(),
+              passwordLogInEditText.getText().toString());
           Intent intent = new Intent(getContext(), StudentScreenActivity.class);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
           startActivity(intent);
           Toast.makeText(getContext(), sapIdLogInEditText.getText().toString(),
               Toast.LENGTH_SHORT).show();
           Toast.makeText(getContext(), passwordLogInEditText.getText().toString(),
-              Toast.LENGTH_SHORT).show();*//*
-        }*/
-        validLogIn();
+              Toast.LENGTH_SHORT).show();
+        }
       }
     });
     return view;
@@ -173,6 +169,18 @@ public class LogInStudentFragment extends Fragment {
     return true;
   }
 
+  private boolean validMatch() {
+    if(sapIdLogInEditText.getText().toString().equals("60004160006") &&
+        passwordLogInEditText.getText().toString().equals("demopass")) {
+
+      return true;
+    }
+    else{
+      Toast.makeText(getContext(), "Doesn't match",
+          Toast.LENGTH_SHORT).show();
+      return false;
+    }
+  }
 
   private void requestFocus (View view) {
 

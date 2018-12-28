@@ -102,6 +102,7 @@ public class TeacherLocationFragment extends Fragment {
         android.R.layout.simple_spinner_dropdown_item, array);
 
     floorSpinner.setAdapter(adapter);
+    roomSpinner.setAdapter(adapter);
 
     departmentSpinner.setEnabled(false);
     departmentSpinner.setAlpha(0.4f);
@@ -154,8 +155,6 @@ public class TeacherLocationFragment extends Fragment {
     roomSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        room = roomSpinner.getItemAtPosition(position).toString();
-
         locationUpdateFab.setEnabled(true);
       }
 
